@@ -48,6 +48,8 @@ namespace Domain.Entities
 
         // Navigation property to UserProfileInfo, a user may have many user profile infos
         public virtual ICollection<UserProfileInfo> UserProfilesInfo { get; set; }
+
+        public  virtual User User { get; set; }
     }
 }
 

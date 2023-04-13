@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class UserDietaryPreferences
+    public class DietaryPreferences
     {
-        //[Key] Configuratuion move to Fluenbt API 
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        //[ForeignKey("User")] confoguration move to Fluent API 
+        [ForeignKey("User")]
         public int UserId { get; set; }
         [Required]
-        public DietaryPreferencesEnum AllowedDietaryPreferences { get; set; } = DietaryPreferencesEnum.Vegan | DietaryPreferencesEnum.Vegetarian;
+        public DietaryPreferencesEnum AllowedDietaryPreferences { get; set; }
 
-        public UserDietaryPreferences() { } // Empty constructor needed for EF Core
+        //public UserDietaryPreferences() { } // Empty constructor needed for EF Core
 
-        // Navigation property to User
+        // Navigation property to User  
         public virtual User? User { get; set; }
     }
 }

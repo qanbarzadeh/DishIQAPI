@@ -25,7 +25,7 @@ namespace Domain.Entities
         public AllergySeverityLevelEnum SeverityLevel { get; set; }
 
         // Navigation property to the related User entity
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         // Timestamp for when the allergy was added
         [Required]
