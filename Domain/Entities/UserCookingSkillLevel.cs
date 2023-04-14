@@ -5,14 +5,9 @@ namespace Domain.Entities
 {
     public class UserCookingSkillLevel
     {
-        public int UserCookingSkillLevelId { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
-
-        [Required]
+        public int Id { get; set; }     
+        public int UserId { get; set; }     
         public CookingSkillLevelEnum CookingSkillLevel { get; set; }
-
         
     }
 }

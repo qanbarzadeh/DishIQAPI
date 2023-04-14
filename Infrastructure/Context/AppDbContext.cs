@@ -25,7 +25,14 @@ namespace Infrastructure.Context
         {            
             modelBuilder.ApplyConfiguration(new UserConfiguration()); 
             modelBuilder.ApplyConfiguration(new DietaryPreferencesConfiguration());
-
+            modelBuilder.ApplyConfiguration(new UserCredentialsConfiguration());
+            modelBuilder.ApplyConfiguration(new UserProfileInfoConfiguration());
+            modelBuilder.ApplyConfiguration(new UserCookingSkillLevelConfiguration());
+            modelBuilder.ApplyConfiguration(new UserAllergyConfiguration());
+            modelBuilder.ApplyConfiguration(new UserActivityLogConfiguration());
+            modelBuilder.ApplyConfiguration(new SocialHandleConfiguration());
+            modelBuilder.ApplyConfiguration(new UserNotificationConfiguration());
+          
             //modelBuilder.Entity<User>()
             //    .HasMany(e => e.DietaryPreferences)
             //    .WithOne()

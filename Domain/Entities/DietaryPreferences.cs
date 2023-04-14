@@ -6,18 +6,9 @@ namespace Domain.Entities
 {
     public class DietaryPreferences
     {
-        [Key]
-        public int Id { get; set; }
-
-        [Required]
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-
-        [Required]
+        public int Id { get; set; }   
+        public int UserId { get; set; }        
         public DietaryPreferencesEnum AllowedDietaryPreferences { get; set; }
-
-        public DietaryPreferences() { } // Empty constructor needed for EF Core
-
-        
+        public DietaryPreferences() { } // Empty constructor needed for EF Core        
     }
 }

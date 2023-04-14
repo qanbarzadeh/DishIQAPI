@@ -9,7 +9,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<DietaryPreferences> builder)
         {
-            builder.ToTable("DietaryPreferences", "User");
+            builder.ToTable(nameof(DietaryPreferences), "User");
             
             builder.HasKey(dp => dp.Id);
 
@@ -19,7 +19,11 @@ namespace Infrastructure.Context.Configuration
             builder.Property(dp => dp.AllowedDietaryPreferences)
                 .HasMaxLength(50)
                 .IsRequired();
-
+            //Relationship to User
+            builder.HasOne<User>()
+                .WithMany(u => u.DietaryPreferences)
+                .HasForeignKey(uf => uf.Id)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -10,28 +10,13 @@ namespace Domain.Entities
 {
     public class UserNotification
     {
-
         //[Key]
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)] move to FluentAPI 
-        public int NotificationId { get; set; }
-
-        [Required]
+        public int Id { get; set; }
         public int UserId { get; set; }
-
-        [Required]
-        [MaxLength(50)]
         public string NotificationType { get; set; }
-
-        [Required]
-        [MaxLength(500)]
         public string NotificationText { get; set; }
-
-        [Required]
         public bool IsRead { get; set; }
-
-        [Required]
         public DateTime CreatedAt { get; set; }
-
-     
     }
 }
