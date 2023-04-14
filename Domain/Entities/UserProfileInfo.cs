@@ -82,8 +82,6 @@ namespace Domain.Entities
         public bool IsSuspicious { get; set; }
 
         [Required]
-        public bool IsBlacklisted { get; set; }
-
-        public virtual User? User { get; set; }
+        public bool IsBlacklisted { get; set; }       
     }
 }

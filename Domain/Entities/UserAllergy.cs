@@ -6,12 +6,9 @@ namespace Domain.Entities
 {
     public class UserAllergy
     {
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)] // to move to FlunetAPI 
         public int Id { get; set; }
 
         [Required]
-        //[ForeignKey("User")] Configuration to move to Fluent API 
         public int UserId { get; set; }
 
         [Required]
@@ -24,8 +21,7 @@ namespace Domain.Entities
         [Required]
         public AllergySeverityLevelEnum SeverityLevel { get; set; }
 
-        // Navigation property to the related User entity
-        public virtual User User { get; set; }
+        
 
         // Timestamp for when the allergy was added
         [Required]
@@ -35,6 +31,4 @@ namespace Domain.Entities
         [Required]
         public DateTime UpdatedAt { get; set; }
     }
-
 }
-

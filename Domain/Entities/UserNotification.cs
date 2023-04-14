@@ -32,7 +32,6 @@ namespace Domain.Entities
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        // Navigation property to the related User entity
-        public User User { get; set; }
+     
     }
 }

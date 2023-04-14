@@ -1,18 +1,12 @@
 ﻿using Domain.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
     public class UserCredentials
     {
-        //[Key]
-        //[ForeignKey("User")] move to Fluent API 
         public int UserId { get; set; }
 
         [Required]
@@ -46,10 +40,6 @@ namespace Domain.Entities
 
         public DateTimeOffset? PasswordResetExpirationDateTime { get; set; }
 
-        // Navigation property to UserProfileInfo, a user may have many user profile infos
-        public virtual ICollection<UserProfileInfo> UserProfilesInfo { get; set; }
-
-        public  virtual User User { get; set; }
+        // Removed navigation property to UserProfileInfo
     }
 }
-

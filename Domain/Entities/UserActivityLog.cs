@@ -4,17 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Entities
 {
     public class UserActivityLog
-     {
-    //    [Key]
-    //    [DatabaseGenerated(DatabaseGeneratedOption.Identity)] move to Infra  
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ActivityLogId { get; set; }
 
         [Required]
+        [ForeignKey("User")]
         public int UserId { get; set; }
 
-        // Navigation property to the related User entity
-        //[ForeignKey("UserId")]  add to DbContext
-        public User User { get; set; }
+        
 
         [Required]
         [MaxLength(50)]
@@ -47,6 +46,5 @@ namespace Domain.Entities
         public string Location { get; set; }
 
         public int? Duration { get; set; }
-
     }
 }

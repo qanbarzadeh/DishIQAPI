@@ -9,15 +9,15 @@ namespace Domain.Entities
         [Key]
         public int Id { get; set; }
 
-        //[Required]
-        //[ForeignKey("User")]
+        [Required]
+        [ForeignKey("User")]
         public int UserId { get; set; }
+
         [Required]
         public DietaryPreferencesEnum AllowedDietaryPreferences { get; set; }
 
         public DietaryPreferences() { } // Empty constructor needed for EF Core
 
-        // Navigation property to User  
-        public virtual User User { get; set; }
+        
     }
 }

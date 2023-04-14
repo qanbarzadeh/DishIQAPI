@@ -27,45 +27,44 @@ namespace Infrastructure.Context.Configuration
 
                 // Relationship to UserProfileInfo
                 builder.HasOne(u => u.UserProfileInfo)
-                    .WithOne(upi => upi.User)
+                    .WithOne()
                     .HasForeignKey<UserProfileInfo>(upi => upi.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 // Relationship to UserCredentials
                 builder.HasOne(u => u.UserCredentials)
-                    .WithOne(uc => uc.User)
+                    .WithOne()
                     .HasForeignKey<UserCredentials>(uc => uc.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 // Relationship to UserAllergies
                 builder.HasMany(u => u.UserAllergies)
-                    .WithOne(ua => ua.User)
+                    .WithOne()
                     .HasForeignKey(ua => ua.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 // Relationship to UserCookingSkillLevels
-                builder.HasMany(u => u.UserCookingSkillLevels)
-                    .WithOne(us => us.User)
-                    .HasForeignKey(us => us.UserId)
+                builder.HasOne(u => u.UserCookingSkillLevel)
+                    .WithOne()
+                    .HasForeignKey<UserCookingSkillLevel>(us => us.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                //// Relationship to UserDietaryPreferences
-                // Relationship to DietaryPreferences
+                //// Relationship to UserDietaryPreferences                
                 builder.HasMany(u => u.DietaryPreferences)
-                       .WithOne(dp => dp.User)
-                       .HasForeignKey(dp => dp.UserId)
-                       .OnDelete(DeleteBehavior.Cascade);
+                    .WithOne()                       
+                    .HasForeignKey(dp => dp.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
 
                 // Relationship to UserNotifications
                 builder.HasMany(u => u.UserNotifications)
-                    .WithOne(un => un.User)
+                    .WithOne()
                     .HasForeignKey(un => un.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 // Relationship to UserActivityLog
                 builder.HasOne(u => u.UserActivityLog)
-                    .WithOne(ual => ual.User)
+                    .WithOne()
                     .HasForeignKey<UserActivityLog>(ual => ual.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
