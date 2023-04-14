@@ -51,9 +51,9 @@ namespace Infrastructure.Context.Configuration
 
                 //// Relationship to UserDietaryPreferences
                 // Relationship to DietaryPreferences
-                builder.HasOne(u => u.DietaryPreferences)
+                builder.HasMany(u => u.DietaryPreferences)
                        .WithOne(dp => dp.User)
-                       .HasForeignKey<DietaryPreferences>(dp => dp.UserId)
+                       .HasForeignKey(dp => dp.UserId)
                        .OnDelete(DeleteBehavior.Cascade);
 
 
