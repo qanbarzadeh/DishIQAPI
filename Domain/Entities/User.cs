@@ -26,7 +26,8 @@ namespace Domain.Entities
         public virtual UserCredentials UserCredentials { get; set; }
         public virtual ICollection<UserAllergy> UserAllergies { get; set; }
         public virtual ICollection<UserCookingSkillLevel> UserCookingSkillLevels { get; set; }
-        public virtual ICollection<DietaryPreferences>? DietaryPreferences { get; set; }
+
+        public virtual DietaryPreferences DietaryPreferences { get; set; }
         public virtual ICollection<UserNotification> UserNotifications { get; set; }
         public virtual UserActivityLog UserActivityLog { get; set; }
     }

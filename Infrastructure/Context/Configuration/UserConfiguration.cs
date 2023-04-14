@@ -50,10 +50,12 @@ namespace Infrastructure.Context.Configuration
                     .OnDelete(DeleteBehavior.Cascade);
 
                 //// Relationship to UserDietaryPreferences
-                builder.HasMany(u => u.DietaryPreferences)
-                    .WithOne(udp => udp.User)
-                    .HasForeignKey(udp => udp.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                // Relationship to DietaryPreferences
+                builder.HasOne(u => u.DietaryPreferences)
+                       .WithOne(dp => dp.User)
+                       .HasForeignKey<DietaryPreferences>(dp => dp.UserId)
+                       .OnDelete(DeleteBehavior.Cascade);
+
 
                 // Relationship to UserNotifications
                 builder.HasMany(u => u.UserNotifications)
