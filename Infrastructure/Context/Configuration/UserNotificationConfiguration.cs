@@ -15,9 +15,7 @@ namespace Infrastructure.Context.Configuration
         {
             builder.ToTable(nameof(UserNotification), "User");
             builder.HasKey(x => x.Id);
-
-            builder.ToTable("UserNotifications");
-
+            
             // Primary key
             builder.HasKey(un => un.Id);
 

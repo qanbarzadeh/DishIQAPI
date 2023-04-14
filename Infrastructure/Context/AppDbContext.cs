@@ -32,13 +32,7 @@ namespace Infrastructure.Context
             modelBuilder.ApplyConfiguration(new UserActivityLogConfiguration());
             modelBuilder.ApplyConfiguration(new SocialHandleConfiguration());
             modelBuilder.ApplyConfiguration(new UserNotificationConfiguration());
-          
-            //modelBuilder.Entity<User>()
-            //    .HasMany(e => e.DietaryPreferences)
-            //    .WithOne()
-            //    .HasForeignKey(u => u.UserId)
-            //    .IsRequired();                
-          
+                                
         }
     }
 }
