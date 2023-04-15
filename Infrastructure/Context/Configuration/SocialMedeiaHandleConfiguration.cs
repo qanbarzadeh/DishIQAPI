@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,7 +9,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<SocialMediaHandle> builder)
         {
-            builder.ToTable(nameof(SocialHandleConfiguration), "User");
+            builder.ToTable(nameof(SocialHandleConfiguration), DatabaseSetting.UserSchema);
             builder.HasKey(k => k.Id);
             builder.Property(s => s.Id)
                 .HasColumnName("SocialMediaId");

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
+using Infrastructure.Setting;
 
 namespace Infrastructure.Context.Configuration
 {
@@ -9,7 +10,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<DietaryPreferences> builder)
         {
-            builder.ToTable(nameof(DietaryPreferences), "User");
+            builder.ToTable(nameof(DietaryPreferences), DatabaseSetting.UserSchema);
             
             builder.HasKey(dp => dp.Id);
 

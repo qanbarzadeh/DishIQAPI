@@ -1,17 +1,16 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-
-namespace Infrastructure.Context.Configuration
-{
+using Infrastructure.Setting;
 
 
-    namespace Infrastructure.Data.Configurations
+    namespace Infrastructure.Context.Configuration
     {
         public class UserConfiguration : IEntityTypeConfiguration<User>
         {
             public void Configure(EntityTypeBuilder<User> builder)
             {
+                builder.ToTable(nameof(User), DatabaseSetting.UserSchema); 
                 // Primary key
                 builder.HasKey(u => u.UserId);
 
@@ -23,7 +22,8 @@ namespace Infrastructure.Context.Configuration
                 // Email address
                 builder.Property(u => u.EmailAddress)
                     .HasMaxLength(100)
-                    .IsRequired();
+                    .IsUnicode(false)
+                    .IsRequired(); 
 
                 // Relationship to UserProfileInfo
                 //builder.HasOne(u => u.UserProfileInfo)
@@ -36,7 +36,7 @@ namespace Infrastructure.Context.Configuration
                 //    .WithOne()
                 //    .HasForeignKey<UserCredentials>(uc => uc.Id)
                 //    .OnDelete(DeleteBehavior.Cascade);
-
+                 
                 // Relationship to UserAllergies
                 builder.HasMany(u => u.UserAllergies)
                     .WithOne()
@@ -71,5 +71,3 @@ namespace Infrastructure.Context.Configuration
             }
         }
     }
-
-}

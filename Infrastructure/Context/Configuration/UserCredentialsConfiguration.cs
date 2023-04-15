@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,7 +14,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserCredentials> builder)
         {
-            builder.ToTable(nameof(UserCredentials), "User");
+            builder.ToTable(nameof(UserCredentials), DatabaseSetting.UserSchema);
             builder.HasKey(uc => uc.UserId);
 
             // Username

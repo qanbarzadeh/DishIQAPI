@@ -1,11 +1,7 @@
 ﻿using Domain.Entities;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Context.Configuration
 {
@@ -13,8 +9,8 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserNotification> builder)
         {
-            builder.ToTable(nameof(UserNotification), "User");
-            builder.HasKey(x => x.Id);
+            builder.ToTable(nameof(UserNotification), DatabaseSetting.UserSchema);
+           
             
             // Primary key
             builder.HasKey(un => un.Id);

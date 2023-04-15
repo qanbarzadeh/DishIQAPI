@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,9 +14,33 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserAllergy> builder)
         {
-            builder.ToTable(nameof(UserAllergy), "User"); 
+            builder.ToTable(nameof(UserAllergy), DatabaseSetting.UserSchema);
+
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).HasColumnName("AllergyID");            
+
+            builder.Property(x => x.Name)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            builder.Property(x => x.Description)
+                .HasMaxLength(500);
+
+            builder.Property(x => x.SeverityLevel)
+                .IsRequired()
+                .HasConversion<int>();
+
+            builder.Property(x => x.CreatedAt)
+                .HasColumnType("datetime2")
+                .HasDefaultValueSql("getutcdate()");
+
+            builder.Property(x => x.UpdatedAt)
+                .HasColumnType("datetime2")
+                .HasDefaultValueSql("getutcdate()");
+
+            builder.HasOne<User>()
+                .WithMany(x => x.UserAllergies)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

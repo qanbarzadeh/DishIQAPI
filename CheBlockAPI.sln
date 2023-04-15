@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheBlockAPI", "CheBlockAPI\CheBlockAPI.csproj", "{7CE714EC-581D-4C85-8BCA-0D9D36E93F4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheBlockAPI", "CheBlockAPI\CheBlockAPI.csproj", "{7CE714EC-581D-4C85-8BCA-0D9D36E93F4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{81F33EA1-8CA3-44C5-9247-3F2EBE14EC75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{81F33EA1-8CA3-44C5-9247-3F2EBE14EC75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{4DC51D79-2280-46A9-AF80-AE04FF213E16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{4DC51D79-2280-46A9-AF80-AE04FF213E16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{AAB873AA-826B-474E-8EBC-F6BFE51B86E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{AAB873AA-826B-474E-8EBC-F6BFE51B86E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{339AF27F-093D-4CDB-82A0-D49A56346153}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{AAB873AA-826B-474E-8EBC-F6BFE51B86E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAB873AA-826B-474E-8EBC-F6BFE51B86E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAB873AA-826B-474E-8EBC-F6BFE51B86E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{339AF27F-093D-4CDB-82A0-D49A56346153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{339AF27F-093D-4CDB-82A0-D49A56346153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{339AF27F-093D-4CDB-82A0-D49A56346153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{339AF27F-093D-4CDB-82A0-D49A56346153}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

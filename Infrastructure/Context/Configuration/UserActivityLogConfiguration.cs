@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,11 +14,48 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserActivityLog> builder)
         {
-            builder.ToTable(nameof(UserActivityLog), "Users");
-            builder.HasKey(u => u.Id);
-            builder.Property(u => u.Id).HasColumnName("ActivityLogId");             
+            
+            builder.ToTable(nameof(UserActivityLog), DatabaseSetting.UserSchema);
 
+            builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.ActivityType)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            builder.Property(x => x.ActivityDate)
+                .IsRequired();
+
+            builder.Property(x => x.IPAddress)
+                .HasMaxLength(50);
+            builder.Property(u => u.IPAddress)
+           .IsRequired()
+           .HasMaxLength(15)
+           .IsUnicode(false)
+           .HasColumnType("varchar(15)"); 
+        
+            builder.Property(x => x.DeviceType)
+                .HasMaxLength(50);
+
+            builder.Property(x => x.DeviceOS)
+                .HasMaxLength(50);
+
+            builder.Property(x => x.BrowserType)
+                .HasMaxLength(50);
+
+            builder.Property(x => x.BrowserVersion)
+                .HasMaxLength(50);
+
+            builder.Property(x => x.Location)
+                .HasMaxLength(100);
+
+            builder.Property(x => x.Duration)
+                .IsRequired(false);
+
+            builder.HasOne<User>()
+                .WithOne(u => u.UserActivityLog)
+                .HasForeignKey<UserActivityLog>(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

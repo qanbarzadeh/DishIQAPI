@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,7 +14,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserProfileInfo> builder)
         {
-            builder.ToTable(nameof(UserProfileInfo), "User");
+            builder.ToTable(nameof(UserProfileInfo), DatabaseSetting.UserSchema); // todo : implement DependencyInjection  and service creation approach 
 
             builder.HasOne<User>()
                 .WithOne(x => x.UserProfileInfo)

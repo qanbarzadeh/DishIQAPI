@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,7 +14,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserCookingSkillLevel> builder)
         {
-            builder.ToTable(nameof(UserCookingSkillLevel), "User");
+            builder.ToTable(nameof(UserCookingSkillLevel), DatabaseSetting.UserSchema);
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("SkillLevelId"); 
         }

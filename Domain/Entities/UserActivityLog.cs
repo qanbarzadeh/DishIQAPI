@@ -13,6 +13,7 @@ namespace Domain.Entities
 
         public DateTimeOffset ActivityDate { get; set; }
 
+        [RegularExpression(@"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")] //IP pattern
         public string IPAddress { get; set; }
 
         public string DeviceType { get; set; }
