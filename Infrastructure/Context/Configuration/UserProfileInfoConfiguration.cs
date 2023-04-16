@@ -16,6 +16,8 @@ namespace Infrastructure.Context.Configuration
         {
             builder.ToTable(nameof(UserProfileInfo), DatabaseSetting.UserSchema); // todo : implement DependencyInjection  and service creation approach 
 
+            builder.HasKey(x => x.UserId); 
+
             builder.HasOne<User>()
                 .WithOne(x => x.UserProfileInfo)
                 .HasForeignKey<UserProfileInfo>(x => x.UserId)
