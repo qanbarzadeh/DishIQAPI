@@ -38,9 +38,6 @@ namespace Infrastructure
             new UserNotificationConfiguration().Configure(modelBuilder.Entity<UserNotification>());
             new UserActivityLogConfiguration().Configure(modelBuilder.Entity<UserActivityLog>());
             new SocialHandleConfiguration().Configure(modelBuilder.Entity<SocialMediaHandle>());
-
-
-
         }
     }
 }
