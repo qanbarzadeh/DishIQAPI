@@ -7,11 +7,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Entities.UserEntities
 {
     public class User
     {
-        public int UserId { get; set; }        
+        public int UserId { get; set; }
         public string Username { get; set; }
 
         [EmailAddress]
@@ -19,7 +19,7 @@ namespace Domain.Entities
 
         // Navigation properties to related entities
         public virtual UserProfileInfo UserProfileInfo { get; set; } = new UserProfileInfo();
-        public virtual UserCredentials UserCredentials { get; set; } = new UserCredentials(); 
+        public virtual UserCredentials UserCredentials { get; set; } = new UserCredentials();
         public virtual ICollection<UserAllergy> UserAllergies { get; set; } = new List<UserAllergy>();
         public virtual UserCookingSkillLevel UserCookingSkillLevel { get; set; } = new UserCookingSkillLevel();
         public virtual ICollection<DietaryPreferences> DietaryPreferences { get; set; } = new List<DietaryPreferences>();
