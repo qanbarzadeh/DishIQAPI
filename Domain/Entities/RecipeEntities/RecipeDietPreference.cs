@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.RecipeEntities
 {
-    public class DietPreference
+    public class RecipeDietPreference
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty; 
+        public DietaryPreferencesEnum DietaryPreferences { get; set; } 
     }
 }

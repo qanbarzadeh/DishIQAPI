@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums.RecipeEnums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace Domain.Entities.RecipeEntities
     public class MealTime
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public MealTimeEnum MealTimeEnum { get; set; } = MealTimeEnum.Breakfast;
     }
 }

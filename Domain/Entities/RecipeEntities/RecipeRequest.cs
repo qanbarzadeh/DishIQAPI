@@ -8,7 +8,7 @@ namespace Domain.Entities.RecipeEntities
         public MealType MealType { get; set; }
 
         public int? DietPreferenceId { get; set; }
-        public DietPreference DietPreference { get; set; }
+        public RecipeDietPreference DietPreference { get; set; }
 
         public int? RegionId { get; set; }
         public Region Region { get; set; }
