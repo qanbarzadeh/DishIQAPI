@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -13,6 +15,166 @@ namespace Infrastructure.Migrations
         {
             migrationBuilder.EnsureSchema(
                 name: "User");
+
+            migrationBuilder.EnsureSchema(
+                name: "Recipe");
+
+            migrationBuilder.CreateTable(
+                name: "BloodTypes",
+                schema: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BloodTypeName = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BloodTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CookingStep",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CookingStep", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CookingTechnique",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CookingTechnique", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Country",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Country", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dislike",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dislike", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Flavor",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FlavorType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Flavor", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredients",
+                schema: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MealTime",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MealTimeEnum = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MealTime", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MealType",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MealName = table.Column<int>(type: "int", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MealType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeDietPreference",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DietaryPreferences = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeDietPreference", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Region",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RegionName = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Region", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "User",
@@ -243,6 +405,63 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                schema: "Recipe",
+                table: "MealTime",
+                columns: new[] { "Id", "MealTimeEnum" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Recipe",
+                table: "MealType",
+                columns: new[] { "Id", "MealName" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 },
+                    { 6, 6 }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Recipe",
+                table: "RecipeDietPreference",
+                columns: new[] { "Id", "DietaryPreferences" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 },
+                    { 6, 6 },
+                    { 7, 7 }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Recipe",
+                table: "Region",
+                columns: new[] { "Id", "RegionName" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 },
+                    { 6, 6 },
+                    { 7, 7 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_SocialMediaHandles_UserProfileInfoId",
                 schema: "User",
@@ -280,8 +499,52 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BloodTypes",
+                schema: "User");
+
+            migrationBuilder.DropTable(
+                name: "CookingStep",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
+                name: "CookingTechnique",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
+                name: "Country",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
                 name: "DietaryPreferences",
                 schema: "User");
+
+            migrationBuilder.DropTable(
+                name: "Dislike",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
+                name: "Flavor",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
+                name: "Ingredients",
+                schema: "User");
+
+            migrationBuilder.DropTable(
+                name: "MealTime",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
+                name: "MealType",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
+                name: "RecipeDietPreference",
+                schema: "Recipe");
+
+            migrationBuilder.DropTable(
+                name: "Region",
+                schema: "Recipe");
 
             migrationBuilder.DropTable(
                 name: "SocialMediaHandles",

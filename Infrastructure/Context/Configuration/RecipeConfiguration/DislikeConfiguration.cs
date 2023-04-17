@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.RecipeEntities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Context.Configuration.RecipeConfiguration
 {
@@ -8,7 +9,8 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
     {
         public void Configure(EntityTypeBuilder<Dislike> builder)
         {
-            builder.ToTable(nameof(Dislike));
+            builder.ToTable(nameof(Dislike), DatabaseSetting.RecipeSchema); // todo : implement DependencyInjection  and service creation approach 
+
             builder.HasKey(x => x.Id);
             builder.Property(p => p.Name)
                 .HasMaxLength(256)
@@ -16,3 +18,5 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
         }
     }
 }
+ 
+

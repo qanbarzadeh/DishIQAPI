@@ -1,5 +1,7 @@
 ﻿using Domain.Entities.RecipeEntities;
+using Domain.Entities.UserEntities;
 using Domain.Enums;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -14,7 +16,8 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
     {
         public void Configure(EntityTypeBuilder<RecipeDietPreference> builder)
         {
-            builder.ToTable(nameof(RecipeDietPreference));
+            builder.ToTable(nameof(RecipeDietPreference), DatabaseSetting.RecipeSchema); // todo : implement DependencyInjection  and service creation approach 
+            
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.DietaryPreferences)
