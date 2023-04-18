@@ -64,6 +64,7 @@ namespace Infrastructure
             new DislikeConfiguration().Configure(modelBuilder.Entity<Dislike>());
             new CookingStepConfiguration().Configure(modelBuilder.Entity<CookingStep>());
             new RecipeDietPreferenceConfiguration().Configure(modelBuilder.Entity<RecipeDietPreference>());
+            new IngredientConfiguration().Configure(modelBuilder.Entity<Ingredient>());
         }
     }
 }
