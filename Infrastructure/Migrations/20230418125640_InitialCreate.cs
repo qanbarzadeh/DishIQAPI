@@ -105,19 +105,33 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ingredients",
+                name: "GeneratedRecipes",
                 schema: "User",
+                columns: table => new
+                {
+                    GeneratedRecipeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FoodInformationId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneratedRecipes", x => x.GeneratedRecipeID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredient",
+                schema: "Recipe",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<float>(type: "real", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ingredients", x => x.Id);
+                    table.PrimaryKey("PK_Ingredient", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,6 +203,38 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FoodInformation",
+                schema: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PreparationTime = table.Column<TimeSpan>(type: "Time", nullable: false),
+                    CookingTime = table.Column<int>(type: "int", nullable: false),
+                    Servings = table.Column<int>(type: "int", nullable: false),
+                    CaloriesPerServing = table.Column<int>(type: "int", nullable: false),
+                    ServingSize = table.Column<int>(type: "int", nullable: false),
+                    DietaryPreferences = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    KeyIngredients = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    AllergyRestrictions = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Cuisine = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    DishType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    CookingMethod = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FoodInformation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FoodInformation_GeneratedRecipes_Id",
+                        column: x => x.Id,
+                        principalSchema: "User",
+                        principalTable: "GeneratedRecipes",
+                        principalColumn: "GeneratedRecipeID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -527,8 +573,12 @@ namespace Infrastructure.Migrations
                 schema: "Recipe");
 
             migrationBuilder.DropTable(
-                name: "Ingredients",
+                name: "FoodInformation",
                 schema: "User");
+
+            migrationBuilder.DropTable(
+                name: "Ingredient",
+                schema: "Recipe");
 
             migrationBuilder.DropTable(
                 name: "MealTime",
@@ -568,6 +618,10 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserNotification",
+                schema: "User");
+
+            migrationBuilder.DropTable(
+                name: "GeneratedRecipes",
                 schema: "User");
 
             migrationBuilder.DropTable(

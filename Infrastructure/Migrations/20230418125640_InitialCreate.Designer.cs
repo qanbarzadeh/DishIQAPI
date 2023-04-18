@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230417191735_InitialCreate")]
+    [Migration("20230418125640_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -118,6 +118,88 @@ namespace Infrastructure.Migrations
                     b.ToTable("Flavor", "Recipe");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.FoodInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AllergyRestrictions")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("CaloriesPerServing")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CookingMethod")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("CookingTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Cuisine")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("DietaryPreferences")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("DishType")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("KeyIngredients")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<TimeSpan>("PreparationTime")
+                        .HasColumnType("Time");
+
+                    b.Property<int>("ServingSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Servings")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FoodInformation", "User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
+                {
+                    b.Property<int>("GeneratedRecipeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("GeneratedRecipeID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GeneratedRecipeID"));
+
+                    b.Property<int>("FoodInformationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GeneratedRecipeID");
+
+                    b.ToTable("GeneratedRecipes", "User");
+                });
+
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
                 {
                     b.Property<int>("Id")
@@ -128,18 +210,20 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Unit")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients", "User");
+                    b.ToTable("Ingredient", "Recipe");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.MealTime", b =>
@@ -721,6 +805,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("UserProfileInfo", "User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.FoodInformation", b =>
+                {
+                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
+                        .WithOne("FoodInformation")
+                        .HasForeignKey("Domain.Entities.RecipeEntities.FoodInformation", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.UserEntities.DietaryPreferences", b =>
                 {
                     b.HasOne("Domain.Entities.UserEntities.User", null)
@@ -790,6 +883,12 @@ namespace Infrastructure.Migrations
                         .WithOne("UserProfileInfo")
                         .HasForeignKey("Domain.Entities.UserEntities.UserProfileInfo", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
+                {
+                    b.Navigation("FoodInformation")
                         .IsRequired();
                 });
 

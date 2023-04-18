@@ -20,11 +20,12 @@ namespace Infrastructure
         public DbSet<UserActivityLog> UserActivityLogs { get; set; }
         public DbSet<SocialMediaHandle> SocialMediaHandles { get; set; }
 
+
         // DbSets for Recipe entities
         public DbSet<RecipeDietPreference> RecipeDietPrefernce { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<CookingStep> CookingStep { get; set; }
-        public DbSet<MealType> MealTypes { get; set; }        
+        public DbSet<MealType> MealTypes { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<CookingTechnique> CookingTechniques { get; set; }
         public DbSet<Flavor> Flavors { get; set; }
@@ -32,6 +33,8 @@ namespace Infrastructure
         public DbSet<MealTime> MealTimes { get; set; }
         public DbSet<Dislike> Dislikes { get; set; }
         public DbSet<BloodType> BloodTypes { get; set; }
+        public DbSet<FoodInformation> FoodInformation { get; set; }
+        public DbSet<GeneratedRecipe> GetGeneratedRecipes { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -65,6 +68,8 @@ namespace Infrastructure
             new CookingStepConfiguration().Configure(modelBuilder.Entity<CookingStep>());
             new RecipeDietPreferenceConfiguration().Configure(modelBuilder.Entity<RecipeDietPreference>());
             new IngredientConfiguration().Configure(modelBuilder.Entity<Ingredient>());
+            new FoodInformationConfiguration().Configure(modelBuilder.Entity<FoodInformation>());
+            new GeneratedRecipeConfiguration().Configure(modelBuilder.Entity<GeneratedRecipe>());
         }
     }
 }
