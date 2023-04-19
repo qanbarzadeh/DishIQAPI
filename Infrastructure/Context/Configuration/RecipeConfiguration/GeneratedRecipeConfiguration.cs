@@ -28,6 +28,16 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
                 .WithOne()
                 .HasForeignKey<FoodInformation>(x => x.Id)
                 .IsRequired();
+
+            builder.HasMany(x => x.Ingredients)
+                .WithOne()
+                .HasForeignKey(x => x.Id)
+                .IsRequired(); 
+
+            builder.HasMany(x => x.CookingSteps)
+                .WithOne()
+                .HasForeignKey(x => x.Id)
+                .IsRequired();
         }
     }
 }
