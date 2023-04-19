@@ -80,10 +80,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -682,11 +679,29 @@ namespace Infrastructure.Migrations
                     b.ToTable("UserProfileInfo", "User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.CookingStep", b =>
+                {
+                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
+                        .WithMany("CookingSteps")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.RecipeEntities.FoodInformation", b =>
                 {
                     b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
                         .WithOne("FoodInformation")
                         .HasForeignKey("Domain.Entities.RecipeEntities.FoodInformation", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
+                {
+                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -765,8 +780,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
                 {
+                    b.Navigation("CookingSteps");
+
                     b.Navigation("FoodInformation")
                         .IsRequired();
+
+                    b.Navigation("Ingredients");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.User", b =>
