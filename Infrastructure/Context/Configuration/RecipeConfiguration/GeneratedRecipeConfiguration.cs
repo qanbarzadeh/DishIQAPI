@@ -16,7 +16,7 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
     {
         public void Configure(EntityTypeBuilder<GeneratedRecipe> builder)
         {
-            builder.ToTable("GeneratedRecipes");
+            builder.ToTable(nameof(GeneratedRecipe), DatabaseSetting.RecipeSchema);
 
             builder.HasKey(x => x.GeneratedRecipeID);
 

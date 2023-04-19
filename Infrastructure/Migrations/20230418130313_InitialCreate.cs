@@ -105,8 +105,8 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GeneratedRecipes",
-                schema: "User",
+                name: "GeneratedRecipe",
+                schema: "Recipe",
                 columns: table => new
                 {
                     GeneratedRecipeID = table.Column<int>(type: "int", nullable: false)
@@ -115,7 +115,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GeneratedRecipes", x => x.GeneratedRecipeID);
+                    table.PrimaryKey("PK_GeneratedRecipe", x => x.GeneratedRecipeID);
                 });
 
             migrationBuilder.CreateTable(
@@ -207,7 +207,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "FoodInformation",
-                schema: "User",
+                schema: "Recipe",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -229,10 +229,10 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_FoodInformation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FoodInformation_GeneratedRecipes_Id",
+                        name: "FK_FoodInformation_GeneratedRecipe_Id",
                         column: x => x.Id,
-                        principalSchema: "User",
-                        principalTable: "GeneratedRecipes",
+                        principalSchema: "Recipe",
+                        principalTable: "GeneratedRecipe",
                         principalColumn: "GeneratedRecipeID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -574,7 +574,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "FoodInformation",
-                schema: "User");
+                schema: "Recipe");
 
             migrationBuilder.DropTable(
                 name: "Ingredient",
@@ -621,8 +621,8 @@ namespace Infrastructure.Migrations
                 schema: "User");
 
             migrationBuilder.DropTable(
-                name: "GeneratedRecipes",
-                schema: "User");
+                name: "GeneratedRecipe",
+                schema: "Recipe");
 
             migrationBuilder.DropTable(
                 name: "UserProfileInfo",

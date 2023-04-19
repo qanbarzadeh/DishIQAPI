@@ -177,7 +177,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FoodInformation", "User");
+                    b.ToTable("FoodInformation", "Recipe");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
@@ -194,7 +194,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("GeneratedRecipeID");
 
-                    b.ToTable("GeneratedRecipes", "User");
+                    b.ToTable("GeneratedRecipe", "Recipe");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>

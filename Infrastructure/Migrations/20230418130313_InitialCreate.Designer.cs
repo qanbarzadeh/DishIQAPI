@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230418125640_InitialCreate")]
+    [Migration("20230418130313_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -180,7 +180,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FoodInformation", "User");
+                    b.ToTable("FoodInformation", "Recipe");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
@@ -197,7 +197,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("GeneratedRecipeID");
 
-                    b.ToTable("GeneratedRecipes", "User");
+                    b.ToTable("GeneratedRecipe", "Recipe");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>

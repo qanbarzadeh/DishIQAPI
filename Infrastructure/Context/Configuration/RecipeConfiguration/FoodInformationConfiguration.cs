@@ -15,7 +15,7 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
     {
         public void Configure(EntityTypeBuilder<FoodInformation> builder)
         {
-            builder.ToTable(nameof(FoodInformation), DatabaseSetting.UserSchema);
+            builder.ToTable(nameof(FoodInformation), DatabaseSetting.RecipeSchema);
             builder.HasKey(fi => fi.Id);
 
             builder.Property(fi => fi.Name)
