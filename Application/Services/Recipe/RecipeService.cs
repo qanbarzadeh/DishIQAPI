@@ -1,5 +1,5 @@
 ﻿using Application.Services.OpenAI.ChatGptAPI;
-
+using Domain.Entities.RecipeEntities;
 
 namespace Application.Services.Recipe
 {
