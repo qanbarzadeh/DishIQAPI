@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class IntialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,21 +31,6 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BloodTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CookingStep",
-                schema: "Recipe",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Order = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CookingStep", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,22 +101,6 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GeneratedRecipe", x => x.GeneratedRecipeID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ingredient",
-                schema: "Recipe",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredient", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -206,6 +175,27 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CookingStep",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CookingStep", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CookingStep_GeneratedRecipe_Id",
+                        column: x => x.Id,
+                        principalSchema: "Recipe",
+                        principalTable: "GeneratedRecipe",
+                        principalColumn: "GeneratedRecipeID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FoodInformation",
                 schema: "Recipe",
                 columns: table => new
@@ -230,6 +220,28 @@ namespace Infrastructure.Migrations
                     table.PrimaryKey("PK_FoodInformation", x => x.Id);
                     table.ForeignKey(
                         name: "FK_FoodInformation_GeneratedRecipe_Id",
+                        column: x => x.Id,
+                        principalSchema: "Recipe",
+                        principalTable: "GeneratedRecipe",
+                        principalColumn: "GeneratedRecipeID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredient",
+                schema: "Recipe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ingredient_GeneratedRecipe_Id",
                         column: x => x.Id,
                         principalSchema: "Recipe",
                         principalTable: "GeneratedRecipe",
