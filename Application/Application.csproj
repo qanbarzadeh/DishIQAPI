@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\OpenAI\" />
     <Folder Include="Services\User\" />
   </ItemGroup>
 

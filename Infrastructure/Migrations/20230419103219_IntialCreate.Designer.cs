@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230419103219_IntialCreate")]
+    partial class IntialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +67,123 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Country", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Country", "Recipe");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Dislike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dislike", "Recipe");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Flavor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FlavorType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Flavor", "Recipe");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.FoodInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AllergyRestrictions")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("CaloriesPerServing")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CookingMethod")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("CookingTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Cuisine")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("DietaryPreferences")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("DishType")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("KeyIngredients")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<TimeSpan>("PreparationTime")
+                        .HasColumnType("Time");
+
+                    b.Property<int>("ServingSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Servings")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FoodInformation", "Recipe");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
+                {
+                    b.Property<int>("GeneratedRecipeID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("GeneratedRecipeID");
 
@@ -80,10 +200,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -682,11 +799,29 @@ namespace Infrastructure.Migrations
                     b.ToTable("UserProfileInfo", "User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.CookingStep", b =>
+                {
+                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
+                        .WithMany("CookingSteps")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.RecipeEntities.FoodInformation", b =>
                 {
                     b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
                         .WithOne("FoodInformation")
                         .HasForeignKey("Domain.Entities.RecipeEntities.FoodInformation", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
+                {
+                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -765,8 +900,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
                 {
+                    b.Navigation("CookingSteps");
+
                     b.Navigation("FoodInformation")
                         .IsRequired();
+
+                    b.Navigation("Ingredients");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.User", b =>
