@@ -1,4 +1,5 @@
-﻿using Application.Services.OpenAI.ChatGptAPI;
+﻿using Application.DTO;
+using Application.Services.OpenAI.ChatGptAPI;
 using Application.Services.Recipe;
 using Domain.Entities.RecipeEntities;
 using Domain.ValueObjects.Recipe;
@@ -20,16 +21,16 @@ namespace Application.Test
         {
             //Arrange
             var mockedChatGptService = new Mock<IChatGptService>();
-            var recipeRequest = new RecipeRequest
+            var recipeRequestDTO = new RecipeRequestDTO
             {
-                MealTypeId = 1,
-                DietPreferenceId = 1,
-                RegionId = 1,
-                CookingTechniqueId = 1,
+                MealType = "SomeMealType",
+                DietPreference = "SomeDietPreference",
+                Region = "SomeRegion",
+                CookingTechnique = "SomeCookingTechnique",
                 NumberOfPax = 2,
-                CountryId = 1,
-                MealTimeId = 1,
-                BloodTypeId = 1
+                Country = "SomeCountry",
+                MealTime = "SomeMealTime",
+                BloodType = "SomeBloodType"
             };
             var expectedGeneratedRecipe = new GeneratedRecipe
             {
@@ -39,11 +40,11 @@ namespace Application.Test
                 Description = "Description test"},
                 // Add hardcoded Ingredients and CookingSteps here
             };
-            mockedChatGptService.Setup(api => api.GeneratedRecipeApiAsync(recipeRequest)).ReturnsAsync(expectedGeneratedRecipe);
+            mockedChatGptService.Setup(api => api.GeneratedRecipeApiAsync(recipeRequestDTO)).ReturnsAsync(expectedGeneratedRecipe);
             var recipeService = new RecipeService(mockedChatGptService.Object);
 
             //Act 
-            var actualGeneatedRecipe = await recipeService.GetGeneratedRecipeAsync(recipeRequest);
+            var actualGeneatedRecipe = await recipeService.GetGeneratedRecipeAsync(recipeRequestDTO);
             
 
             //Assert 
