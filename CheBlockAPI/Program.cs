@@ -1,12 +1,8 @@
 using Application.Services.OpenAI.ChatGptAPI;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
-using Application.Services.OpenAI.ChatGptAPI;
-using Microsoft.Extensions.DependencyInjection;
 using Application.Mapping;
 using Application.Services.Recipe;
 

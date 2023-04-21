@@ -1,8 +1,5 @@
 ﻿using Application.DTO.RecipeDTOs;
-using Application.Services.OpenAI.ChatGptAPI;
 using Application.Services.Recipe;
-using Domain.Entities.RecipeEntities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheBlockAPI.Controllers
@@ -19,7 +16,7 @@ namespace CheBlockAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GeneratedRecipe>> GenerateRecipe(RecipeRequestDTO request)
+        public async Task<ActionResult<GeneratedRecipeDTO>> GenerateRecipe(RecipeRequestDTO request)
         {
             var generatedRecipe = await _recipeService.GetGeneratedRecipeAsync(request); 
             

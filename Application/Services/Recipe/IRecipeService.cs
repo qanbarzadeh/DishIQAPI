@@ -1,4 +1,5 @@
-﻿using Domain.Entities.RecipeEntities;
+﻿using Application.DTO.RecipeDTOs;
+using Domain.Entities.RecipeEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Application.Services.Recipe
 {
     public interface IRecipeService
     {
-        Task<GeneratedRecipe> GetGeneratedRecipeAsync(RecipeRequest request);
+        Task<GeneratedRecipeDTO> GetGeneratedRecipeAsync(RecipeRequestDTO requestDTO);
 
     }
 }

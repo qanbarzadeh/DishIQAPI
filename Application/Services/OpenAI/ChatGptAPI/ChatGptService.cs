@@ -1,42 +1,74 @@
-﻿using Domain.Entities.RecipeEntities;
-using Domain.ValueObjects.Recipe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Application.DTO.RecipeDTOs;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
     public class ChatGptService : IChatGptService
     {
-        public async Task<GeneratedRecipe> GeneratedRecipeApiAsync(RecipeRequest request)
+        private readonly IConfiguration? _configuration;
+        private readonly HttpClient _httpClient;
+        private readonly string? _apiKey;
+        private readonly string? _apiEndpoint;
+
+        public ChatGptService(HttpClient httpClient, IConfiguration configuration)
         {
-            // You should add any necessary dependencies and configuration for interacting with the ChatGPT API here.
+            _httpClient = httpClient;
+            _apiKey = configuration["OpenAI:ApiKey"] ?? throw new System.ArgumentNullException(nameof(configuration), "OpenAI API key cannot be null");
+            _apiEndpoint = configuration["OpenAI:ApiEndpoint"] ?? throw new System.ArgumentNullException(nameof(configuration), "OpenAI API endpoint cannot be null");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+        }
 
-            var  GeneratedRecipe = new GeneratedRecipe
+        public async Task<GeneratedRecipeDTO> GeneratedRecipeApiAsync(RecipeRequestDTO request)
+        {
+            // Build the prompt
+            string prompt = BuildPrompt(request);
+
+            // Prepare the request JSON
+            var requestData = new
             {
-                GeneratedRecipeID = 1,              
-                FoodInformation = new FoodInformation { Id = 1,
-                    Name = "Example Food",
-                    Description = "This is a good food ", 
-                    CookingTime = 34, 
-                    Servings = 1, 
-                   },
-
-                Ingredients = new List<Ingredient>
-                {
-                    new Ingredient { Id = 1, Name = "Ingredient 1", Unit = "g", Quantity = 100 },
-                    new Ingredient { Id = 2, Name = "Ingredient 2", Unit = "ml", Quantity = 50 }
-                },
-                CookingSteps = new List<CookingStep>
-                {
-                    new CookingStep { Id = 1, Description = "Step 1: Prepare the ingredients", Order = 1 },
-                    new CookingStep { Id = 2, Description = "Step 2: Cook the dish", Order = 2 }
-                }
+                prompt,
+                max_tokens = 512,
+                temperature = 0.5,
+                top_p = 1,
+                frequency_penalty = 0,
+                presence_penalty = 0,
+                stop = "###"
             };
 
-            return await Task.FromResult(GeneratedRecipe);
+            var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+            var content = new StringContent(JsonConvert.SerializeObject(requestData, settings), Encoding.UTF8, "application/json");
+
+            // Send the HTTP request to the ChatGPT API
+            var response = await _httpClient.PostAsync(_apiEndpoint, content);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the response JSON to GeneratedRecipe
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var generatedRecipeDTO = JsonConvert.DeserializeObject<GeneratedRecipeDTO>(responseJson);
+
+            return generatedRecipeDTO;
+        }
+
+        private string BuildPrompt(RecipeRequestDTO request)
+        {
+            var promptBuilder = new StringBuilder();
+            promptBuilder.AppendLine($"I want to cook a {request.NumberOfPax}-serving {request.MealType} dish");
+            promptBuilder.AppendLine($"that is {request.DietPreference} and suitable for {request.BloodType} blood type");
+            promptBuilder.AppendLine($"from {request.Region} and {request.Country}");
+            promptBuilder.AppendLine($"using {request.CookingTechnique} cooking technique for {request.MealTime}");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
+            promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time," +
+                " servings, calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, cuisine, " +
+                "dish type, cooking method)");
+            promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");
+            promptBuilder.AppendLine("- Cooking steps (description, order)");
+            promptBuilder.AppendLine("###");
+
+            return promptBuilder.ToString();
         }
     }
 }
