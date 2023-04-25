@@ -1,9 +1,12 @@
 ﻿using System.Net;
+using Application.Configuration;
 using Application.DTO;
 using Application.DTO.RecipeDTOs;
 using Application.Services.OpenAI.ChatGptAPI;
 using Domain.Entities.RecipeEntities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
@@ -20,7 +23,7 @@ namespace Application.Test.ChatGptTests
             // Arrange
             var configurationMock = new Mock<IConfiguration>();
             configurationMock.Setup(x => x["OpenAI:ApiKey"]).Returns("test_api_key");
-
+            
             var httpClientHandlerMock = new Mock<HttpMessageHandler>();
 
             httpClientHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync",
@@ -33,8 +36,13 @@ namespace Application.Test.ChatGptTests
                 });
 
             var httpClient = new HttpClient(httpClientHandlerMock.Object);
+            var rapidApiOptionsMock = new Mock<IOptions<RapidApiOptions>>();
+            rapidApiOptionsMock.Setup(x => x.Value).Returns(new RapidApiOptions { RAPIDAPI_KEY = "test_api_key" });
+            var loggerMock = new Mock<ILogger<ChatGptService>>();
 
-            var chatGptService = new ChatGptService(httpClient, configurationMock.Object);
+
+
+            var chatGptService = new ChatGptService(httpClient, configurationMock.Object,rapidApiOptionsMock.Object, loggerMock.Object);
 
             var recipeRequestDTO = new RecipeRequestDTO
             {

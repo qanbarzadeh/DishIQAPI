@@ -1,8 +1,10 @@
-﻿using Application.DTO.RecipeDTOs;
+﻿using Application.Configuration;
+using Application.DTO.RecipeDTOs;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
@@ -10,75 +12,83 @@ namespace Application.Services.OpenAI.ChatGptAPI
     {
         private readonly IConfiguration? _configuration;
         private readonly HttpClient _httpClient;
-        private readonly string? _rapidApiKey;
+        //private readonly string? _rapidApiKey;
         private readonly string? _rapidapiEndpoint;
-        private readonly string? _apiHost;
-
-        public ChatGptService(HttpClient httpClient, IConfiguration configuration)
-        {
+        private readonly ILogger _logger;
+        //private readonly string? _apiHost;
+        private const string _apiHost = "https://openai80.p.rapidapi.com";
+        private const string _rapidAPEndpoint = "https://openai80.p.rapidapi.com/";
+        private const string _rapidApikey = "87469d0de2msh68ef681a9b461f3p1bfa82jsn173917c29b0e"; 
+        public ChatGptService(HttpClient httpClient, IConfiguration configuration, IOptions<RapidApiOptions> rapidApiOptions, ILogger<ChatGptService> logger)
+        {            
             _httpClient = httpClient;
-            _rapidapiEndpoint = configuration["RapidAPI:ApiEndpoint"] ?? throw new System.ArgumentNullException(nameof(configuration), "RapidApi endPoint api endpoint cannot be null");
-            _rapidApiKey = configuration["RapidAPI:ApiKey"] ?? throw new System.ArgumentNullException(nameof(configuration), "RapidAPI key cannot be null");
-            _apiHost = configuration["RapidAPI:ApiHost"] ?? throw new System.ArgumentNullException(nameof(configuration), "RapidAPI endpoint cannot be null");
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApiKey);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", _apiHost);
-            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+            _configuration = configuration;
+            _logger = logger;
+            //_rapidApiKey = rapidApiOptions.Value.RAPIDAPI_KEY;
+            //_rapidapiEndpoint = rapidApiOptions.Value.RAPIDAPI_ENDPOINT;
+            //_apiHost = configuration["RapidApi:RAPIDAPI_HOST"];
+            _httpClient.BaseAddress = new Uri(_apiHost);
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApikey);
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "openai80.p.rapidapi.com");
             _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
+            //logging 
+            _logger.LogInformation("ChatGptService initialized");
+            _logger.LogInformation($"_apiHost: {_apiHost}");
+            _logger.LogInformation($"_rapidApiKey: {_rapidApikey}");
+            _logger.LogInformation($"_rapidapiEndpoint: {_rapidapiEndpoint}");
 
         }
 
-        public async Task<GeneratedRecipeDTO> GeneratedRecipeApiAsync(RecipeRequestDTO request)
+        public async Task<GeneratedRecipeDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
         {
             // Build the prompt
-            string prompt = BuildPrompt(request);
+            string prompt = BuildPrompt(recipeRequest);
 
             // Prepare the request JSON
-            //var requestData = new
-            //{
-            //    prompt,
-            //    max_tokens = 512,
-            //    temperature = 0.5,
-            //    top_p = 1,
-            //    frequency_penalty = 0,
-            //    presence_penalty = 0,
-            //    stop = "###"
-            //};
-            //Change for RapidAPI 
             var requestData = new
             {
                 model = "gpt-3.5-turbo",
                 messages = new[]
-               {
-                    new
-                    {
-                        role = "user",
-                        content = prompt
-                    }
-                }
+         {
+            new
+            {
+                role = "user",
+                content = prompt
+            }
+        }
             };
-
+            //Change for RapidAPI 
 
             var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             var content = new StringContent(JsonConvert.SerializeObject(requestData, settings), Encoding.UTF8, "application/json");
 
-            // Send the HTTP request to the ChatGPT API
-            var response = await _httpClient.PostAsync(_rapidapiEndpoint, content);
-            response.EnsureSuccessStatusCode();
+            var requestUri = new Uri("https://openai80.p.rapidapi.com/chat/completions");
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = content
+            };
+            //request.Headers.Add("X-RapidAPI-Key", _rapidApikey);
+            //request.Headers.Add("X-RapidAPI-Host", _apiHost);
+            _logger.LogInformation($"Sending API request to {_apiHost} with prompt: {prompt}"); //logging 
 
-            // Deserialize the response JSON to GeneratedRecipe
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            _logger.LogInformation($"API response received with status code {response.StatusCode}"); //loging 
+
             var responseJson = await response.Content.ReadAsStringAsync();
             var generatedRecipeDTO = JsonConvert.DeserializeObject<GeneratedRecipeDTO>(responseJson);
 
             return generatedRecipeDTO;
+
         }
 
-        private string BuildPrompt(RecipeRequestDTO request)
+        private string BuildPrompt(RecipeRequestDTO recipeRequest)
         {
             var promptBuilder = new StringBuilder();
-            promptBuilder.AppendLine($"I want to cook a {request.NumberOfPax}-serving {request.MealType} dish");
-            promptBuilder.AppendLine($"that is {request.DietPreference} and suitable for {request.BloodType} blood type");
-            promptBuilder.AppendLine($"from {request.Region} and {request.Country}");
-            promptBuilder.AppendLine($"using {request.CookingTechnique} cooking technique for {request.MealTime}");
+            promptBuilder.AppendLine($"I want to cook a {recipeRequest.NumberOfPax}-serving {recipeRequest.MealType} dish");
+            promptBuilder.AppendLine($"that is {recipeRequest.DietPreference} and suitable for {recipeRequest.BloodType} blood type");
+            promptBuilder.AppendLine($"from {recipeRequest.Region} and {recipeRequest.Country}");
+            promptBuilder.AppendLine($"using {recipeRequest.CookingTechnique} cooking technique for {recipeRequest.MealTime}");
             promptBuilder.AppendLine();
             promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
             promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time," +

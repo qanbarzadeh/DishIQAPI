@@ -1,4 +1,5 @@
-﻿using Application.DTO;
+﻿using Application.Configuration;
+using Application.DTO;
 using Application.DTO.RecipeDTOs;
 using Application.Services.OpenAI.ChatGptAPI;
 using Application.Services.Recipe;
@@ -6,13 +7,26 @@ using Domain.Entities.RecipeEntities;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Xunit; 
 
 namespace Application.Test.Application.Test.Integration
 {
     public class RecipeServiceIntegrationTests
     {
+
+        private readonly ILogger _logger;
+        private readonly IOptions<RapidApiOptions> _rapidAiOptions;
+
+        public RecipeServiceIntegrationTests(ILogger<RecipeServiceIntegrationTests> logger, IOptions<RapidApiOptions> rapidAiOptions)
+        {
+            _logger = logger;
+            _rapidAiOptions = rapidAiOptions;
+        }
+
         [Fact]
+
         public async Task GetGeneratedRecipeAsync_IntegrationTest()
         {
             // Configure in-memory DbContext
@@ -26,13 +40,14 @@ namespace Application.Test.Application.Test.Integration
             var httpClient = new HttpClient();
 
             // Configure appsettings.json
-            var configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()                    
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
 
             // Create services
-            var chatGptService = new ChatGptService(httpClient, configuration);
+            var chatGptService = new ChatGptService(httpClient, configuration, _rapidAiOptions, (ILogger<ChatGptService>)_logger);
             var recipeService = new RecipeService(chatGptService);
+            
 
             
             // Perform the integration test
