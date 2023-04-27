@@ -1,4 +1,5 @@
-﻿using Domain.Entities.RecipeEntities;
+﻿using Application.DTO.RecipeDTOs;
+using Domain.Entities.RecipeEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Application.Services.OpenAI.ChatGptAPI
 {
     public interface IChatGptService
     {
-        Task<GeneratedRecipe> GeneratedRecipeApiAsync(RecipeRequest request);   
+        Task<GeneratedRecipeDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequestDTO);   
     }
 }

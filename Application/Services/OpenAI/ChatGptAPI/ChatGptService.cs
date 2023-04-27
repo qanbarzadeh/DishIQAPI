@@ -1,42 +1,104 @@
-﻿using Domain.Entities.RecipeEntities;
-using Domain.ValueObjects.Recipe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Application.Configuration;
+using Application.DTO.RecipeDTOs;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
     public class ChatGptService : IChatGptService
     {
-        public async Task<GeneratedRecipe> GeneratedRecipeApiAsync(RecipeRequest request)
+        private readonly IConfiguration? _configuration;
+        private readonly HttpClient _httpClient;
+        //private readonly string? _rapidApiKey;
+        private readonly string? _rapidapiEndpoint;
+        private readonly ILogger _logger;
+        //private readonly string? _apiHost;
+        private const string _apiHost = "https://openai80.p.rapidapi.com";
+        private const string _rapidAPEndpoint = "https://openai80.p.rapidapi.com/";
+        private const string _rapidApikey = "87469d0de2msh68ef681a9b461f3p1bfa82jsn173917c29b0e"; 
+        public ChatGptService(HttpClient httpClient, IConfiguration configuration, IOptions<RapidApiOptions> rapidApiOptions, ILogger<ChatGptService> logger)
+        {            
+            _httpClient = httpClient;
+            _configuration = configuration;
+            _logger = logger;
+            //_rapidApiKey = rapidApiOptions.Value.RAPIDAPI_KEY;
+            //_rapidapiEndpoint = rapidApiOptions.Value.RAPIDAPI_ENDPOINT;
+            //_apiHost = configuration["RapidApi:RAPIDAPI_HOST"];
+            _httpClient.BaseAddress = new Uri(_apiHost);
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApikey);
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "openai80.p.rapidapi.com");
+            _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
+            //logging 
+            _logger.LogInformation("ChatGptService initialized");
+            _logger.LogInformation($"_apiHost: {_apiHost}");
+            _logger.LogInformation($"_rapidApiKey: {_rapidApikey}");
+            _logger.LogInformation($"_rapidapiEndpoint: {_rapidapiEndpoint}");
+
+        }
+
+        public async Task<GeneratedRecipeDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
         {
-            // You should add any necessary dependencies and configuration for interacting with the ChatGPT API here.
+            // Build the prompt
+            string prompt = BuildPrompt(recipeRequest);
 
-            var  GeneratedRecipe = new GeneratedRecipe
+            // Prepare the request JSON
+            var requestData = new
             {
-                GeneratedRecipeID = 1,              
-                FoodInformation = new FoodInformation { Id = 1,
-                    Name = "Example Food",
-                    Description = "This is a good food ", 
-                    CookingTime = 34, 
-                    Servings = 1, 
-                   },
-
-                Ingredients = new List<Ingredient>
-                {
-                    new Ingredient { Id = 1, Name = "Ingredient 1", Unit = "g", Quantity = 100 },
-                    new Ingredient { Id = 2, Name = "Ingredient 2", Unit = "ml", Quantity = 50 }
-                },
-                CookingSteps = new List<CookingStep>
-                {
-                    new CookingStep { Id = 1, Description = "Step 1: Prepare the ingredients", Order = 1 },
-                    new CookingStep { Id = 2, Description = "Step 2: Cook the dish", Order = 2 }
-                }
+                model = "gpt-3.5-turbo",
+                messages = new[]
+         {
+            new
+            {
+                role = "user",
+                content = prompt
+            }
+        }
             };
+            //Change for RapidAPI 
 
-            return await Task.FromResult(GeneratedRecipe);
+            var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+            var content = new StringContent(JsonConvert.SerializeObject(requestData, settings), Encoding.UTF8, "application/json");
+
+            var requestUri = new Uri("https://openai80.p.rapidapi.com/chat/completions");
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = content
+            };
+            //request.Headers.Add("X-RapidAPI-Key", _rapidApikey);
+            //request.Headers.Add("X-RapidAPI-Host", _apiHost);
+            _logger.LogInformation($"Sending API request to {_apiHost} with prompt: {prompt}"); //logging 
+
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            _logger.LogInformation($"API response received with status code {response.StatusCode}"); //loging 
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var generatedRecipeDTO = JsonConvert.DeserializeObject<GeneratedRecipeDTO>(responseJson);
+
+            return generatedRecipeDTO;
+
+        }
+
+        private string BuildPrompt(RecipeRequestDTO recipeRequest)
+        {
+            var promptBuilder = new StringBuilder();
+            promptBuilder.AppendLine($"I want to cook a {recipeRequest.NumberOfPax}-serving {recipeRequest.MealType} dish");
+            promptBuilder.AppendLine($"that is {recipeRequest.DietPreference} and suitable for {recipeRequest.BloodType} blood type");
+            promptBuilder.AppendLine($"from {recipeRequest.Region} and {recipeRequest.Country}");
+            promptBuilder.AppendLine($"using {recipeRequest.CookingTechnique} cooking technique for {recipeRequest.MealTime}");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
+            promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time," +
+                " servings, calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, cuisine, " +
+                "dish type, cooking method)");
+            promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");
+            promptBuilder.AppendLine("- Cooking steps (description, order)");
+            promptBuilder.AppendLine("###");
+
+            return promptBuilder.ToString();
         }
     }
 }
