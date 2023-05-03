@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  cheblockapi:
+    image: ${DOCKER_REGISTRY-}cheblockapi
+    build:
+      context: .
+      dockerfile: CheBlockAPI/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - sqlserver
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrongPassword!
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
