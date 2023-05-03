@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Application.Mapping;
 using Application.Services.Recipe;
-using Microsoft.Extensions.Configuration;
 using Application.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
