@@ -8,6 +8,8 @@ services:
       dockerfile: CheBlockAPI/Dockerfile
     ports:
       - "8080:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=CheBlockDb;User Id=sa;Password=YourStrongPassword!
     depends_on:
       - sqlserver
   sqlserver:
