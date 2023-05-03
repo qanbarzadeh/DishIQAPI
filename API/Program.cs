@@ -9,7 +9,7 @@ using Application.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container..
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
@@ -20,7 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 
-// Register RecipeService
+// Register RecipeService 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 // Configure RapidApiOptions using environment variables
 var rapidApiKey = Environment.GetEnvironmentVariable("RAPIDAPI_KEY");
