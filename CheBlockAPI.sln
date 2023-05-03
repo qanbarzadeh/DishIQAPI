@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheBlockAPI", "CheBlockAPI\CheBlockAPI.csproj", "{7CE714EC-581D-4C85-8BCA-0D9D36E93F4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "CheBlockAPI\API.csproj", "{7CE714EC-581D-4C85-8BCA-0D9D36E93F4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{81F33EA1-8CA3-44C5-9247-3F2EBE14EC75}"
 EndProject
