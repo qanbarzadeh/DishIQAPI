@@ -9,7 +9,7 @@ services:
     ports:
       - "80:80"
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=YourDatabaseName;User Id=sa;Password=YourStrongPassword!
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=chefblock;User Id=sa;Password=YourStrongPassword!
   sqlserver:
     image: "mcr.microsoft.com/mssql/server"
     ports:
