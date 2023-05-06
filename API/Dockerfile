@@ -1,5 +1,3 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -17,6 +15,9 @@ WORKDIR "/src/API"
 RUN dotnet build "API.csproj" -c Release -o /app/build
 
 FROM build AS publish
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password=password
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p password
 RUN dotnet publish "API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
