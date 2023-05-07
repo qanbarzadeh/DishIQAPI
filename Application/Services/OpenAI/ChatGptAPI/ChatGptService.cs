@@ -49,7 +49,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             {
                 model = "gpt-3.5-turbo",
                 messages = new[]
-         {
+              {
             new
             {
                 role = "user",
@@ -67,16 +67,30 @@ namespace Application.Services.OpenAI.ChatGptAPI
             {
                 Content = content
             };
-            //request.Headers.Add("X-RapidAPI-Key", _rapidApikey);
-            //request.Headers.Add("X-RapidAPI-Host", _apiHost);
             _logger.LogInformation($"Sending API request to {_apiHost} with prompt: {prompt}"); //logging 
 
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            _logger.LogInformation($"API response received with status code {response.StatusCode}"); //loging 
+            GeneratedRecipeDTO generatedRecipeDTO;
+            try
+            {
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
 
-            var responseJson = await response.Content.ReadAsStringAsync();
-            var generatedRecipeDTO = JsonConvert.DeserializeObject<GeneratedRecipeDTO>(responseJson);
+                // Log the response content and headers
+                _logger.LogInformation($"Response Content: {await response.Content.ReadAsStringAsync()}");
+                _logger.LogInformation($"Response Headers: {response.Headers.ToString()}");
+
+                response.EnsureSuccessStatusCode();
+
+                var responseJson = await response.Content.ReadAsStringAsync();
+                generatedRecipeDTO = JsonConvert.DeserializeObject<GeneratedRecipeDTO>(responseJson);
+            }
+            catch (HttpRequestException ex)
+            {
+                // Log the exception
+                _logger.LogError(ex, "An error occurred while calling the API");
+
+                // Re-throw the exception to be handled by the caller
+                throw;
+            }
 
             return generatedRecipeDTO;
 

@@ -33,13 +33,16 @@ builder.Services.Configure<RapidApiOptions>(options =>
     options.RAPIDAPI_ENDPOINT = rapidApiEndpoint;
 });
 
-
-
 // Register AutoMapper
 //builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly); //Register IMapper when need to store entityinto databse 
-
 //builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // check if it is needed to inject Iconfiguration here. 
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
