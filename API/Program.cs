@@ -7,6 +7,7 @@ using Microsoft.Identity.Web;
 using Application.Mapping;
 using Application.Services.Recipe;
 using Application.Configuration;
+using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 
 // Register RecipeService 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddSingleton<IRecipeParser, RecipeParser>(); 
 // Configure RapidApiOptions using environment variables
 var rapidApiKey = Environment.GetEnvironmentVariable("RAPIDAPI_KEY");
 var rapidApiHost = Environment.GetEnvironmentVariable("RAPIDAPI_HOST");
