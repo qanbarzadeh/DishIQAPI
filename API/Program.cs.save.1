@@ -1,4 +1,3 @@
-
 using Application.Services.OpenAI.ChatGptAPI;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -51,17 +50,8 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
- //   app.UseSwagger();
- //   app.UseSwaggerUI();
-//}
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-});
+
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
