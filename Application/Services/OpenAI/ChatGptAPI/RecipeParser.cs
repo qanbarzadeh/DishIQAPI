@@ -94,21 +94,27 @@ namespace Application.Services.OpenAI.ChatGptAPI
 
             return ingredients;
         }
-
         private IngredientDTO ParseIngredient(string ingredientName)
         {
-            var ingredient = new IngredientDTO
-            {
-                Name = ingredientName,
-                Quantity = 0,  // Initialize to zero or set the actual quantity if available
-                Unit = null,  // Set to null or parse the unit if available
-            };
+            var ingredient = new IngredientDTO();
 
-            // Perform additional parsing logic for quantity and unit if provided in the ingredient name
-            // For example, you can split the ingredientName by spaces and check for quantity and unit patterns
+            var parts = ingredientName.Split(':');
+            if (parts.Length > 1)
+            {
+                ingredient.Name = parts[0].Trim();
+                ingredient.Quantity = 0; // Initialize to zero or set the actual quantity if available
+                ingredient.Unit = null; // Set to null or parse the unit if available
+            }
+            else
+            {
+                ingredient.Name = ingredientName.Trim();
+                ingredient.Quantity = 0; // Initialize to zero or set the actual quantity if available
+                ingredient.Unit = null; // Set to null or parse the unit if available
+            }
 
             return ingredient;
         }
+
 
 
         private List<CookingStepDTO> ParseCookingSteps(List<string> lines)
