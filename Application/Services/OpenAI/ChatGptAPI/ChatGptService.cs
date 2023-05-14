@@ -42,6 +42,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             var requestData = new
             {
                 model = "gpt-3.5-turbo",
+                max_tokens = 2048, // the desired number of tokens (characters) allowed in the response
                 messages = new[]
                 {
             new
