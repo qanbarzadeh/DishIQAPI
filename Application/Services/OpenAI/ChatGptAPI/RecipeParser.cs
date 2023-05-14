@@ -18,6 +18,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             _logger = logger;
         }
 
+
         public GeneratedRecipeDTO Parse(string assistantMessage)
         {
             // Split the assistant message into lines
@@ -32,73 +33,85 @@ namespace Application.Services.OpenAI.ChatGptAPI
             // Create a new FoodInformationDTO
             var foodInformation = new FoodInformationDTO();
 
+            // Flags to track when we're in the ingredients or cooking steps sections
+            bool inIngredients = false;
+            bool inCookingSteps = false;
+
             // Loop through each line
             for (int i = 0; i < lines.Length; i++)
             {
                 // Get current line
-                var line = lines[i];
+                var line = lines[i].Trim();
+
+                // Check if we're entering or leaving the ingredients or cooking steps sections
+                if (line.StartsWith("List of Ingredients:"))
+                {
+                    inIngredients = true;
+                    continue;
+                }
+                else if (line.StartsWith("Cooking Steps:"))
+                {
+                    inIngredients = false;
+                    inCookingSteps = true;
+                    continue;
+                }
+                else if (line.StartsWith("Food Information:"))
+                {
+                    inCookingSteps = false;
+                    continue;
+                }
 
                 try
                 {
                     // Parse the food information
-                    if (line.StartsWith("- Name:"))
-                        foodInformation.Name = line.Substring("- Name:".Length).Trim();
-                    else if (line.StartsWith("- Description:"))
-                        foodInformation.Description = line.Substring("- Description:".Length).Trim();
-                    // ... repeat this for all properties of FoodInformationDTO ...
+                    if (!inIngredients && !inCookingSteps)
+                    {
+                        if (line.StartsWith("Name:"))
+                            foodInformation.Name = line.Substring("Name:".Length).Trim();
+                        else if (line.StartsWith("Description:"))
+                            foodInformation.Description = line.Substring("Description:".Length).Trim();
+                        // ... repeat this for all properties of FoodInformationDTO ...
+                    }
 
                     // Parse the list of ingredients
-                    else if (line.StartsWith("List of Ingredients:"))
+                    else if (inIngredients)
                     {
-                        i++; // skip the "List of Ingredients:" line
-                        while (!lines[i].StartsWith("Cooking Steps:"))
+                        var parts = line.Split('-');
+                        if (parts.Length > 1)
                         {
-                            var ingredientLine = lines[i];
-                            var parts = ingredientLine.Split(',');
                             var ingredient = new IngredientDTO
                             {
-                                Name = parts[0].Substring(2).Trim(),  // remove the '-' at the start
-                                Quantity = float.Parse(parts[1].Split(' ')[1]), // parse the quantity
-                                Unit = parts[1].Split(' ')[2]  // get the unit
+                                Name = parts[1].Trim(),  // remove the '-' at the start
+                                                         // Quantity and Unit are omitted here as they're not provided in the response
                             };
                             ingredients.Add(ingredient);
-                            i++;
                         }
                     }
 
                     // Parse the cooking steps
-                    else if (line.StartsWith("Cooking Steps:"))
+                    else if (inCookingSteps)
                     {
-                        i++; // skip the "Cooking Steps:" line
-                        while (i < lines.Length)
+                        var stepLine = line;
+                        var cookingStep = new CookingStepDTO
                         {
-                            var stepLine = lines[i];
-                            var cookingStep = new CookingStepDTO
-                            {
-                                Order = int.Parse(stepLine.Split('.')[0]),  // parse the step number
-                                Description = stepLine.Substring(stepLine.IndexOf('.') + 2)  // get the step description
-                            };
-                            cookingSteps.Add(cookingStep);
-                            i++;
-                        }
+                            Order = int.Parse(stepLine.Split('.')[0]),  // parse the step number
+                            Description = stepLine.Substring(stepLine.IndexOf('.') + 2)  // get the step description
+                        };
+                        cookingSteps.Add(cookingStep);
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Error parsing line: {line}");
-                    // Decide how to handle the error. You might want to continue parsing the rest of the lines, or stop and return an error.
-                }
+                    _logger.LogError(ex, $"Failed to parse line {i}: {line}");
+                    throw;
+                }              
             }
-
-            // Set the DTO properties
-            generatedRecipeDTO.FoodInformation = foodInformation;
+            // Assign the parsed ingredients and cooking steps to the RecipeResponseDTO
             generatedRecipeDTO.Ingredients = ingredients;
             generatedRecipeDTO.CookingSteps = cookingSteps;
+            generatedRecipeDTO.FoodInformation = foodInformation;
 
             return generatedRecipeDTO;
         }
     }
-
-
-
 }
