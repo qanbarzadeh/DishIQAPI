@@ -144,18 +144,24 @@ namespace Application.Services.OpenAI.ChatGptAPI
         {
             // Use regular expressions to extract the numeric part of the step number
             Match match = Regex.Match(stepLine, @"\d+");
+            string numberString = string.Empty;
+
             if (match.Success)
             {
-                string numberString = match.Value;
+                numberString = match.Value;
                 if (int.TryParse(numberString, out int stepNumber))
                 {
                     return stepNumber;
                 }
             }
 
-            // Throw an exception if the step number cannot be parsed
-            throw new FormatException("Invalid step number format: " + stepLine);
+            // Log the stepLine and numberString for troubleshooting
+            _logger.LogError($"Failed to parse step number. stepLine: {stepLine}, numberString: {numberString}");
+
+            // If no numeric part found or parsing fails, you can return a default value (e.g., 0) or handle the error accordingly
+            return 0;
         }
+
 
 
         private string ParseStepDescription(string stepLine)
