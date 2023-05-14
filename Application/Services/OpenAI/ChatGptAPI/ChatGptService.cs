@@ -29,8 +29,8 @@ namespace Application.Services.OpenAI.ChatGptAPI
             _recipeParser = recipeParser;
             _logger = logger;
             _httpClient.BaseAddress = new Uri(_apiHost);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApikey);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "openai80.p.rapidapi.com");
+            _httpClient.BaseAddress = new Uri(_configuration["OPENAI_API_URL"]); // Assuming you store the OpenAI API URL in appsettings.json
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_configuration["OPENAI_API_KEY"]}");
             _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
                                                             //logging 
             _logger.LogInformation("ChatGptService initialized");
