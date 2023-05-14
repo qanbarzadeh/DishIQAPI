@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
@@ -141,10 +142,22 @@ namespace Application.Services.OpenAI.ChatGptAPI
 
         private int ParseStepNumber(string stepLine)
         {
-            // Extract the step number from the stepLine
-            var stepNumberString = stepLine.Split('.')[0];
-            return int.Parse(stepNumberString);
+            // Remove any non-numeric characters from the stepLine
+            string numberString = Regex.Replace(stepLine, @"[^0-9]", "");
+
+            if (!string.IsNullOrEmpty(numberString))
+            {
+                if (int.TryParse(numberString, out int stepNumber))
+                {
+                    return stepNumber;
+                }
+            }
+
+            // Throw an exception if the step number cannot be parsed
+            throw new FormatException("Invalid step number format: " + stepLine);
         }
+
+
 
         private string ParseStepDescription(string stepLine)
         {
