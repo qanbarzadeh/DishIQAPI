@@ -1,0 +1,54 @@
+[1mdiff --git a/Application/Services/OpenAI/ChatGptAPI/ChatGptService.cs b/Application/Services/OpenAI/ChatGptAPI/ChatGptService.cs[m
+[1mindex c479a6c..3af161f 100644[m
+[1m--- a/Application/Services/OpenAI/ChatGptAPI/ChatGptService.cs[m
+[1m+++ b/Application/Services/OpenAI/ChatGptAPI/ChatGptService.cs[m
+[36m@@ -101,24 +101,31 @@[m [mnamespace Application.Services.OpenAI.ChatGptAPI[m
+         }[m
+ [m
+ [m
+[31m-        private string BuildPrompt(RecipeRequestDTO recipeRequest)[m
+[31m-        {[m
+[31m-            var promptBuilder = new StringBuilder();[m
+[31m-            promptBuilder.AppendLine($"I want to cook a {recipeRequest.NumberOfPax}-serving {recipeRequest.MealType} dish");[m
+[31m-            promptBuilder.AppendLine($"that is {recipeRequest.DietPreference} and suitable for {recipeRequest.BloodType} blood type");[m
+[31m-            promptBuilder.AppendLine($"from {recipeRequest.Region} and {recipeRequest.Country}");[m
+[31m-            promptBuilder.AppendLine($"using {recipeRequest.CookingTechnique} cooking technique for {recipeRequest.MealTime}");[m
+[31m-            promptBuilder.AppendLine();[m
+[31m-            promptBuilder.AppendLine("Please provide the following details for the generated recipe:");[m
+[31m-            promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time," +[m
+[31m-                " servings, calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, cuisine, " +[m
+[31m-                "dish type, cooking method)");[m
+[31m-            promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");[m
+[31m-            promptBuilder.AppendLine("- Cooking steps (description, order)");[m
+[31m-            promptBuilder.AppendLine("###");[m
+[31m-[m
+[31m-            return promptBuilder.ToString();[m
+[31m-        }[m
+[32m+[m[32m       private string BuildPrompt(RecipeRequestDTO recipeRequest)[m
+[32m+[m[32m{[m
+[32m+[m[32m    var promptBuilder = new StringBuilder();[m
+[32m+[m[32m    promptBuilder.AppendLine("{");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"mealType\": \"" + recipeRequest.MealType + "\",");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"dietPreference\": \"" + recipeRequest.DietPreference + "\",");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"region\": \"" + recipeRequest.Region + "\",");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"cookingTechnique\": \"" + recipeRequest.CookingTechnique + "\",");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"numberOfPax\": " + recipeRequest.NumberOfPax + ",");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"country\": \"" + recipeRequest.Country + "\",");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"mealTime\": \"" + recipeRequest.MealTime + "\",");[m
+[32m+[m[32m    promptBuilder.AppendLine("  \"bloodType\": \"" + recipeRequest.BloodType + "\"");[m
+[32m+[m[32m    promptBuilder.AppendLine("}");[m
+[32m+[m[32m    promptBuilder.AppendLine();[m
+[32m+[m[32m    promptBuilder.AppendLine("Please provide the following details for the generated recipe:");[m
+[32m+[m[32m    promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time, servings, " +[m
+[32m+[m[32m                             "calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, " +[m
+[32m+[m[32m                             "cuisine, dish type, cooking method)");[m
+[32m+[m[32m    promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");[m
+[32m+[m[32m    promptBuilder.AppendLine("- Cooking steps (description, order)");[m
+[32m+[m[32m    promptBuilder.AppendLine("###");[m
+[32m+[m
+[32m+[m[32m    return promptBuilder.ToString();[m
+[32m+[m[32m}[m
+[32m+[m
+ [m
+     }[m
+ }[m
