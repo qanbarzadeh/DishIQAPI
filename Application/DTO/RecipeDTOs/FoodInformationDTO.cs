@@ -1,10 +1,10 @@
 ﻿namespace Application.DTO.RecipeDTOs
 {
     public class FoodInformationDTO
-    {        
+    {
         public string Name { get; set; }
         public string Description { get; set; }
-        public int PreparationTime { get; set; }
+        public TimeSpan PreparationTime { get; set; }
         public int CookingTime { get; set; }
         public int Servings { get; set; }
         public int CaloriesPerServing { get; set; }
