@@ -4,8 +4,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
@@ -18,100 +16,205 @@ namespace Application.Services.OpenAI.ChatGptAPI
             _logger = logger;
         }
 
-
         public GeneratedRecipeDTO Parse(string assistantMessage)
         {
-            // Split the assistant message into lines
             var lines = assistantMessage.Split('\n');
 
-            // Create the RecipeResponseDTO
-            var generatedRecipeDTO = new GeneratedRecipeDTO();
+            var foodInfoStart = Array.IndexOf(lines, "Food Information:") + 1;
+            var ingredientsStart = Array.IndexOf(lines, "List of Ingredients:") + 1;
+            var cookingStepsStart = Array.IndexOf(lines, "Cooking Steps:") + 1;
 
-            // Temporary holders for ingredients and cooking steps
-            var ingredients = new List<IngredientDTO>();
-            var cookingSteps = new List<CookingStepDTO>();
-            // Create a new FoodInformationDTO
+            var foodInfoLines = lines.Skip(foodInfoStart).Take(ingredientsStart - foodInfoStart - 2).ToList();
+            var ingredientLines = lines.Skip(ingredientsStart).Take(cookingStepsStart - ingredientsStart - 2).ToList();
+            var cookingStepLines = lines.Skip(cookingStepsStart).ToList();
+
+            var foodInformation = ParseFoodInformation(foodInfoLines);
+            var ingredients = ParseIngredients(ingredientLines);
+            var cookingSteps = ParseCookingSteps(cookingStepLines);
+
+            return new GeneratedRecipeDTO
+            {
+                FoodInformation = foodInformation,
+                Ingredients = ingredients,
+                CookingSteps = cookingSteps
+            };
+        }
+
+        private FoodInformationDTO ParseFoodInformation(List<string> lines)
+        {
             var foodInformation = new FoodInformationDTO();
 
-            // Flags to track when we're in the ingredients or cooking steps sections
-            bool inIngredients = false;
-            bool inCookingSteps = false;
-
-            // Loop through each line
-            for (int i = 0; i < lines.Length; i++)
+            foreach (var line in lines)
             {
-                // Get current line
-                var line = lines[i].Trim();
-
-                // Check if we're entering or leaving the ingredients or cooking steps sections
-                if (line.StartsWith("List of Ingredients:"))
-                {
-                    inIngredients = true;
-                    continue;
-                }
-                else if (line.StartsWith("Cooking Steps:"))
-                {
-                    inIngredients = false;
-                    inCookingSteps = true;
-                    continue;
-                }
-                else if (line.StartsWith("Food Information:"))
-                {
-                    inCookingSteps = false;
-                    continue;
-                }
-
-                try
-                {
-                    // Parse the food information
-                    if (!inIngredients && !inCookingSteps)
-                    {
-                        if (line.StartsWith("Name:"))
-                            foodInformation.Name = line.Substring("Name:".Length).Trim();
-                        else if (line.StartsWith("Description:"))
-                            foodInformation.Description = line.Substring("Description:".Length).Trim();
-                        // ... repeat this for all properties of FoodInformationDTO ...
-                    }
-
-                    // Parse the list of ingredients
-                    else if (inIngredients)
-                    {
-                        var parts = line.Split('-');
-                        if (parts.Length > 1)
-                        {
-                            var ingredient = new IngredientDTO
-                            {
-                                Name = parts[1].Trim(),  // remove the '-' at the start
-                                                         // Quantity and Unit are omitted here as they're not provided in the response
-                            };
-                            ingredients.Add(ingredient);
-                        }
-                    }
-
-                    // Parse the cooking steps
-                    else if (inCookingSteps)
-                    {
-                        var stepLine = line;
-                        var cookingStep = new CookingStepDTO
-                        {
-                            Order = int.Parse(stepLine.Split('.')[0]),  // parse the step number
-                            Description = stepLine.Substring(stepLine.IndexOf('.') + 2)  // get the step description
-                        };
-                        cookingSteps.Add(cookingStep);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Failed to parse line {i}: {line}");
-                    throw;
-                }              
+                if (line.StartsWith("Name:"))
+                    foodInformation.Name = line.Substring("Name:".Length).Trim();
+                else if (line.StartsWith("Description:"))
+                    foodInformation.Description = line.Substring("Description:".Length).Trim();
+                else if (line.StartsWith("Preparation Time:"))
+                    foodInformation.PreparationTime = ParseTime(line.Substring("Preparation Time:".Length).Trim());
+                else if (line.StartsWith("Cooking Time:"))
+                    foodInformation.CookingTime = ParseTime(line.Substring("Cooking Time:".Length).Trim());
+                else if (line.StartsWith("Servings:"))
+                    foodInformation.Servings = ParseServings(line.Substring("Servings:".Length).Trim());
+                else if (line.StartsWith("Calories per Serving:"))
+                    foodInformation.CaloriesPerServing = ParseCalories(line.Substring("Calories per Serving:".Length).Trim());
+                else if (line.StartsWith("Serving Size:"))
+                    foodInformation.ServingSize = ParseServingSize(line.Substring("Serving Size:".Length).Trim());
+                else if (line.StartsWith("Dietary Preferences:"))
+                    foodInformation.DietaryPreferences = line.Substring("Dietary Preferences:".Length).Trim();
+                else if (line.StartsWith("Key Ingredients:"))
+                    foodInformation.KeyIngredients = line.Substring("Key Ingredients:".Length).Trim();
+                else if (line.StartsWith("Allergy Restrictions:"))
+                    foodInformation.AllergyRestrictions = line.Substring("Allergy Restrictions:".Length).Trim();
+                else if (line.StartsWith("Cuisine:"))
+                    foodInformation.Cuisine = line.Substring("Cuisine:".Length).Trim();
+                else if (line.StartsWith("Dish Type:"))
+                    foodInformation.DishType = line.Substring("Dish Type:".Length).Trim();
+                else if (line.StartsWith("Cooking Method:"))
+                    foodInformation.CookingMethod = line.Substring("Cooking Method:".Length).Trim();
             }
-            // Assign the parsed ingredients and cooking steps to the RecipeResponseDTO
-            generatedRecipeDTO.Ingredients = ingredients;
-            generatedRecipeDTO.CookingSteps = cookingSteps;
-            generatedRecipeDTO.FoodInformation = foodInformation;
 
-            return generatedRecipeDTO;
+            return foodInformation;
         }
+
+        private List<IngredientDTO> ParseIngredients(List<string> lines)
+        {
+            var ingredients = new List<IngredientDTO>();
+
+            foreach (var line in lines)
+            {
+                var parts = line.Split(':');
+                if (parts.Length > 1)
+                {
+                    var ingredientName = parts[1].Trim();
+                    var ingredient = ParseIngredient(ingredientName);
+                    ingredients.Add(ingredient);
+                }
+            }
+
+            return ingredients;
+        }
+
+        private IngredientDTO ParseIngredient(string ingredientName)
+        {
+            var ingredient = new IngredientDTO
+            {
+                Name = ingredientName,
+                Quantity = 0,  // Initialize to zero or set the actual quantity if available
+                Unit = null,  // Set to null or parse the unit if available
+            };
+
+            // Perform additional parsing logic for quantity and unit if provided in the ingredient name
+            // For example, you can split the ingredientName by spaces and check for quantity and unit patterns
+
+            return ingredient;
+        }
+
+
+        private List<CookingStepDTO> ParseCookingSteps(List<string> lines)
+        {
+            var cookingSteps = new List<CookingStepDTO>();
+
+            foreach (var line in lines)
+            {
+                var stepLine = line.Trim();
+                var stepNumber = ParseStepNumber(stepLine);
+                var stepDescription = ParseStepDescription(stepLine);
+
+                var cookingStep = new CookingStepDTO
+                {
+                    Order = stepNumber,
+                    Description = stepDescription
+                };
+
+                cookingSteps.Add(cookingStep);
+            }
+
+            return cookingSteps;
+        }
+
+        private int ParseStepNumber(string stepLine)
+        {
+            // Extract the step number from the stepLine
+            var stepNumberString = stepLine.Split('.')[0];
+            return int.Parse(stepNumberString);
+        }
+
+        private string ParseStepDescription(string stepLine)
+        {
+            // Extract the step description from the stepLine
+            var stepDescription = stepLine.Substring(stepLine.IndexOf('.') + 2).Trim();
+            return stepDescription;
+        }
+
+        private int ParseTime(string timeString)
+        {
+            // You can implement your custom logic to parse the time string into an integer representation
+            // For example, you can extract the numbers and convert them to minutes
+            // You can also handle different time units (e.g., minutes, hours) based on your specific requirements
+            // For demonstration purposes, let's assume the time string contains only an integer representing minutes
+            if (int.TryParse(timeString, out int time))
+            {
+                return time;
+            }
+            else
+            {
+                // Unable to parse the time, return a default value (e.g., 0) or handle the error accordingly
+                return 0;
+            }
+        }
+
+        private int ParseCalories(string caloriesString)
+        {
+            // You can implement your custom logic to parse the calories string into an integer representation
+            // For example, you can extract the numbers and convert them to an integer
+            // For demonstration purposes, let's assume the calories string contains only an integer value
+            if (int.TryParse(caloriesString, out int calories))
+            {
+                return calories;
+            }
+            else
+            {
+                // Unable to parse the calories, return a default value (e.g., 0) or handle the error accordingly
+                return 0;
+            }
+        }
+
+        private int ParseServingSize(string servingSizeString)
+        {
+            // You can implement your custom logic to parse the serving size string into an integer representation
+            // For example, you can extract the numbers and convert them to an integer
+            // For demonstration purposes, let's assume the serving size string contains only an integer value
+            if (int.TryParse(servingSizeString, out int servingSize))
+            {
+                return servingSize;
+            }
+            else
+            {
+                // Unable to parse the serving size, return a default value (e.g., 0) or handle the error accordingly
+                return 0;
+            }
+        }
+
+        private int ParseServings(string servingsString)
+        {
+            // You can implement your custom logic to parse the servings string into an integer representation
+            // For example, you can extract the numbers and convert them to an integer
+            // For demonstration purposes, let's assume the servings string contains only an integer value
+            if (int.TryParse(servingsString, out int servings))
+            {
+                return servings;
+            }
+            else
+            {
+                // Unable to parse the servings, return a default value (e.g., 0) or handle the error accordingly
+                return 0;
+            }
+        }
+
+
     }
 }
+
+
+   
