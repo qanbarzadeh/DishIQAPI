@@ -47,32 +47,37 @@ namespace Application.Services.OpenAI.ChatGptAPI
 
             foreach (var line in lines)
             {
-                if (line.StartsWith("Name:"))
-                    foodInformation.Name = line.Substring("Name:".Length).Trim();
-                else if (line.StartsWith("Description:"))
-                    foodInformation.Description = line.Substring("Description:".Length).Trim();
-                else if (line.StartsWith("Preparation Time:"))
-                    foodInformation.PreparationTime = ParseTime(line.Substring("Preparation Time:".Length).Trim());
-                else if (line.StartsWith("Cooking Time:"))
-                    foodInformation.CookingTime = ParseTime(line.Substring("Cooking Time:".Length).Trim());
-                else if (line.StartsWith("Servings:"))
-                    foodInformation.Servings = ParseServings(line.Substring("Servings:".Length).Trim());
-                else if (line.StartsWith("Calories per Serving:"))
-                    foodInformation.CaloriesPerServing = ParseCalories(line.Substring("Calories per Serving:".Length).Trim());
-                else if (line.StartsWith("Serving Size:"))
-                    foodInformation.ServingSize = ParseServingSize(line.Substring("Serving Size:".Length).Trim());
-                else if (line.StartsWith("Dietary Preferences:"))
-                    foodInformation.DietaryPreferences = line.Substring("Dietary Preferences:".Length).Trim();
-                else if (line.StartsWith("Key Ingredients:"))
-                    foodInformation.KeyIngredients = line.Substring("Key Ingredients:".Length).Trim();
-                else if (line.StartsWith("Allergy Restrictions:"))
-                    foodInformation.AllergyRestrictions = line.Substring("Allergy Restrictions:".Length).Trim();
-                else if (line.StartsWith("Cuisine:"))
-                    foodInformation.Cuisine = line.Substring("Cuisine:".Length).Trim();
-                else if (line.StartsWith("Dish Type:"))
-                    foodInformation.DishType = line.Substring("Dish Type:".Length).Trim();
-                else if (line.StartsWith("Cooking Method:"))
-                    foodInformation.CookingMethod = line.Substring("Cooking Method:".Length).Trim();
+                // ...
+
+                // Remove the leading and trailing whitespace from the line
+                var trimmedLine = line.Trim();
+
+                if (trimmedLine.StartsWith("Name:"))
+                    foodInformation.Name = trimmedLine.Substring("Name:".Length).Trim();
+                else if (trimmedLine.StartsWith("Description:"))
+                    foodInformation.Description = trimmedLine.Substring("Description:".Length).Trim();
+                else if (trimmedLine.StartsWith("Preparation Time:"))
+                    foodInformation.PreparationTime = ParseTime(trimmedLine.Substring("Preparation Time:".Length).Trim());
+                else if (trimmedLine.StartsWith("Cooking Time:"))
+                    foodInformation.CookingTime = ParseTime(trimmedLine.Substring("Cooking Time:".Length).Trim());
+                else if (trimmedLine.StartsWith("Servings:"))
+                    foodInformation.Servings = ParseServings(trimmedLine.Substring("Servings:".Length).Trim());
+                else if (trimmedLine.StartsWith("Calories per Serving:"))
+                    foodInformation.CaloriesPerServing = ParseCalories(trimmedLine.Substring("Calories per Serving:".Length).Trim());
+                else if (trimmedLine.StartsWith("Serving Size:"))
+                    foodInformation.ServingSize = ParseServingSize(trimmedLine.Substring("Serving Size:".Length).Trim());
+                else if (trimmedLine.StartsWith("Dietary Preferences:"))
+                    foodInformation.DietaryPreferences = trimmedLine.Substring("Dietary Preferences:".Length).Trim();
+                else if (trimmedLine.StartsWith("Key Ingredients:"))
+                    foodInformation.KeyIngredients = trimmedLine.Substring("Key Ingredients:".Length).Trim();
+                else if (trimmedLine.StartsWith("Allergy Restrictions:"))
+                    foodInformation.AllergyRestrictions = trimmedLine.Substring("Allergy Restrictions:".Length).Trim();
+                else if (trimmedLine.StartsWith("Cuisine:"))
+                    foodInformation.Cuisine = trimmedLine.Substring("Cuisine:".Length).Trim();
+                else if (trimmedLine.StartsWith("Dish Type:"))
+                    foodInformation.DishType = trimmedLine.Substring("Dish Type:".Length).Trim();
+                else if (trimmedLine.StartsWith("Cooking Method:"))
+                    foodInformation.CookingMethod = trimmedLine.Substring("Cooking Method:".Length).Trim();
             }
 
             return foodInformation;
@@ -84,7 +89,10 @@ namespace Application.Services.OpenAI.ChatGptAPI
 
             foreach (var line in lines)
             {
-                var parts = line.Split(':');
+                // Remove the leading and trailing whitespace from the line
+                var trimmedLine = line.Trim();
+
+                var parts = trimmedLine.Split(':');
                 if (parts.Length > 1)
                 {
                     var ingredientName = parts[1].Trim();
