@@ -30,7 +30,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             _httpClient.BaseAddress = new Uri(_apiHost);
             _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApikey);
             _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "openai80.p.rapidapi.com");
-            _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
+            _httpClient.Timeout = TimeSpan.FromSeconds(120); // or any desired duration
             //logging 
             _logger.LogInformation("ChatGptService initialized");
             _logger.LogInformation($"_apiHost: {_apiHost}");
