@@ -100,6 +100,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             }
         }
 
+<<<<<<< HEAD
 
        private string BuildPrompt(RecipeRequestDTO recipeRequest)
 {
@@ -125,6 +126,36 @@ namespace Application.Services.OpenAI.ChatGptAPI
 
     return promptBuilder.ToString();
 }
+
+=======
+        private string BuildPrompt(RecipeRequestDTO recipeRequest)
+        {
+            var promptBuilder = new StringBuilder();
+            promptBuilder.AppendLine("{");
+            promptBuilder.AppendLine("  \"mealType\": \"" + recipeRequest.MealType + "\",");
+            promptBuilder.AppendLine("  \"dietPreference\": \"" + recipeRequest.DietPreference + "\",");
+            promptBuilder.AppendLine("  \"region\": \"" + recipeRequest.Region + "\",");
+            promptBuilder.AppendLine("  \"cookingTechnique\": \"" + recipeRequest.CookingTechnique + "\",");
+            promptBuilder.AppendLine("  \"numberOfPax\": " + recipeRequest.NumberOfPax + ",");
+            promptBuilder.AppendLine("  \"country\": \"" + recipeRequest.Country + "\",");
+            promptBuilder.AppendLine("  \"mealTime\": \"" + recipeRequest.MealTime + "\",");
+            promptBuilder.AppendLine("  \"bloodType\": \"" + recipeRequest.BloodType + "\"");
+            promptBuilder.AppendLine("}");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
+            promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time, servings, " +
+                                     "calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, " +
+                                     "cuisine, dish type, cooking method)");
+            promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");
+            promptBuilder.AppendLine("- Cooking steps (description, order)");
+            promptBuilder.AppendLine("###");
+
+            return promptBuilder.ToString();
+        }
+>>>>>>> 72590adfb8ed7ea7586882b359c9851039ca07f1
+
+
+
 
 
     }

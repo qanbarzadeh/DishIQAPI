@@ -142,11 +142,19 @@ namespace Application.Services.OpenAI.ChatGptAPI
 
         private int ParseStepNumber(string stepLine)
         {
+<<<<<<< HEAD
             // Use regular expressions to extract the numeric part of the step number
             Match match = Regex.Match(stepLine, @"\d+");
             if (match.Success)
             {
                 string numberString = match.Value;
+=======
+            // Remove any non-numeric characters from the stepLine
+            string numberString = Regex.Replace(stepLine, @"[^0-9]", "");
+
+            if (!string.IsNullOrEmpty(numberString))
+            {
+>>>>>>> 72590adfb8ed7ea7586882b359c9851039ca07f1
                 if (int.TryParse(numberString, out int stepNumber))
                 {
                     return stepNumber;
@@ -158,6 +166,10 @@ namespace Application.Services.OpenAI.ChatGptAPI
         }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 72590adfb8ed7ea7586882b359c9851039ca07f1
         private string ParseStepDescription(string stepLine)
         {
             // Extract the step description from the stepLine
