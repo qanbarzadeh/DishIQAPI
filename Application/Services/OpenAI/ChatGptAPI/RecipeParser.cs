@@ -13,31 +13,27 @@ namespace Application.Services.OpenAI.ChatGptAPI
     {
         public GeneratedRecipeDTO Parse(string content)
         {
-            // Assuming the content is a JSON string and the structure matches the DTOs.
-            // If the structure is different, you will need to write more complex parsing logic.
-
             JObject jObject = JObject.Parse(content);
+            var message = jObject["choices"][0]["message"]["content"].ToString();
 
             // Parse the Food Information
-            var foodInformation = jObject["foodInformation"];
+            var foodInformationString = message.Substring(message.IndexOf("Food information"), message.IndexOf("List of ingredients")).Trim();
+
+            var lines = foodInformationString.Split("\n");
+            var name = lines[1].Split(":")[1].Trim();
+            var description = lines[2].Split(":")[1].Trim();
+            var preparationTime = lines[3].Split(":")[1].Trim();
+            // Parse the rest of the fields in a similar way...
+
             FoodInformationDTO foodInformationDTO = new FoodInformationDTO
             {
-                Name = (string)foodInformation["name"],
-                Description = (string)foodInformation["description"],
-                PreparationTime = (string)foodInformation["preparationTime"],
-                CookingTime = (string)foodInformation["cookingTime"],
-                Servings = (string)foodInformation["servings"],
-                CaloriesPerServing = (string)foodInformation["caloriesPerServing"],
-                ServingSize = (string)foodInformation["servingSize"],
-                DietaryPreferences = (string)foodInformation["dietaryPreferences"],
-                KeyIngredients = (string)foodInformation["keyIngredients"],
-                AllergyRestrictions = (string)foodInformation["allergyRestrictions"],
-                Cuisine = (string)foodInformation["cuisine"],
-                DishType = (string)foodInformation["dishType"],
-                CookingMethod = (string)foodInformation["cookingMethod"],
+                Name = name,
+                Description = description,
+                PreparationTime = preparationTime,
+                // Assign rest of the parsed fields here...
             };
 
-            // TODO: Parse the Ingredients and CookingSteps
+            // TODO: Parse the Ingredients and CookingSteps in a similar way.
 
             GeneratedRecipeDTO generatedRecipeDTO = new GeneratedRecipeDTO
             {
@@ -48,6 +44,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             return generatedRecipeDTO;
         }
     }
+
 
 }
 
