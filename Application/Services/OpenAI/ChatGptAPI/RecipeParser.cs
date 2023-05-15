@@ -17,34 +17,76 @@ namespace Application.Services.OpenAI.ChatGptAPI
             var message = jObject["choices"][0]["message"]["content"].ToString();
 
             // Parse the Food Information
-            var foodInformationString = message.Substring(message.IndexOf("Food information"), message.IndexOf("List of ingredients")).Trim();
-
-            var lines = foodInformationString.Split("\n");
-            var name = lines[1].Split(":")[1].Trim();
-            var description = lines[2].Split(":")[1].Trim();
-            var preparationTime = lines[3].Split(":")[1].Trim();
-            // Parse the rest of the fields in a similar way...
+            var foodInformationString = message.Substring(message.IndexOf("Food Information:"), message.IndexOf("List of Ingredients:") - message.IndexOf("Food Information:")).Trim();
+            var foodLines = foodInformationString.Split("\n");
+            var name = foodLines[1].Split(":")[1].Trim();
+            var description = foodLines[2].Split(":")[1].Trim();
+            var preparationTime = foodLines[3].Split(":")[1].Trim();
+            var cookingTime = foodLines[4].Split(":")[1].Trim();
+            var servings = foodLines[5].Split(":")[1].Trim();
+            var caloriesPerServing = foodLines[6].Split(":")[1].Trim();
+            var servingSize = foodLines[7].Split(":")[1].Trim();
+            var dietaryPreferences = foodLines[8].Split(":")[1].Trim();
+            var keyIngredients = foodLines[9].Split(":")[1].Trim();
+            var allergyRestrictions = foodLines[10].Split(":")[1].Trim();
+            var cuisine = foodLines[11].Split(":")[1].Trim();
+            var dishType = foodLines[12].Split(":")[1].Trim();
+            var cookingMethod = foodLines[13].Split(":")[1].Trim();
 
             FoodInformationDTO foodInformationDTO = new FoodInformationDTO
             {
                 Name = name,
                 Description = description,
                 PreparationTime = preparationTime,
-                // Assign rest of the parsed fields here...
+                CookingTime = cookingTime,
+                Servings = servings,
+                CaloriesPerServing = caloriesPerServing,
+                ServingSize = servingSize,
+                DietaryPreferences = dietaryPreferences,
+                KeyIngredients = keyIngredients,
+                AllergyRestrictions = allergyRestrictions,
+                Cuisine = cuisine,
+                DishType = dishType,
+                CookingMethod = cookingMethod
             };
 
-            // TODO: Parse the Ingredients and CookingSteps in a similar way.
+            // Parse the Ingredients
+            var ingredientsString = message.Substring(message.IndexOf("List of Ingredients:"), message.IndexOf("Cooking Steps:") - message.IndexOf("List of Ingredients:")).Trim();
+            var ingredientsLines = ingredientsString.Split("\n").Skip(1); // Skip the "List of Ingredients:" line
+            List<IngredientDTO> ingredients = ingredientsLines.Select(line =>
+            {
+                var parts = line.Split(",");
+                return new IngredientDTO
+                {
+                    Name = parts[0].Trim(),
+                    Quantity = parts[1].Trim(),
+                    Unit = parts.Length > 2 ? parts[2].Trim() : null
+                };
+            }).ToList();
 
+            // Parse the Cooking Steps
+            var cookingStepsString = message.Substring(message.IndexOf("Cooking Steps:")).Trim();
+            var cookingStepsLines = cookingStepsString.Split("\n").Skip(1); // Skip the "Cooking Steps:" line
+            List<CookingStepDTO> cookingSteps = cookingStepsLines.Select(line =>
+            {
+                var parts = line.Split(".");
+                return new CookingStepDTO
+                {
+                    Order = parts[0].Trim(),
+                    Description = parts[1].Trim()
+                };
+            }).ToList();
+
+            // Populate the GeneratedRecipeDTO
             GeneratedRecipeDTO generatedRecipeDTO = new GeneratedRecipeDTO
             {
                 FoodInformation = foodInformationDTO,
-                // Assign parsed Ingredients and CookingSteps here
+                Ingredients = ingredients,
+                CookingSteps = cookingSteps
             };
 
             return generatedRecipeDTO;
         }
     }
-
-
 }
 
