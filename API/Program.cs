@@ -23,7 +23,9 @@ builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 
 // Register RecipeService 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
-builder.Services.AddSingleton<IRecipeParser, RecipeParser>(); 
+builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
+    builder.Services.AddSingleton<FoodInformationParser>();
+
 // Configure RapidApiOptions using environment variables
 var rapidApiKey = Environment.GetEnvironmentVariable("RAPIDAPI_KEY");
 var rapidApiHost = Environment.GetEnvironmentVariable("RAPIDAPI_HOST");
