@@ -4,11 +4,11 @@
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public TimeSpan PreparationTime { get; set; }
-        public int CookingTime { get; set; }
-        public int Servings { get; set; }
-        public int CaloriesPerServing { get; set; }
-        public int ServingSize { get; set; }
+        public string PreparationTime { get; set; }
+        public string CookingTime { get; set; }
+        public string Servings { get; set; }
+        public string CaloriesPerServing { get; set; }
+        public string ServingSize { get; set; }
         public string DietaryPreferences { get; set; }
         public string KeyIngredients { get; set; }
         public string AllergyRestrictions { get; set; }
