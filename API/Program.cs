@@ -8,6 +8,7 @@ using Application.Mapping;
 using Application.Services.Recipe;
 using Application.Configuration;
 using Application.Interfaces;
+using OpenAIAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
