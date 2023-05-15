@@ -39,7 +39,7 @@ namespace Application.Test
                 Ingredients = new List<IngredientDTO>
                 {
                     new IngredientDTO { Id = 1, Name = "Ingredient 1", Quantity = "2" },
-                    new IngredientDTO { Id = 2, Name = "Ingredient 2", Quantity = "1" }
+                    new IngredientDTO { Id = 2, Name = "Ingredient 2", Quantity = "" }
                 },
                 CookingSteps = new List<CookingStepDTO>
                 {
