@@ -20,7 +20,10 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
+builder.Services.AddScoped<IRecipeParser, RecipeParser>();
+builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
 
 // Register RecipeService 
 

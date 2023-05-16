@@ -7,8 +7,7 @@ namespace CheBlockAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class RecipeController : ControllerBase
-    {
-        
+    {        
         private readonly IRecipeService _recipeService; 
         public RecipeController(IRecipeService recipeService)
         {

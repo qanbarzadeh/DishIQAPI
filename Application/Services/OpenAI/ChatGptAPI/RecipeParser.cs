@@ -1,4 +1,5 @@
-﻿using Application.DTO.RecipeDTOs;
+﻿using Application.DTO.OpenAiResponse;
+using Application.DTO.RecipeDTOs;
 using Application.Interfaces;
 using Newtonsoft.Json.Linq;
 
@@ -129,6 +130,33 @@ namespace OpenAIAPI
             return cookingSteps;
         }
 
+        public GeneratedRecipeDTO ParseApiResponse(ApiResponseDTO apiResponse)
+        {
+            if (apiResponse?.Choices == null || !apiResponse.Choices.Any())
+            {
+                throw new Exception("Invalid API response: No choices available.");
+            }
+
+            var message = apiResponse.Choices[0]?.Message?.Content;
+
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new Exception("Invalid message format: Empty message content.");
+            }
+
+            var foodInformation = ParseFoodInformation(message);
+            var ingredients = ParseIngredients(message);
+            var cookingSteps = ParseCookingSteps(message);
+
+            var generatedRecipeDTO = new GeneratedRecipeDTO
+            {
+                FoodInformation = foodInformation,
+                Ingredients = ingredients,
+                CookingSteps = cookingSteps
+            };
+
+            return generatedRecipeDTO;
+        }
     }
 }
 
