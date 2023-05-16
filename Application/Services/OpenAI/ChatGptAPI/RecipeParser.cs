@@ -22,9 +22,17 @@ namespace OpenAIAPI
                 throw new Exception("Invalid message format: Empty message content.");
             }
 
-            var foodInformation = ParseFoodInformation(message);
-            var ingredients = ParseIngredients(message);
-            var cookingSteps = ParseCookingSteps(message);
+            var responseObject = JObject.Parse(message);
+            var content = responseObject["content"]?.ToString();
+
+            if (string.IsNullOrEmpty(content))
+            {
+                throw new Exception("Invalid JSON format: 'content' is empty or null.");
+            }
+
+            var foodInformation = ParseFoodInformation(content);
+            var ingredients = ParseIngredients(content);
+            var cookingSteps = ParseCookingSteps(content);
 
             var generatedRecipeDTO = new GeneratedRecipeDTO
             {
@@ -35,6 +43,7 @@ namespace OpenAIAPI
 
             return generatedRecipeDTO;
         }
+
         public FoodInformationDTO ParseFoodInformationFromJson(string json)
         {
             JObject jObject = JObject.Parse(json);
