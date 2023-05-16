@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.DTO.OpenAiResponse
 {
-    public class ApiResponse
+    public class UsageDTO
     {
-        public List<Choice>? Choices { get; set; }
+        public int PromptTokens { get; set; }
+        public int CompletionTokens { get; set; }
+        public int TotalTokens { get; set; }
     }
 }

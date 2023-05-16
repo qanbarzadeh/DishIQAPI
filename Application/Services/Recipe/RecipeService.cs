@@ -6,23 +6,23 @@ using System.Runtime.CompilerServices;
 
 namespace Application.Services.Recipe
 {
-    public class RecipeService : IRecipeService
-    {
-        private readonly IChatGptService _chatGptService;
+    //public class RecipeService : IRecipeService
+    //{
+    //    private readonly IChatGptService _chatGptService;
               
-        public RecipeService(IChatGptService chatGptService)
-        {
-            _chatGptService = chatGptService;
+    //    public RecipeService(IChatGptService chatGptService)
+    //    {
+    //        _chatGptService = chatGptService;
          
-        }
+    //    }
 
-        public async Task<GeneratedRecipeDTO> GetGeneratedRecipeAsync(RecipeRequestDTO requestDTO)
-        {
+    //    public async Task<GeneratedRecipeDTO> GetGeneratedRecipeAsync(RecipeRequestDTO requestDTO)
+    //    {
 
-            return await _chatGptService.GeneratedRecipeApiAsync(requestDTO);
+    //        return await _chatGptService.GeneratedRecipeApiAsync(requestDTO);
 
-        }
-    }
+    //    }
+    //}
 }
 
 

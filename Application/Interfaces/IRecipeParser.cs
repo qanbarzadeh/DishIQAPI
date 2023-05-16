@@ -1,14 +1,12 @@
-﻿using Application.DTO.RecipeDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.DTO.OpenAiResponse;
+using Application.DTO.RecipeDTOs;
 
 namespace Application.Interfaces
 {
-    public  interface IRecipeParser
+    public interface IRecipeParser
     {
-        GeneratedRecipeDTO Parse(string assitantMessage); 
+        FoodInformationDTO ParseFoodInformation(string apiResponse);
+        List<IngredientDTO> ParseIngredients(string apiResponse);
+        List<CookingStepDTO> ParseCookingSteps(string apiResponse);
     }
 }

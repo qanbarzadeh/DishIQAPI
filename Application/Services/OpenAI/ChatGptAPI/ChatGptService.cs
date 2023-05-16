@@ -14,17 +14,14 @@ namespace Application.Services.OpenAI.ChatGptAPI
     {
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
-        private readonly IRecipeParser _recipeParser;
         private readonly ILogger _logger;
 
         public ChatGptService(HttpClient httpClient,
             IConfiguration configuration,
-            ILogger<ChatGptService> logger,
-            IRecipeParser recipeParser)
+            ILogger<ChatGptService> logger)
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            _recipeParser = recipeParser;
             _logger = logger;
             _httpClient.BaseAddress = new Uri(_configuration["OpenAI:ApiEndpoint"]); // OpenAI API URL from appsettings.json
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"); // OpenAI API Key from environment variable
@@ -33,7 +30,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             _logger.LogInformation($"OpenAI API Endpoint: {_httpClient.BaseAddress}");
         }
 
-        public async Task<GeneratedRecipeDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
+        public async Task<ApiResponseDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
         {
             // Build the prompt
             string prompt = BuildPrompt(recipeRequest);
@@ -45,12 +42,12 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 max_tokens = 2048, // the desired number of tokens (characters) allowed in the response
                 messages = new[]
                 {
-            new
-            {
-                role = "user",
-                content = prompt
+                new
+                {
+                    role = "user",
+                    content = prompt
+                }
             }
-        }
             };
 
             var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
@@ -74,7 +71,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 response.EnsureSuccessStatusCode();
 
                 var responseJson = await response.Content.ReadAsStringAsync();
-                var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseJson);
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponseDTO>(responseJson);
 
                 // Handle the scenario where the API response does not contain any choices
                 if (apiResponse?.Choices == null || !apiResponse.Choices.Any())
@@ -83,12 +80,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
                     throw new Exception("Invalid API response: No choices available.");
                 }
 
-                var assistantMessage = apiResponse.Choices.First().Message.Content;
-
-                // Use the RecipeParser to parse the assistant message
-                GeneratedRecipeDTO generatedRecipe = _recipeParser.Parse(assistantMessage);
-
-                return generatedRecipe;
+                return apiResponse;
             }
             catch (HttpRequestException ex)
             {
@@ -98,16 +90,13 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 // Re-throw the exception to be handled by the caller
                 throw;
             }
-        }
-
-
-
+        }     
         private string BuildPrompt(RecipeRequestDTO recipeRequest)
         {
             var promptBuilder = new StringBuilder();
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("  \"mealType\": \"" + recipeRequest.MealType + "\",");
-            promptBuilder.AppendLine("  \"dietPreference\": \"" + recipeRequest.DietPreference + "\",");
+            promptBuilder.AppendLine("  \"dietPreference\": \"" + recipeRequest.DietaryPreference + "\",");
             promptBuilder.AppendLine("  \"region\": \"" + recipeRequest.Region + "\",");
             promptBuilder.AppendLine("  \"cookingTechnique\": \"" + recipeRequest.CookingTechnique + "\",");
             promptBuilder.AppendLine("  \"numberOfPax\": " + recipeRequest.NumberOfPax + ",");
