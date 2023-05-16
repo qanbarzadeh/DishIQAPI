@@ -23,7 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 
 // Register RecipeService 
-builder.Services.AddScoped<IRecipeService, RecipeService>();
+
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
 
 
