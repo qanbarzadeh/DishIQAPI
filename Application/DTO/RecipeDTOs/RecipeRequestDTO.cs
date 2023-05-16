@@ -14,7 +14,7 @@ namespace Application.DTO.RecipeDTOs
         public string Country { get; set; }
         public string MealTime { get; set; }
         public string BloodType { get; set; }
-        public string DietPreference { get; set; }
+        
     }
 
 }

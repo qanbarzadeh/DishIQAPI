@@ -26,7 +26,7 @@ namespace Application.Test
             var recipeRequestDTO = new RecipeRequestDTO
             {
                 MealType = "SomeMealType",
-                DietPreference = "SomeDietPreference",
+                DietaryPreference = "SomeDietPreference",
                 Region = "SomeRegion",
                 CookingTechnique = "SomeCookingTechnique",
                 NumberOfPax = 2,
