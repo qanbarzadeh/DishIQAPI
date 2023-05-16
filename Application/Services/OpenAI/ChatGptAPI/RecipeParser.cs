@@ -7,43 +7,106 @@ namespace OpenAIAPI
 {
     public class RecipeParser : IRecipeParser
     {
-        public FoodInformationDTO ParseFoodInformation(string content)
+
+        public GeneratedRecipeDTO ParseApiResponse(ApiResponseDTO apiResponse)
         {
-            JObject jObject = JObject.Parse(content);
-            var message = jObject["choices"][0]["message"]["content"].ToString();
-
-            // Parse the Food Information
-            var foodInformationIndex = message.Contains("Food Information:") ? message.IndexOf("Food Information:") : -1;
-            var ingredientsIndex = message.Contains("List of Ingredients:") ? message.IndexOf("List of Ingredients:") : -1;
-            var cookingStepsIndex = message.Contains("Cooking Steps:") ? message.IndexOf("Cooking Steps:") : -1;
-
-            if (foodInformationIndex == -1 || ingredientsIndex == -1 || cookingStepsIndex == -1)
+            if (apiResponse?.Choices == null || !apiResponse.Choices.Any())
             {
-                throw new Exception("Invalid message format. Couldn't find Food Information, List of Ingredients, or Cooking Steps.");
+                throw new Exception("Invalid API response: No choices available.");
             }
 
-            var foodInformationString = message.Substring(foodInformationIndex, ingredientsIndex - foodInformationIndex).Trim();
+            var message = apiResponse.Choices[0]?.Message?.Content;
 
-            var foodLines = foodInformationString.Split(new[] { "\n", "\r\n" }, StringSplitOptions.None);
-
-            FoodInformationDTO foodInformationDTO = new FoodInformationDTO
+            if (string.IsNullOrEmpty(message))
             {
-                Name = foodLines.ElementAtOrDefault(0)?.Split(":")[1]?.Trim(),
-                PreparationTime = foodLines.ElementAtOrDefault(1)?.Split(":")[1]?.Trim(),
-                CookingTime = foodLines.ElementAtOrDefault(2)?.Split(":")[1]?.Trim(),
-                Servings = foodLines.ElementAtOrDefault(3)?.Split(":")[1]?.Trim(),
-                CaloriesPerServing = foodLines.ElementAtOrDefault(4)?.Split(":")[1]?.Trim(),
-                ServingSize = foodLines.ElementAtOrDefault(5)?.Split(":")[1]?.Trim(),
-                DietaryPreferences = foodLines.ElementAtOrDefault(6)?.Split(":")[1]?.Trim(),
-                KeyIngredients = foodLines.ElementAtOrDefault(7)?.Split(":")[1]?.Trim(),
-                AllergyRestrictions = foodLines.ElementAtOrDefault(8)?.Split(":")[1]?.Trim(),
-                Cuisine = foodLines.ElementAtOrDefault(9)?.Split(":")[1]?.Trim(),
-                DishType = foodLines.ElementAtOrDefault(10)?.Split(":")[1]?.Trim(),
-                CookingMethod = foodLines.ElementAtOrDefault(11)?.Split(":")[1]?.Trim()
+                throw new Exception("Invalid message format: Empty message content.");
+            }
+
+            var foodInformation = ParseFoodInformation(message);
+            var ingredients = ParseIngredients(message);
+            var cookingSteps = ParseCookingSteps(message);
+
+            var generatedRecipeDTO = new GeneratedRecipeDTO
+            {
+                FoodInformation = foodInformation,
+                Ingredients = ingredients,
+                CookingSteps = cookingSteps
             };
 
-            return foodInformationDTO;
+            return generatedRecipeDTO;
+        }
+        public FoodInformationDTO ParseFoodInformationFromJson(string json)
+        {
+            JObject jObject = JObject.Parse(json);
 
+            var message = jObject["choices"]?[0]?["message"]?["content"]?.ToString();
+
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new Exception("Invalid JSON format: Message content is empty or null.");
+            }
+
+            var lines = message.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            var foodInformation = new FoodInformationDTO();
+
+            foreach (var line in lines)
+            {
+                if (line.StartsWith("-"))
+                {
+                    var keyValue = line.TrimStart('-').Split(':');
+
+                    if (keyValue.Length == 2)
+                    {
+                        var key = keyValue[0].Trim();
+                        var value = keyValue[1].Trim();
+
+                        switch (key)
+                        {
+                            case "Name":
+                                foodInformation.Name = value;
+                                break;
+                            case "Description":
+                                foodInformation.Description = value;
+                                break;
+                            case "Preparation Time":
+                                foodInformation.PreparationTime = value;
+                                break;
+                            case "Cooking Time":
+                                foodInformation.CookingTime = value;
+                                break;
+                            case "Servings":
+                                foodInformation.Servings = value;
+                                break;
+                            case "Calories per serving":
+                                foodInformation.CaloriesPerServing = value;
+                                break;
+                            case "Serving Size":
+                                foodInformation.ServingSize = value;
+                                break;
+                            case "Dietary Preferences":
+                                foodInformation.DietaryPreferences = value;
+                                break;
+                            case "Key Ingredients":
+                                foodInformation.KeyIngredients = value;
+                                break;
+                            case "Allergy Restrictions":
+                                foodInformation.AllergyRestrictions = value;
+                                break;
+                            case "Cuisine":
+                                foodInformation.Cuisine = value;
+                                break;
+                            case "Dish Type":
+                                foodInformation.DishType = value;
+                                break;
+                            case "Cooking Method":
+                                foodInformation.CookingMethod = value;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return foodInformation;
         }
 
         public List<IngredientDTO> ParseIngredients(string content)
@@ -129,34 +192,11 @@ namespace OpenAIAPI
 
             return cookingSteps;
         }
-
-        public GeneratedRecipeDTO ParseApiResponse(ApiResponseDTO apiResponse)
+        public FoodInformationDTO ParseFoodInformation(string content)
         {
-            if (apiResponse?.Choices == null || !apiResponse.Choices.Any())
-            {
-                throw new Exception("Invalid API response: No choices available.");
-            }
-
-            var message = apiResponse.Choices[0]?.Message?.Content;
-
-            if (string.IsNullOrEmpty(message))
-            {
-                throw new Exception("Invalid message format: Empty message content.");
-            }
-
-            var foodInformation = ParseFoodInformation(message);
-            var ingredients = ParseIngredients(message);
-            var cookingSteps = ParseCookingSteps(message);
-
-            var generatedRecipeDTO = new GeneratedRecipeDTO
-            {
-                FoodInformation = foodInformation,
-                Ingredients = ingredients,
-                CookingSteps = cookingSteps
-            };
-
-            return generatedRecipeDTO;
+            return ParseFoodInformationFromJson(content);
         }
+
     }
 }
 
