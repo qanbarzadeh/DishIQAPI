@@ -108,19 +108,19 @@ namespace OpenAIAPI
 
         public List<IngredientDTO> ParseIngredients(string content)
         {
-            // Directly use content as the message
-            var message = content;
-
             // Parse the list of ingredients
-            var ingredientsIndex = message.Contains("List of Ingredients:") ? message.IndexOf("List of Ingredients:") : -1;
-            var cookingStepsIndex = message.Contains("Cooking Steps:") ? message.IndexOf("Cooking Steps:") : -1;
+            var ingredientsIndex = content.IndexOf("List of Ingredients:", StringComparison.OrdinalIgnoreCase);
+            var cookingStepsIndex = content.IndexOf("Cooking Steps:", StringComparison.OrdinalIgnoreCase);
 
             if (ingredientsIndex == -1 || cookingStepsIndex == -1)
             {
                 throw new Exception("Invalid message format. Couldn't find List of Ingredients or Cooking Steps.");
             }
 
-            var ingredientsString = message.Substring(ingredientsIndex, cookingStepsIndex - ingredientsIndex).Trim();
+            // Adjust the starting index by skipping any consecutive newline characters
+            var startIndex = content.LastIndexOf('\n', ingredientsIndex) + 1;
+
+            var ingredientsString = content.Substring(startIndex, cookingStepsIndex - startIndex).Trim();
 
             var ingredientsLines = ingredientsString.Split(new[] { "\n", "\r\n" }, StringSplitOptions.None).Skip(1);
             List<IngredientDTO> ingredients = new List<IngredientDTO>();
@@ -150,6 +150,7 @@ namespace OpenAIAPI
 
             return ingredients;
         }
+
 
 
         public List<CookingStepDTO> ParseCookingSteps(string content)
