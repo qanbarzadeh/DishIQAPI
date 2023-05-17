@@ -47,7 +47,6 @@ namespace OpenAIAPI
         public FoodInformationDTO ParseFoodInformationFromJson(string json)
         {
             JObject jObject = JObject.Parse(json);
-
             var message = jObject["choices"]?[0]?["message"]?["content"]?.ToString();
 
             if (string.IsNullOrEmpty(message))
@@ -60,63 +59,61 @@ namespace OpenAIAPI
 
             foreach (var line in lines)
             {
-                if (line.StartsWith("-"))
+                var keyValue = line.Split(':');
+
+                if (keyValue.Length == 2)
                 {
-                    var keyValue = line.TrimStart('-').Split(':');
+                    var key = keyValue[0].Trim();
+                    var value = keyValue[1].Trim();
 
-                    if (keyValue.Length == 2)
+                    switch (key)
                     {
-                        var key = keyValue[0].Trim();
-                        var value = keyValue[1].Trim();
-
-                        switch (key)
-                        {
-                            case "Name":
-                                foodInformation.Name = value;
-                                break;
-                            case "Description":
-                                foodInformation.Description = value;
-                                break;
-                            case "Preparation Time":
-                                foodInformation.PreparationTime = value;
-                                break;
-                            case "Cooking Time":
-                                foodInformation.CookingTime = value;
-                                break;
-                            case "Servings":
-                                foodInformation.Servings = value;
-                                break;
-                            case "Calories per serving":
-                                foodInformation.CaloriesPerServing = value;
-                                break;
-                            case "Serving Size":
-                                foodInformation.ServingSize = value;
-                                break;
-                            case "Dietary Preferences":
-                                foodInformation.DietaryPreferences = value;
-                                break;
-                            case "Key Ingredients":
-                                foodInformation.KeyIngredients = value;
-                                break;
-                            case "Allergy Restrictions":
-                                foodInformation.AllergyRestrictions = value;
-                                break;
-                            case "Cuisine":
-                                foodInformation.Cuisine = value;
-                                break;
-                            case "Dish Type":
-                                foodInformation.DishType = value;
-                                break;
-                            case "Cooking Method":
-                                foodInformation.CookingMethod = value;
-                                break;
-                        }
+                        case "Name":
+                            foodInformation.Name = value;
+                            break;
+                        case "Description":
+                            foodInformation.Description = value;
+                            break;
+                        case "Preparation Time":
+                            foodInformation.PreparationTime = value;
+                            break;
+                        case "Cooking Time":
+                            foodInformation.CookingTime = value;
+                            break;
+                        case "Servings":
+                            foodInformation.Servings = value;
+                            break;
+                        case "Calories per Serving":
+                            foodInformation.CaloriesPerServing = value;
+                            break;
+                        case "Serving Size":
+                            foodInformation.ServingSize = value;
+                            break;
+                        case "Dietary Preferences":
+                            foodInformation.DietaryPreferences = value;
+                            break;
+                        case "Key Ingredients":
+                            foodInformation.KeyIngredients = value;
+                            break;
+                        case "Allergy Restrictions":
+                            foodInformation.AllergyRestrictions = value;
+                            break;
+                        case "Cuisine":
+                            foodInformation.Cuisine = value;
+                            break;
+                        case "Dish Type":
+                            foodInformation.DishType = value;
+                            break;
+                        case "Cooking Method":
+                            foodInformation.CookingMethod = value;
+                            break;
                     }
                 }
             }
 
             return foodInformation;
         }
+
 
         public List<IngredientDTO> ParseIngredients(string content)
         {
