@@ -127,29 +127,17 @@ namespace OpenAIAPI
 
             foreach (var line in ingredientsLines)
             {
-                var parts = line.Split(",");
-
-                if (parts.Length < 2)
-                {
-                    throw new Exception("Invalid ingredient format. Expected at least two parts: name and quantity.");
-                }
-
                 IngredientDTO ingredient = new IngredientDTO
                 {
-                    Name = parts[0].Trim(),
-                    Quantity = parts[1].Trim()
+                    IngredientInfo = line.Trim()
                 };
-
-                if (parts.Length >= 3)
-                {
-                    ingredient.Unit = parts[2].Trim();
-                }
 
                 ingredients.Add(ingredient);
             }
 
             return ingredients;
         }
+
 
 
 
