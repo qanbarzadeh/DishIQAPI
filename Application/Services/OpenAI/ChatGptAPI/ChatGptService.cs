@@ -90,30 +90,65 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 // Re-throw the exception to be handled by the caller
                 throw;
             }
-        }     
+        }
         private string BuildPrompt(RecipeRequestDTO recipeRequest)
         {
             var promptBuilder = new StringBuilder();
             promptBuilder.AppendLine("{");
-            promptBuilder.AppendLine("  \"mealType\": \"" + recipeRequest.MealType + "\",");
-            promptBuilder.AppendLine("  \"dietPreference\": \"" + recipeRequest.DietaryPreference + "\",");
-            promptBuilder.AppendLine("  \"region\": \"" + recipeRequest.Region + "\",");
-            promptBuilder.AppendLine("  \"cookingTechnique\": \"" + recipeRequest.CookingTechnique + "\",");
-            promptBuilder.AppendLine("  \"numberOfPax\": " + recipeRequest.NumberOfPax + ",");
-            promptBuilder.AppendLine("  \"country\": \"" + recipeRequest.Country + "\",");
-            promptBuilder.AppendLine("  \"mealTime\": \"" + recipeRequest.MealTime + "\",");
-            promptBuilder.AppendLine("  \"bloodType\": \"" + recipeRequest.BloodType + "\"");
+            promptBuilder.AppendLine("  \"foodInformation\": {");
+            promptBuilder.AppendLine("    \"name\": \"\",");
+            promptBuilder.AppendLine("    \"description\": \"\",");
+            promptBuilder.AppendLine("    \"preparationTime\": \"\",");
+            promptBuilder.AppendLine("    \"cookingTime\": \"\",");
+            promptBuilder.AppendLine("    \"servings\": \"\",");
+            promptBuilder.AppendLine("    \"caloriesPerServing\": \"\",");
+            promptBuilder.AppendLine("    \"servingSize\": \"\",");
+            promptBuilder.AppendLine("    \"dietaryPreferences\": \"\",");
+            promptBuilder.AppendLine("    \"keyIngredients\": \"\",");
+            promptBuilder.AppendLine("    \"allergyRestrictions\": \"\",");
+            promptBuilder.AppendLine("    \"cuisine\": \"\",");
+            promptBuilder.AppendLine("    \"dishType\": \"\",");
+            promptBuilder.AppendLine("    \"cookingMethod\": \"\"");
+            promptBuilder.AppendLine("  },");
+            promptBuilder.AppendLine("  \"ingredients\": [");
+            promptBuilder.AppendLine("    {");
+            promptBuilder.AppendLine("      \"ingredientInfo\": \"\"");
+            promptBuilder.AppendLine("    }");
+            promptBuilder.AppendLine("  ],");
+            promptBuilder.AppendLine("  \"cookingSteps\": [");
+            promptBuilder.AppendLine("    {");
+            promptBuilder.AppendLine("      \"description\": \"\",");
+            promptBuilder.AppendLine("      \"order\": \"\"");
+            promptBuilder.AppendLine("    }");
+            promptBuilder.AppendLine("  ]");
             promptBuilder.AppendLine("}");
-            promptBuilder.AppendLine();
-            promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
-            promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time, servings, " +
-                                     "calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, " +
-                                     "cuisine, dish type, cooking method)");
-            promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");
-            promptBuilder.AppendLine("- Cooking steps (description, order)");
-            promptBuilder.AppendLine("###");
 
             return promptBuilder.ToString();
         }
+
+        //private string BuildPrompt(RecipeRequestDTO recipeRequest)
+        //{
+        //    var promptBuilder = new StringBuilder();
+        //    promptBuilder.AppendLine("{");
+        //    promptBuilder.AppendLine("  \"mealType\": \"" + recipeRequest.MealType + "\",");
+        //    promptBuilder.AppendLine("  \"dietPreference\": \"" + recipeRequest.DietaryPreference + "\",");
+        //    promptBuilder.AppendLine("  \"region\": \"" + recipeRequest.Region + "\",");
+        //    promptBuilder.AppendLine("  \"cookingTechnique\": \"" + recipeRequest.CookingTechnique + "\",");
+        //    promptBuilder.AppendLine("  \"numberOfPax\": " + recipeRequest.NumberOfPax + ",");
+        //    promptBuilder.AppendLine("  \"country\": \"" + recipeRequest.Country + "\",");
+        //    promptBuilder.AppendLine("  \"mealTime\": \"" + recipeRequest.MealTime + "\",");
+        //    promptBuilder.AppendLine("  \"bloodType\": \"" + recipeRequest.BloodType + "\"");
+        //    promptBuilder.AppendLine("}");
+        //    promptBuilder.AppendLine();
+        //    promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
+        //    promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time, servings, " +
+        //                             "calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, " +
+        //                             "cuisine, dish type, cooking method)");
+        //    promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");
+        //    promptBuilder.AppendLine("- Cooking steps (description, order)");
+        //    promptBuilder.AppendLine("###");
+
+        //    return promptBuilder.ToString();
+        //}
     }
 }
