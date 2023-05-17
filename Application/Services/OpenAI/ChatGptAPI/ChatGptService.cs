@@ -94,6 +94,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
         private string BuildPrompt(RecipeRequestDTO recipeRequest)
         {
             var promptBuilder = new StringBuilder();
+            promptBuilder.AppendLine("I need a recipe with the following details:");
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("  \"foodInformation\": {");
             promptBuilder.AppendLine("    \"name\": \"\",");
@@ -125,6 +126,8 @@ namespace Application.Services.OpenAI.ChatGptAPI
 
             return promptBuilder.ToString();
         }
+
+
 
         //private string BuildPrompt(RecipeRequestDTO recipeRequest)
         //{
