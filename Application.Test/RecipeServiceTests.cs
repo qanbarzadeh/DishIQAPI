@@ -42,8 +42,8 @@ public class RecipeServiceTests
             },
             CookingSteps = new List<CookingStepDTO>
             {
-                new CookingStepDTO { Id = 1, Description = "Cooking step 1" },
-                new CookingStepDTO { Id = 2, Description = "Cooking step 2" }
+                new CookingStepDTO {Description = "Cooking step 1" },
+                new CookingStepDTO { Description = "Cooking step 2" }
             }
         };
 
