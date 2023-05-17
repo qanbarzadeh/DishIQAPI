@@ -56,7 +56,7 @@ namespace Application.Test
             };
 
             mockedChatGptService.Setup(api => api.GeneratedRecipeApiAsync(recipeRequestDTO)).ReturnsAsync(apiResponseDTO);
-            mockedRecipeParser.Setup(parser => parser.ParseFoodInformation(It.IsAny<string>())).Returns(expectedGeneratedRecipeDTO.FoodInformation);
+            mockedRecipeParser.Setup(parser => parser.ParseFoodInformationFromContent(It.IsAny<string>())).Returns(expectedGeneratedRecipeDTO.FoodInformation);
             mockedRecipeParser.Setup(parser => parser.ParseIngredients(It.IsAny<string>())).Returns(expectedGeneratedRecipeDTO.Ingredients);
             mockedRecipeParser.Setup(parser => parser.ParseCookingSteps(It.IsAny<string>())).Returns(expectedGeneratedRecipeDTO.CookingSteps);
 

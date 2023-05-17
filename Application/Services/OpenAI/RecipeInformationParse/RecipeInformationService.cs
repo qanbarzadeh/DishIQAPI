@@ -26,7 +26,7 @@ public class RecipeInformationService : IRecipeInformationService
                 throw new Exception("Invalid API response: Message content is empty.");
             }
 
-            var foodInformation = _recipeParser.ParseFoodInformation(messageContent);
+            var foodInformation = _recipeParser.ParseFoodInformationFromContent(messageContent);
             var ingredients = _recipeParser.ParseIngredients(messageContent);
             var cookingSteps = _recipeParser.ParseCookingSteps(messageContent);
 

@@ -44,70 +44,70 @@ namespace OpenAIAPI
             return generatedRecipeDTO;
         }
 
-        public FoodInformationDTO ParseFoodInformationFromJson(string json)
+        public FoodInformationDTO ParseFoodInformationFromContent(string content)
         {
-            JObject jObject = JObject.Parse(json);
-            var message = jObject["choices"]?[0]?["message"]?["content"]?.ToString();
-
-            if (string.IsNullOrEmpty(message))
-            {
-                throw new Exception("Invalid JSON format: Message content is empty or null.");
-            }
-
-            var lines = message.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            var lines = content.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             var foodInformation = new FoodInformationDTO();
 
             foreach (var line in lines)
             {
-                var keyValue = line.Split(':');
-
-                if (keyValue.Length == 2)
+                if (line.StartsWith("-"))
                 {
-                    var key = keyValue[0].Trim();
-                    var value = keyValue[1].Trim();
+                    var keyValue = line.TrimStart('-').Split(':');
 
-                    switch (key)
+                    if (keyValue.Length == 2)
                     {
-                        case "Name":
-                            foodInformation.Name = value;
-                            break;
-                        case "Description":
-                            foodInformation.Description = value;
-                            break;
-                        case "Preparation Time":
-                            foodInformation.PreparationTime = value;
-                            break;
-                        case "Cooking Time":
-                            foodInformation.CookingTime = value;
-                            break;
-                        case "Servings":
-                            foodInformation.Servings = value;
-                            break;
-                        case "Calories per Serving":
-                            foodInformation.CaloriesPerServing = value;
-                            break;
-                        case "Serving Size":
-                            foodInformation.ServingSize = value;
-                            break;
-                        case "Dietary Preferences":
-                            foodInformation.DietaryPreferences = value;
-                            break;
-                        case "Key Ingredients":
-                            foodInformation.KeyIngredients = value;
-                            break;
-                        case "Allergy Restrictions":
-                            foodInformation.AllergyRestrictions = value;
-                            break;
-                        case "Cuisine":
-                            foodInformation.Cuisine = value;
-                            break;
-                        case "Dish Type":
-                            foodInformation.DishType = value;
-                            break;
-                        case "Cooking Method":
-                            foodInformation.CookingMethod = value;
-                            break;
+                        var key = keyValue[0].Trim();
+                        var value = keyValue[1].Trim();
+
+                        switch (key)
+                        {
+                            case "Name":
+                                foodInformation.Name = value;
+                                break;
+                            case "Description":
+                                foodInformation.Description = value;
+                                break;
+                            case "Preparation Time":
+                                foodInformation.PreparationTime = value;
+                                break;
+                            case "Cooking Time":
+                                foodInformation.CookingTime = value;
+                                break;
+                            case "Servings":
+                                foodInformation.Servings = value;
+                                break;
+                            case "Calories per serving":
+                                foodInformation.CaloriesPerServing = value;
+                                break;
+                            case "Serving Size":
+                                foodInformation.ServingSize = value;
+                                break;
+                            case "Dietary Preferences":
+                                foodInformation.DietaryPreferences = value;
+                                break;
+                            case "Key Ingredients":
+                                foodInformation.KeyIngredients = value;
+                                break;
+                            case "Allergy Restrictions":
+                                foodInformation.AllergyRestrictions = value;
+                                break;
+                            case "Cuisine":
+                                foodInformation.Cuisine = value;
+                                break;
+                            case "Dish Type":
+                                foodInformation.DishType = value;
+                                break;
+                            case "Cooking Method":
+                                foodInformation.CookingMethod = value;
+                                break;
+                        }
                     }
+                }
+                else if (line.Contains("List of ingredients:") || line.Contains("Cooking steps:"))
+                {
+                    // Stop parsing as we've reached the end of the food information
+                    break;
                 }
             }
 
@@ -200,10 +200,10 @@ namespace OpenAIAPI
         }
         public FoodInformationDTO ParseFoodInformation(string content)
         {
-            return ParseFoodInformationFromJson(content);
+            return ParseFoodInformationFromContent(content);
         }
 
     }
 }
 
-       
+     
