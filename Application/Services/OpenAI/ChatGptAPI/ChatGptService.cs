@@ -24,9 +24,13 @@ namespace Application.Services.OpenAI.ChatGptAPI
             _httpClient = httpClient;
             _configuration = configuration;
             _logger = logger;
+
             _httpClient.BaseAddress = new Uri(_configuration["OpenAI:ApiEndpoint"]); // OpenAI API URL from appsettings.json
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"); // OpenAI API Key from environment variable
             _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
+
+            //logging 
+
             _logger.LogInformation("ChatGptService initialized");
             _logger.LogInformation($"OpenAI API Endpoint: {_httpClient.BaseAddress}");
         }
