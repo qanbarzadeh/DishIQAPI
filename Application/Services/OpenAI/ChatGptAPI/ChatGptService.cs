@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Application.Interfaces;
 using Application.DTO.OpenAiResponse;
+using Domain.Entities.RecipeEntities;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
@@ -94,39 +95,35 @@ namespace Application.Services.OpenAI.ChatGptAPI
         private string BuildPrompt(RecipeRequestDTO recipeRequest)
         {
             var promptBuilder = new StringBuilder();
-            promptBuilder.AppendLine("I need a recipe with the following details:");
-            promptBuilder.AppendLine("{");
-            promptBuilder.AppendLine("  \"foodInformation\": {");
-            promptBuilder.AppendLine("    \"name\": \"\",");
-            promptBuilder.AppendLine("    \"description\": \"\",");
-            promptBuilder.AppendLine("    \"preparationTime\": \"\",");
-            promptBuilder.AppendLine("    \"cookingTime\": \"\",");
-            promptBuilder.AppendLine("    \"servings\": \"\",");
-            promptBuilder.AppendLine("    \"caloriesPerServing\": \"\",");
-            promptBuilder.AppendLine("    \"servingSize\": \"\",");
-            promptBuilder.AppendLine("    \"dietaryPreferences\": \"\",");
-            promptBuilder.AppendLine("    \"keyIngredients\": \"\",");
-            promptBuilder.AppendLine("    \"allergyRestrictions\": \"\",");
-            promptBuilder.AppendLine("    \"cuisine\": \"\",");
-            promptBuilder.AppendLine("    \"dishType\": \"\",");
-            promptBuilder.AppendLine("    \"cookingMethod\": \"\"");
-            promptBuilder.AppendLine("  },");
-            promptBuilder.AppendLine("  \"ingredients\": [");
-            promptBuilder.AppendLine("    {");
-            promptBuilder.AppendLine("      \"ingredientInfo\": \"\"");
-            promptBuilder.AppendLine("    }");
-            promptBuilder.AppendLine("  ],");
-            promptBuilder.AppendLine("  \"cookingSteps\": [");
-            promptBuilder.AppendLine("    {");
-            promptBuilder.AppendLine("      \"description\": \"\",");
-            promptBuilder.AppendLine("      \"order\": \"\"");
-            promptBuilder.AppendLine("    }");
-            promptBuilder.AppendLine("  ]");
-            promptBuilder.AppendLine("}");
+            promptBuilder.AppendLine("Please generate a recipe with the following criteria:");
+            promptBuilder.AppendLine($"- Meal Type: {recipeRequest.MealType}");
+            promptBuilder.AppendLine($"- Dietary Preference: {recipeRequest.DietaryPreference}");
+            promptBuilder.AppendLine($"- Region: {recipeRequest.Region}");
+            promptBuilder.AppendLine($"- Cooking Technique: {recipeRequest.CookingTechnique}");
+            promptBuilder.AppendLine($"- Number of Pax: {recipeRequest.NumberOfPax}");
+            promptBuilder.AppendLine($"- Country: {recipeRequest.Country}");
+            promptBuilder.AppendLine($"- Meal Time: {recipeRequest.MealTime}");
+            promptBuilder.AppendLine($"- Blood Type: {recipeRequest.BloodType}");
+            promptBuilder.AppendLine("Please include the following details in the recipe:");
+            promptBuilder.AppendLine("- Name");
+            promptBuilder.AppendLine("- Description");
+            promptBuilder.AppendLine("- Preparation Time");
+            promptBuilder.AppendLine("- Cooking Time");
+            promptBuilder.AppendLine("- Servings");
+            promptBuilder.AppendLine("- Calories per serving");
+            promptBuilder.AppendLine("- Serving Size");
+            promptBuilder.AppendLine("- Dietary Preferences");
+            promptBuilder.AppendLine("- Key Ingredients");
+            promptBuilder.AppendLine("- Allergy Restrictions");
+            promptBuilder.AppendLine("- Cuisine");
+            promptBuilder.AppendLine("- Dish Type");
+            promptBuilder.AppendLine("- Cooking Method");
+            promptBuilder.AppendLine("- List of Ingredients");
+            promptBuilder.AppendLine("- Cooking Steps");
+            promptBuilder.AppendLine("###");
 
             return promptBuilder.ToString();
         }
-
 
 
         //private string BuildPrompt(RecipeRequestDTO recipeRequest)
