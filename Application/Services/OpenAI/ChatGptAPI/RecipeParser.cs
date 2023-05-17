@@ -108,8 +108,8 @@ namespace OpenAIAPI
 
         public List<IngredientDTO> ParseIngredients(string content)
         {
-            JObject jObject = JObject.Parse(content);
-            var message = jObject["choices"][0]["message"]["content"].ToString();
+            // Directly use content as the message
+            var message = content;
 
             // Parse the list of ingredients
             var ingredientsIndex = message.Contains("List of Ingredients:") ? message.IndexOf("List of Ingredients:") : -1;
@@ -151,22 +151,20 @@ namespace OpenAIAPI
             return ingredients;
         }
 
+
         public List<CookingStepDTO> ParseCookingSteps(string content)
         {
-            JObject jObject = JObject.Parse(content);
-            var message = jObject["choices"][0]["message"]["content"].ToString();
-
             // Parse the cooking steps
-            var cookingStepsIndex = message.Contains("Cooking Steps:") ? message.IndexOf("Cooking Steps:") : -1;
+            var cookingStepsIndex = content.IndexOf("Cooking Steps:");
 
             if (cookingStepsIndex == -1)
             {
                 throw new Exception("Invalid message format. Couldn't find Cooking Steps.");
             }
 
-            var cookingStepsString = message.Substring(cookingStepsIndex).Trim();
+            var cookingStepsString = content.Substring(cookingStepsIndex).Trim();
 
-            var cookingStepsLines = cookingStepsString.Split(new[] { "\n", "\r\n" }, StringSplitOptions.None).Skip(1);
+            var cookingStepsLines = cookingStepsString.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Skip(1);
             List<CookingStepDTO> cookingSteps = new List<CookingStepDTO>();
 
             foreach (var line in cookingStepsLines)
@@ -189,6 +187,7 @@ namespace OpenAIAPI
 
             return cookingSteps;
         }
+
         public FoodInformationDTO ParseFoodInformation(string content)
         {
             return ParseFoodInformationFromContent(content);
