@@ -10,38 +10,37 @@ namespace Application.DTO.RecipeDTOs
         [JsonProperty("description")]
         public string Description { get; set; }
 
-
-        [JsonProperty("PreparationTime")]
+        [JsonProperty("preparationTime")]
         public string PreparationTime { get; set; }
 
-        [JsonProperty("CookingTime")]
+        [JsonProperty("cookingTime")]
         public string CookingTime { get; set; }
 
-        [JsonProperty("Servings ")]
+        [JsonProperty("servings")]
         public string Servings { get; set; }
 
-        [JsonProperty("CaloriesPerServing")]
+        [JsonProperty("caloriesPerServing")]
         public string CaloriesPerServing { get; set; }
 
-        [JsonProperty("ServingSize")]
+        [JsonProperty("servingSize")]
         public string ServingSize { get; set; }
 
-        [JsonProperty("DietaryPreferences")]
+        [JsonProperty("dietaryPreferences")]
         public string DietaryPreferences { get; set; }
 
-        [JsonProperty("KeyIngredients")]
+        [JsonProperty("keyIngredients")]
         public string KeyIngredients { get; set; }
 
-        [JsonProperty("AllergyRestrictions")]
+        [JsonProperty("allergyRestrictions")]
         public string AllergyRestrictions { get; set; }
 
-        [JsonProperty("Cuisine")]
+        [JsonProperty("cuisine")]
         public string Cuisine { get; set; }
 
-        [JsonProperty("DishType")]
+        [JsonProperty("dishType")]
         public string DishType { get; set; }
 
-        [JsonProperty("CookingMethod")]
+        [JsonProperty("cookingMethod")]
         public string CookingMethod { get; set; }
     }
 }
