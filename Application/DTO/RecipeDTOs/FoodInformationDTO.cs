@@ -7,8 +7,9 @@ namespace Application.DTO.RecipeDTOs
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("Description")]
+        [JsonProperty("description")]
         public string Description { get; set; }
+
 
         [JsonProperty("PreparationTime")]
         public string PreparationTime { get; set; }
