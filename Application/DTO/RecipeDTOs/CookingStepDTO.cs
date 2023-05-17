@@ -1,9 +1,15 @@
-﻿namespace Application.DTO.RecipeDTOs
+﻿using Newtonsoft.Json;
+
+namespace Application.DTO.RecipeDTOs
 {
     public class CookingStepDTO
     {
-        public int Id { get; set; }
+     
+
+        [JsonProperty("description")]
         public string Description { get; set; }
-        public int Order { get; set; }
+
+        [JsonProperty("order")]
+        public string Order { get; set; }
     }
 }

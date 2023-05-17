@@ -1,65 +1,65 @@
-﻿using Application.DTO;
+﻿using Application.DTO.OpenAiResponse;
 using Application.DTO.RecipeDTOs;
+using Application.Interfaces;
 using Application.Services.OpenAI.ChatGptAPI;
 using Application.Services.Recipe;
-using Domain.Entities.RecipeEntities;
-using Domain.ValueObjects.Recipe;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace Application.Test
+public class RecipeServiceTests
 {
-    public class RecipeServiceTests
+    [Fact]
+    public async Task GetGeneratedRecipeAsync_ReturnGeneratedRecipe()
     {
+        // Arrange
+        var mockedChatGptService = new Mock<IChatGptService>();
+        var mockedRecipeParser = new Mock<IRecipeParser>();
 
-      private readonly IRecipeService _recipeService;
-
-        [Fact]
-        public async Task GetGeneratedRecipeAsync_ReturnGeneratedRecipe()
+        var recipeRequestDTO = new RecipeRequestDTO
         {
-            //Arrange
-            var mockedChatGptService = new Mock<IChatGptService>();
-            var recipeRequestDTO = new RecipeRequestDTO
+            MealType = "SomeMealType",
+            DietaryPreference = "SomeDietPreference",
+            Region = "SomeRegion",
+            CookingTechnique = "SomeCookingTechnique",
+            NumberOfPax = 2,
+            Country = "SomeCountry",
+            MealTime = "SomeMealTime",
+            BloodType = "SomeBloodType"
+        };
+
+        var apiResponseDTO = new ApiResponseDTO
+        {
+            // fill this object with the expected values
+        };
+
+        var expectedGeneratedRecipeDTO = new GeneratedRecipeDTO
+        {
+            FoodInformation = new FoodInformationDTO { Name = "Test Food", Description = "Description test" },
+            Ingredients = new List<IngredientDTO>
             {
-                MealType = "SomeMealType",
-                DietPreference = "SomeDietPreference",
-                Region = "SomeRegion",
-                CookingTechnique = "SomeCookingTechnique",
-                NumberOfPax = 2,
-                Country = "SomeCountry",
-                MealTime = "SomeMealTime",
-                BloodType = "SomeBloodType"
-            };
-            var expectedGeneratedRecipeDTO = new GeneratedRecipeDTO
-            {                
-                FoodInformation = new FoodInformationDTO { Name = "Test Food", Description = "Description test" },
-                Ingredients = new List<IngredientDTO>
-                {
-                    new IngredientDTO { Id = 1, Name = "Ingredient 1", Quantity = 2 },
-                    new IngredientDTO { Id = 2, Name = "Ingredient 2", Quantity = 1 }
-                },
-                CookingSteps = new List<CookingStepDTO>
-                {
-                    new CookingStepDTO { Id = 1, Description = "Cooking step 1" },
-                    new CookingStepDTO { Id = 2, Description = "Cooking step 2" }
-                }
-            };
+                new IngredientDTO { IngredientInfo = "Ingredient 1" },
+                new IngredientDTO { IngredientInfo = "Ingredient 2" }
+            },
+            CookingSteps = new List<CookingStepDTO>
+            {
+                new CookingStepDTO {Description = "Cooking step 1" },
+                new CookingStepDTO { Description = "Cooking step 2" }
+            }
+        };
 
+        mockedChatGptService.Setup(api => api.GeneratedRecipeApiAsync(recipeRequestDTO)).ReturnsAsync(apiResponseDTO);
+        mockedRecipeParser.Setup(parser => parser.ParseFoodInformationFromContent(It.IsAny<string>())).Returns(expectedGeneratedRecipeDTO.FoodInformation);
+        mockedRecipeParser.Setup(parser => parser.ParseIngredients(It.IsAny<string>())).Returns(expectedGeneratedRecipeDTO.Ingredients);
+        mockedRecipeParser.Setup(parser => parser.ParseCookingSteps(It.IsAny<string>())).Returns(expectedGeneratedRecipeDTO.CookingSteps);
 
-            mockedChatGptService.Setup(api => api.GeneratedRecipeApiAsync(recipeRequestDTO)).ReturnsAsync(expectedGeneratedRecipeDTO);
-            var recipeService = new RecipeService(mockedChatGptService.Object);
+        var recipeService = new RecipeService(mockedChatGptService.Object, mockedRecipeParser.Object);
 
-            //Act 
-            var actualGeneatedRecipe = await recipeService.GetGeneratedRecipeAsync(recipeRequestDTO);
-            
+        // Act 
+        var actualGeneratedRecipe = await recipeService.GetGeneratedRecipeAsync(recipeRequestDTO);
 
-            //Assert 
-            Assert.NotNull(actualGeneatedRecipe);            
-            Assert.Equal("Test Food", actualGeneatedRecipe.FoodInformation.Name);
-            Assert.Equal("Description test", actualGeneatedRecipe.FoodInformation.Description);
-        }               
+        // Assert 
+        Assert.NotNull(actualGeneratedRecipe);
+        Assert.Equal(expectedGeneratedRecipeDTO.FoodInformation.Name, actualGeneratedRecipe.FoodInformation.Name);
+        Assert.Equal(expectedGeneratedRecipeDTO.FoodInformation.Description, actualGeneratedRecipe.FoodInformation.Description);
     }
 }

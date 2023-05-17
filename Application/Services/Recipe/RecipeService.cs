@@ -1,28 +1,25 @@
 ﻿using Application.DTO.RecipeDTOs;
+using Application.Interfaces;
 using Application.Services.OpenAI.ChatGptAPI;
-using AutoMapper;
-using Domain.Entities.RecipeEntities;
-using System.Runtime.CompilerServices;
 
 namespace Application.Services.Recipe
 {
     public class RecipeService : IRecipeService
     {
         private readonly IChatGptService _chatGptService;
-              
-        public RecipeService(IChatGptService chatGptService)
+        private readonly IRecipeParser _recipeParser;
+
+        public RecipeService(IChatGptService chatGptService, IRecipeParser recipeParser)
         {
             _chatGptService = chatGptService;
-         
+            _recipeParser = recipeParser;
         }
 
         public async Task<GeneratedRecipeDTO> GetGeneratedRecipeAsync(RecipeRequestDTO requestDTO)
         {
-
-            return await _chatGptService.GeneratedRecipeApiAsync(requestDTO);
-
+            var apiResponse = await _chatGptService.GeneratedRecipeApiAsync(requestDTO);
+            var generatedRecipeDTO = _recipeParser.ParseApiResponse(apiResponse);
+            return generatedRecipeDTO;
         }
     }
 }
-
-

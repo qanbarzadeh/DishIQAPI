@@ -7,6 +7,8 @@ using Microsoft.Identity.Web;
 using Application.Mapping;
 using Application.Services.Recipe;
 using Application.Configuration;
+using Application.Interfaces;
+using OpenAIAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,20 +20,25 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
+builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
 
 // Register RecipeService 
-builder.Services.AddScoped<IRecipeService, RecipeService>();
+
+builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
+
+
 // Configure RapidApiOptions using environment variables
-var rapidApiKey = Environment.GetEnvironmentVariable("RAPIDAPI_KEY");
-var rapidApiHost = Environment.GetEnvironmentVariable("RAPIDAPI_HOST");
-var rapidApiEndpoint = Environment.GetEnvironmentVariable("RAPIDAPI_ENDPOINT");
-builder.Services.Configure<RapidApiOptions>(options =>
-{
-    options.RAPIDAPI_KEY = rapidApiKey;
-    options.RAPIDAPI_HOST = rapidApiHost;
-    options.RAPIDAPI_ENDPOINT = rapidApiEndpoint;
-});
+//var rapidApiKey = Environment.GetEnvironmentVariable("RAPIDAPI_KEY");
+//var rapidApiHost = Environment.GetEnvironmentVariable("RAPIDAPI_HOST");
+//var rapidApiEndpoint = Environment.GetEnvironmentVariable("RAPIDAPI_ENDPOINT");
+//builder.Services.Configure<RapidApiOptions>(options =>
+//{
+//    options.RAPIDAPI_KEY = rapidApiKey;
+//    options.RAPIDAPI_HOST = rapidApiHost;
+//    options.RAPIDAPI_ENDPOINT = rapidApiEndpoint;
+//});
 
 // Register AutoMapper
 //builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly); //Register IMapper when need to store entityinto databse 
@@ -51,11 +58,11 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
- //   app.UseSwagger();
- //   app.UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

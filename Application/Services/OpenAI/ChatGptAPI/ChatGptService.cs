@@ -5,41 +5,37 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Application.Interfaces;
+using Application.DTO.OpenAiResponse;
+using Domain.Entities.RecipeEntities;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
     public class ChatGptService : IChatGptService
     {
-        private readonly IConfiguration? _configuration;
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
-        //private readonly string? _rapidApiKey;
-        private readonly string? _rapidapiEndpoint;
         private readonly ILogger _logger;
-        //private readonly string? _apiHost;
-        private const string _apiHost = "https://openai80.p.rapidapi.com";
-        private const string _rapidAPEndpoint = "https://openai80.p.rapidapi.com/";
-        private const string _rapidApikey = "87469d0de2msh68ef681a9b461f3p1bfa82jsn173917c29b0e"; 
-        public ChatGptService(HttpClient httpClient, IConfiguration configuration, IOptions<RapidApiOptions> rapidApiOptions, ILogger<ChatGptService> logger)
-        {            
+
+        public ChatGptService(HttpClient httpClient,
+            IConfiguration configuration,
+            ILogger<ChatGptService> logger)
+        {
             _httpClient = httpClient;
             _configuration = configuration;
             _logger = logger;
-            //_rapidApiKey = rapidApiOptions.Value.RAPIDAPI_KEY;
-            //_rapidapiEndpoint = rapidApiOptions.Value.RAPIDAPI_ENDPOINT;
-            //_apiHost = configuration["RapidApi:RAPIDAPI_HOST"];
-            _httpClient.BaseAddress = new Uri(_apiHost);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApikey);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "openai80.p.rapidapi.com");
-            _httpClient.Timeout = TimeSpan.FromSeconds(120); // or any desired duration
-            //logging 
-            _logger.LogInformation("ChatGptService initialized");
-            _logger.LogInformation($"_apiHost: {_apiHost}");
-            _logger.LogInformation($"_rapidApiKey: {_rapidApikey}");
-            _logger.LogInformation($"_rapidapiEndpoint: {_rapidapiEndpoint}");
 
+            _httpClient.BaseAddress = new Uri(_configuration["OpenAI:ApiEndpoint"]); // OpenAI API URL from appsettings.json
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"); // OpenAI API Key from environment variable
+            _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
+
+            //logging 
+
+            _logger.LogInformation("ChatGptService initialized");
+            _logger.LogInformation($"OpenAI API Endpoint: {_httpClient.BaseAddress}");
         }
 
-        public async Task<GeneratedRecipeDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
+        public async Task<ApiResponseDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
         {
             // Build the prompt
             string prompt = BuildPrompt(recipeRequest);
@@ -48,31 +44,30 @@ namespace Application.Services.OpenAI.ChatGptAPI
             var requestData = new
             {
                 model = "gpt-3.5-turbo",
+                max_tokens = 2048, // the desired number of tokens (characters) allowed in the response
                 messages = new[]
-              {
-            new
-            {
-                role = "user",
-                content = prompt
+                {
+                new
+                {
+                    role = "user",
+                    content = prompt
+                }
             }
-        }
             };
-            //Change for RapidAPI 
 
             var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             var content = new StringContent(JsonConvert.SerializeObject(requestData, settings), Encoding.UTF8, "application/json");
 
-            var requestUri = new Uri("https://openai80.p.rapidapi.com/chat/completions");
+            var requestUri = new Uri($"{_httpClient.BaseAddress}/v1/chat/completions");
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
             {
                 Content = content
             };
-            _logger.LogInformation($"Sending API request to {_apiHost} with prompt: {prompt}"); //logging 
+            _logger.LogInformation($"Sending API request to {_httpClient.BaseAddress} with prompt: {prompt}");
 
-            GeneratedRecipeDTO generatedRecipeDTO;
             try
             {
-                HttpResponseMessage response = await _httpClient.SendAsync(request);
+                HttpResponseMessage response = await _httpClient.SendAsync(request).ConfigureAwait(false);
 
                 // Log the response content and headers
                 _logger.LogInformation($"Response Content: {await response.Content.ReadAsStringAsync()}");
@@ -81,7 +76,16 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 response.EnsureSuccessStatusCode();
 
                 var responseJson = await response.Content.ReadAsStringAsync();
-                generatedRecipeDTO = JsonConvert.DeserializeObject<GeneratedRecipeDTO>(responseJson);
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponseDTO>(responseJson);
+
+                // Handle the scenario where the API response does not contain any choices
+                if (apiResponse?.Choices == null || !apiResponse.Choices.Any())
+                {
+                    // Handle the error accordingly
+                    throw new Exception("Invalid API response: No choices available.");
+                }
+
+                return apiResponse;
             }
             catch (HttpRequestException ex)
             {
@@ -91,28 +95,64 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 // Re-throw the exception to be handled by the caller
                 throw;
             }
-
-            return generatedRecipeDTO;
-
         }
-
         private string BuildPrompt(RecipeRequestDTO recipeRequest)
         {
             var promptBuilder = new StringBuilder();
-            promptBuilder.AppendLine($"I want to cook a {recipeRequest.NumberOfPax}-serving {recipeRequest.MealType} dish");
-            promptBuilder.AppendLine($"that is {recipeRequest.DietPreference} and suitable for {recipeRequest.BloodType} blood type");
-            promptBuilder.AppendLine($"from {recipeRequest.Region} and {recipeRequest.Country}");
-            promptBuilder.AppendLine($"using {recipeRequest.CookingTechnique} cooking technique for {recipeRequest.MealTime}");
-            promptBuilder.AppendLine();
-            promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
-            promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time," +
-                " servings, calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, cuisine, " +
-                "dish type, cooking method)");
-            promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");
-            promptBuilder.AppendLine("- Cooking steps (description, order)");
+            promptBuilder.AppendLine("Please generate a recipe with the following criteria:");
+            promptBuilder.AppendLine($"- Meal Type: {recipeRequest.MealType}");
+            promptBuilder.AppendLine($"- Dietary Preference: {recipeRequest.DietaryPreference}");
+            promptBuilder.AppendLine($"- Region: {recipeRequest.Region}");
+            promptBuilder.AppendLine($"- Cooking Technique: {recipeRequest.CookingTechnique}");
+            promptBuilder.AppendLine($"- Number of Pax: {recipeRequest.NumberOfPax}");
+            promptBuilder.AppendLine($"- Country: {recipeRequest.Country}");
+            promptBuilder.AppendLine($"- Meal Time: {recipeRequest.MealTime}");
+            promptBuilder.AppendLine($"- Blood Type: {recipeRequest.BloodType}");
+            promptBuilder.AppendLine("Please include the following details in the recipe:");
+            promptBuilder.AppendLine("- Name");
+            promptBuilder.AppendLine("- Description");
+            promptBuilder.AppendLine("- Preparation Time");
+            promptBuilder.AppendLine("- Cooking Time");
+            promptBuilder.AppendLine("- Servings");
+            promptBuilder.AppendLine("- Calories per serving");
+            promptBuilder.AppendLine("- Serving Size");
+            promptBuilder.AppendLine("- Dietary Preferences");
+            promptBuilder.AppendLine("- Key Ingredients");
+            promptBuilder.AppendLine("- Allergy Restrictions");
+            promptBuilder.AppendLine("- Cuisine");
+            promptBuilder.AppendLine("- Dish Type");
+            promptBuilder.AppendLine("- Cooking Method");
+            promptBuilder.AppendLine("- List of Ingredients");
+            promptBuilder.AppendLine("- Cooking Steps");
             promptBuilder.AppendLine("###");
 
             return promptBuilder.ToString();
         }
+
+
+        //private string BuildPrompt(RecipeRequestDTO recipeRequest)
+        //{
+        //    var promptBuilder = new StringBuilder();
+        //    promptBuilder.AppendLine("{");
+        //    promptBuilder.AppendLine("  \"mealType\": \"" + recipeRequest.MealType + "\",");
+        //    promptBuilder.AppendLine("  \"dietPreference\": \"" + recipeRequest.DietaryPreference + "\",");
+        //    promptBuilder.AppendLine("  \"region\": \"" + recipeRequest.Region + "\",");
+        //    promptBuilder.AppendLine("  \"cookingTechnique\": \"" + recipeRequest.CookingTechnique + "\",");
+        //    promptBuilder.AppendLine("  \"numberOfPax\": " + recipeRequest.NumberOfPax + ",");
+        //    promptBuilder.AppendLine("  \"country\": \"" + recipeRequest.Country + "\",");
+        //    promptBuilder.AppendLine("  \"mealTime\": \"" + recipeRequest.MealTime + "\",");
+        //    promptBuilder.AppendLine("  \"bloodType\": \"" + recipeRequest.BloodType + "\"");
+        //    promptBuilder.AppendLine("}");
+        //    promptBuilder.AppendLine();
+        //    promptBuilder.AppendLine("Please provide the following details for the generated recipe:");
+        //    promptBuilder.AppendLine("- Food information (name, description, preparation time, cooking time, servings, " +
+        //                             "calories per serving, serving size, dietary preferences, key ingredients, allergy restrictions, " +
+        //                             "cuisine, dish type, cooking method)");
+        //    promptBuilder.AppendLine("- List of ingredients (name, unit, quantity)");
+        //    promptBuilder.AppendLine("- Cooking steps (description, order)");
+        //    promptBuilder.AppendLine("###");
+
+        //    return promptBuilder.ToString();
+        //}
     }
 }
