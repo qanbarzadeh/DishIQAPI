@@ -1,12 +1,9 @@
 
 using Application.Services.OpenAI.ChatGptAPI;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 using Application.Mapping;
 using Application.Services.Recipe;
-using Application.Configuration;
 using Application.Interfaces;
 using OpenAIAPI;
 using Application.Services.SelectionAndOrder;
@@ -30,17 +27,6 @@ builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionSer
 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
 
-
-// Configure RapidApiOptions using environment variables
-//var rapidApiKey = Environment.GetEnvironmentVariable("RAPIDAPI_KEY");
-//var rapidApiHost = Environment.GetEnvironmentVariable("RAPIDAPI_HOST");
-//var rapidApiEndpoint = Environment.GetEnvironmentVariable("RAPIDAPI_ENDPOINT");
-//builder.Services.Configure<RapidApiOptions>(options =>
-//{
-//    options.RAPIDAPI_KEY = rapidApiKey;
-//    options.RAPIDAPI_HOST = rapidApiHost;
-//    options.RAPIDAPI_ENDPOINT = rapidApiEndpoint;
-//});
 
 // Register AutoMapper
 //builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly); //Register IMapper when need to store entityinto databse 
