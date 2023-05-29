@@ -30,18 +30,6 @@ builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionSer
 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
 
-
-// Configure RapidApiOptions using environment variables
-//var rapidApiKey = Environment.GetEnvironmentVariable("RAPIDAPI_KEY");
-//var rapidApiHost = Environment.GetEnvironmentVariable("RAPIDAPI_HOST");
-//var rapidApiEndpoint = Environment.GetEnvironmentVariable("RAPIDAPI_ENDPOINT");
-//builder.Services.Configure<RapidApiOptions>(options =>
-//{
-//    options.RAPIDAPI_KEY = rapidApiKey;
-//    options.RAPIDAPI_HOST = rapidApiHost;
-//    options.RAPIDAPI_ENDPOINT = rapidApiEndpoint;
-//});
-
 // Register AutoMapper
 //builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly); //Register IMapper when need to store entityinto databse 
 //builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // check if it is needed to inject Iconfiguration here. 
