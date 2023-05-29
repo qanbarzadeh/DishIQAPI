@@ -9,6 +9,7 @@ using Application.Services.Recipe;
 using Application.Configuration;
 using Application.Interfaces;
 using OpenAIAPI;
+using Application.Services.SelectionAndOrder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
+builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionService>(); 
 
 // Register RecipeService 
 
