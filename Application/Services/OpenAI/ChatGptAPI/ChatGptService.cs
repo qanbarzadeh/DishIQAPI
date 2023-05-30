@@ -25,15 +25,24 @@ namespace Application.Services.OpenAI.ChatGptAPI
             _configuration = configuration;
             _logger = logger;
 
-            _httpClient.BaseAddress = new Uri(_configuration["OpenAI:ApiEndpoint"]); // OpenAI API URL from appsettings.json
+            var openAiEndpoint = _configuration["OpenAI:ApiEndpoint"]; // Retrieve OpenAI API endpoint from Azure App Configuration
+
+            // Check if the OpenAI API endpoint is empty or null
+            if (string.IsNullOrEmpty(openAiEndpoint))
+            {
+                throw new Exception("OpenAI API endpoint not found in Azure App Configuration.");
+            }
+
+            _httpClient.BaseAddress = new Uri(openAiEndpoint);
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"); // OpenAI API Key from environment variable
             _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
 
-            //logging 
+            // Logging
 
             _logger.LogInformation("ChatGptService initialized");
             _logger.LogInformation($"OpenAI API Endpoint: {_httpClient.BaseAddress}");
         }
+
 
         public async Task<ApiResponseDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
         {
