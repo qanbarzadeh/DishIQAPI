@@ -1,12 +1,9 @@
 
 using Application.Services.OpenAI.ChatGptAPI;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 using Application.Mapping;
 using Application.Services.Recipe;
-using Application.Configuration;
 using Application.Interfaces;
 using OpenAIAPI;
 using Application.Services.SelectionAndOrder;
@@ -14,8 +11,6 @@ using Application.Services.SelectionAndOrder;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container..
-
-
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -29,6 +24,7 @@ builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionSer
 // Register RecipeService 
 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
+
 
 // Register AutoMapper
 //builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly); //Register IMapper when need to store entityinto databse 
