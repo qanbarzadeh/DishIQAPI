@@ -8,52 +8,68 @@ using Microsoft.Extensions.Logging;
 using Application.Interfaces;
 using Application.DTO.OpenAiResponse;
 using Domain.Entities.RecipeEntities;
+using System.Net.Http.Headers;
+using Domain.AzureVault;
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
     public class ChatGptService : IChatGptService
     {
-        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
+        private readonly IKeyVaultService _keyVaultService;
+        private string _openAiApiKey;
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public ChatGptService(HttpClient httpClient,
+            ILogger<ChatGptService> logger,
             IConfiguration configuration,
-            ILogger<ChatGptService> logger)
+            IKeyVaultService keyVaultService)
         {
             _httpClient = httpClient;
-            _configuration = configuration;
             _logger = logger;
+            _configuration = configuration;
+            _keyVaultService = keyVaultService;
+            _httpClient.Timeout = TimeSpan.FromSeconds(60);
 
-            var openAiEndpoint = _configuration["OpenAI:ApiEndpoint"]; // Retrieve OpenAI API endpoint from Azure App Configuration
-
-            // Check if the OpenAI API endpoint is empty or null
-            if (string.IsNullOrEmpty(openAiEndpoint))
-            {
-                throw new Exception("OpenAI API endpoint not found in Azure App Configuration.");
-            }
-
-            _httpClient.BaseAddress = new Uri(openAiEndpoint);
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"); // OpenAI API Key from environment variable
-            _httpClient.Timeout = TimeSpan.FromSeconds(60); // or any desired duration
-
-            // Logging
+            var openAiEndPoint = _configuration["OpenAI:ApiEndpoint"];
+            _httpClient.BaseAddress = new Uri(openAiEndPoint);
 
             _logger.LogInformation("ChatGptService initialized");
             _logger.LogInformation($"OpenAI API Endpoint: {_httpClient.BaseAddress}");
         }
 
+        private async Task<string> OpenAiApiKey()
+        {
+            if (_openAiApiKey == null)
+            {
+                await _semaphore.WaitAsync();
+                try
+                {
+                    if (_openAiApiKey == null)
+                    {
+                        _openAiApiKey = await _keyVaultService.GetSecretAsync("OpenAI-Key");
+                    }
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
+            }
+            return _openAiApiKey;
+        }
 
         public async Task<ApiResponseDTO> GeneratedRecipeApiAsync(RecipeRequestDTO recipeRequest)
         {
-            // Build the prompt
-            string prompt = BuildPrompt(recipeRequest);
+            var openAiApiKey = await OpenAiApiKey();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", openAiApiKey);
 
-            // Prepare the request JSON
+            string prompt = BuildPrompt(recipeRequest);
             var requestData = new
             {
                 model = "gpt-3.5-turbo",
-                max_tokens = 2048, // the desired number of tokens (characters) allowed in the response
+                max_tokens = 2048,
                 messages = new[]
                 {
                 new
@@ -67,30 +83,24 @@ namespace Application.Services.OpenAI.ChatGptAPI
             var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             var content = new StringContent(JsonConvert.SerializeObject(requestData, settings), Encoding.UTF8, "application/json");
 
-            var requestUri = new Uri($"{_httpClient.BaseAddress}/v1/chat/completions");
+            var chatCompletionsEndpoint = _configuration["OpenAI:ChatCompletionsEndpoint"];
+            var requestUri = new Uri(_httpClient.BaseAddress, chatCompletionsEndpoint);
+
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
             {
                 Content = content
             };
-            _logger.LogInformation($"Sending API request to {_httpClient.BaseAddress} with prompt: {prompt}");
 
             try
             {
                 HttpResponseMessage response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-
-                // Log the response content and headers
-                _logger.LogInformation($"Response Content: {await response.Content.ReadAsStringAsync()}");
-                _logger.LogInformation($"Response Headers: {response.Headers.ToString()}");
-
                 response.EnsureSuccessStatusCode();
 
                 var responseJson = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponseDTO>(responseJson);
 
-                // Handle the scenario where the API response does not contain any choices
                 if (apiResponse?.Choices == null || !apiResponse.Choices.Any())
                 {
-                    // Handle the error accordingly
                     throw new Exception("Invalid API response: No choices available.");
                 }
 
@@ -98,10 +108,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             }
             catch (HttpRequestException ex)
             {
-                // Log the exception
                 _logger.LogError(ex, "An error occurred while calling the API");
-
-                // Re-throw the exception to be handled by the caller
                 throw;
             }
         }
