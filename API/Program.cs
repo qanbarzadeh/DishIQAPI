@@ -1,11 +1,8 @@
 using Application.Services.OpenAI.ChatGptAPI;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 using Application.Mapping;
 using Application.Services.Recipe;
-using Application.Configuration;
 using Application.Interfaces;
 using OpenAIAPI;
 using Application.Services.SelectionAndOrder;
@@ -33,6 +30,7 @@ builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 
 // Register RecipeService 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
+
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
