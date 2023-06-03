@@ -57,7 +57,7 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 
 // Connect to Azure Key Vault
 var keyVaultUri = builder.Configuration.GetSection("Azure")["KeyVaultUri"];
-builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new DefaultAzureCredential());
+builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new ManagedIdentityCredential());
 
 var app = builder.Build();
 
