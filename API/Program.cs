@@ -91,6 +91,8 @@ app.UseCors(builder =>
     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
 });
 
+//todo: fix permissions
 app.MapControllers();
 
 app.Run();
+
