@@ -10,13 +10,11 @@ using Domain.AzureVault;
 using Infrastructure.AzureVaultService;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Security.KeyVault.Secrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container..
+// Add services to the container.
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -30,7 +28,6 @@ builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 
 // Register RecipeService 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
-
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -59,15 +56,8 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 });
 
 // Connect to Azure Key Vault
-var azureServiceTokenProvider = new AzureServiceTokenProvider();
-var keyVaultClient = new KeyVaultClient(
-     new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
 var keyVaultUri = builder.Configuration.GetSection("Azure")["KeyVaultUri"];
-
-builder.Configuration.AddAzureKeyVault(
-     vault: keyVaultUri,
-     client: keyVaultClient,
-     manager: new DefaultKeyVaultSecretManager());
+builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new DefaultAzureCredential());
 
 var app = builder.Build();
 
@@ -76,9 +66,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}else
+}
+else
 {
-    app.UseExceptionHandler("/error"); 
+    app.UseExceptionHandler("/error");
 }
 
 app.UseSwagger();
@@ -90,9 +81,5 @@ app.UseCors(builder =>
 {
     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
 });
-
-//todo: fix permissions
 app.MapControllers();
-
 app.Run();
-
