@@ -11,8 +11,14 @@ using Infrastructure.AzureVaultService;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 // Add services to the container.
 builder.Services.AddControllers();
