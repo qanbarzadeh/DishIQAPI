@@ -8,6 +8,7 @@ namespace API.Controllers
     [Route("[controller]")]
     public class ErrorController : ControllerBase
     {
+        [HttpGet] // Added HTTP verb here
         [Route("")]
         public IActionResult Error()
         {
