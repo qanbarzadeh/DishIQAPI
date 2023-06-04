@@ -53,12 +53,8 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 {
     options.Connect(new Uri(appConfigUri), new ManagedIdentityCredential())
           .Select(KeyFilter.Any, LabelFilter.Null)
-          .UseFeatureFlags()
-          .ConfigureRefresh(refresh =>
-          {
-              refresh.Register("TestApp:Settings", refreshAll: true)
-                     .SetCacheExpiration(TimeSpan.FromMinutes(5));
-          });
+          .UseFeatureFlags(); 
+         
 });
 
 // Connect to Azure Key Vault
