@@ -141,7 +141,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             promptBuilder.AppendLine("- Dish Type");
             promptBuilder.AppendLine("- Cooking Method");
             promptBuilder.AppendLine("- List of Ingredients");
-            promptBuilder.AppendLine("- List of Ingredients (please format each ingredient as 'Ingredient Name: Quantity')");
+            promptBuilder.AppendLine("- List of Ingredients (please format each ingredient as 'Ingredient Name: Quantity')"); //updat format
             promptBuilder.AppendLine("- Cooking Steps");
             promptBuilder.AppendLine("###");
 
