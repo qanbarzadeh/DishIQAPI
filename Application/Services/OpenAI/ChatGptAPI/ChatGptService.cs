@@ -49,7 +49,9 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 {
                     if (_openAiApiKey == null)
                     {
-                        _openAiApiKey = await _keyVaultService.GetSecretAsync("OpenAI-Key");
+                        //_openAiApiKey = await _keyVaultService.GetSecretAsync("OpenAI-Key");
+                        _openAiApiKey = await _keyVaultService.GetSecretAsync("openai-apikey-b");
+
                     }
                 }
                 finally

@@ -16,15 +16,33 @@ namespace Infrastructure.AzureVaultService
 
         public AzureKeyVaultService(IConfiguration configuration)
         {
-            var keyVaultEndpoint = configuration["KeyVault:Endpoint"];
-            var credential = new DefaultAzureCredential();
-            _secretClient = new SecretClient(new Uri(keyVaultEndpoint), credential);
+            try
+            {
+                var keyVaultEndpoint = configuration["Azure:KeyVaultUri"];
+                var credential = new DefaultAzureCredential();
+                _secretClient = new SecretClient(new Uri(keyVaultEndpoint), credential);
+            }
+            catch (Exception ex)
+            {
+                // log exception
+                Console.WriteLine($"An error occurred while setting up AzureKeyVaultService: {ex.Message}");
+                throw; // rethrow the exception after logging
+            }
         }
 
         public async Task<string> GetSecretAsync(string secretName)
         {
-            KeyVaultSecret secret = await _secretClient.GetSecretAsync(secretName);
-            return secret.Value;
+            try
+            {
+                KeyVaultSecret secret = await _secretClient.GetSecretAsync(secretName);
+                return secret.Value;
+            }
+            catch (Exception ex)
+            {
+                // log exception
+                Console.WriteLine($"An error occurred while retrieving the secret: {ex.Message}");
+                throw; // rethrow the exception after logging
+            }
         }
     }
 }

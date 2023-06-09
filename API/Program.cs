@@ -10,13 +10,17 @@ using Domain.AzureVault;
 using Infrastructure.AzureVaultService;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container..
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+// Add services to the container.
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -30,7 +34,6 @@ builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 
 // Register RecipeService 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
-
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -50,24 +53,13 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 {
     options.Connect(new Uri(appConfigUri), new ManagedIdentityCredential())
           .Select(KeyFilter.Any, LabelFilter.Null)
-          .UseFeatureFlags()
-          .ConfigureRefresh(refresh =>
-          {
-              refresh.Register("TestApp:Settings", refreshAll: true)
-                     .SetCacheExpiration(TimeSpan.FromMinutes(5));
-          });
+          .UseFeatureFlags(); 
+         
 });
 
 // Connect to Azure Key Vault
-var azureServiceTokenProvider = new AzureServiceTokenProvider();
-var keyVaultClient = new KeyVaultClient(
-     new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
 var keyVaultUri = builder.Configuration.GetSection("Azure")["KeyVaultUri"];
-
-builder.Configuration.AddAzureKeyVault(
-     vault: keyVaultUri,
-     client: keyVaultClient,
-     manager: new DefaultKeyVaultSecretManager());
+builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new ManagedIdentityCredential());
 
 var app = builder.Build();
 
@@ -75,19 +67,24 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DishIQ MVP Dev");
+    });
+}
+else
+{
+    app.UseExceptionHandler("/error");
 }
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DishIQ MVP");
 });
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
 });
-
 app.MapControllers();
-
 app.Run();
