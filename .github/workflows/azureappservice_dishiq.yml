@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - AzureAppService
+      - feat-ingredient-selection
   workflow_dispatch:
 
 jobs:
