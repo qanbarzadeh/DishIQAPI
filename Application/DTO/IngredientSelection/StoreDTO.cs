@@ -12,6 +12,7 @@ namespace Application.DTO.IngredientSelection
         public string? StoreAddress { get; set; }
         public double Distance { get; set; }
         public List<string>? AvailableIngredients { get; set; }
+        public Dictionary<string, string> SelectedIngredients { get; set; }
     }
 
 }
