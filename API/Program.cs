@@ -14,6 +14,8 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Application.Interfaces.GoogleMaps;
+using Application.Services.GoogleMaps;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
+builder.Services.AddHttpClient<INearbySearchService, NearbySearchService>();
 builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionService>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 
