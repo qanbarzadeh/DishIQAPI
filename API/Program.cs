@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Application.Interfaces.GoogleMaps;
+using Application.Services.GoogleMaps;
 
 var builder = WebApplication.CreateBuilder(args);
 
