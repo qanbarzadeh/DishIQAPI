@@ -1,13 +1,12 @@
-﻿using GoogleApi.Entities.Places.Search.NearBy.Request;
-using GoogleApi.Entities.Places.Search.Common.Enums;
-using GoogleApi.Entities.Common;
-using Application.DTO.GoogleMaps;
+﻿using Application.DTO.GoogleMaps;
 using Application.Interfaces.GoogleMaps;
+using Domain.AzureVault;
 using System.Net.Http;
-using Application.Interfaces.Services; // I assumed this is the namespace for IKeyVaultService
 using System.Threading;
 using System.Threading.Tasks;
-using Domain.AzureVault;
+using System.Collections.Generic;
+using System;
+using Newtonsoft.Json.Linq;
 
 public class NearbySearchService : INearbySearchService
 {
@@ -44,35 +43,33 @@ public class NearbySearchService : INearbySearchService
 
     public async Task<StoreListDTO> Search(string location, int radius, string[] types)
     {
-        var splitLocation = location.Split(',');
-        var latitude = double.Parse(splitLocation[0]);
-        var longitude = double.Parse(splitLocation[1]);
-        var coordinate = new Coordinate(latitude, longitude);
-
         var storeList = new StoreListDTO { Stores = new List<StoreDTO>() };
 
         foreach (var type in types)
         {
-            var request = new PlacesNearBySearchRequest
-            {
-                Key = await GoogleApiKey(),
-                Location = coordinate,
-                Radius = radius,
-                Type = (SearchPlaceType)System.Enum.Parse(typeof(SearchPlaceType), type)
-            };
+            var requestUrl = $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location}&radius={radius}&type={type}&key={await GoogleApiKey()}";
+            var response = await _httpClient.GetAsync(requestUrl);
 
-            // Directly calling the ExecuteAsync method
-            var response = await GoogleApi.GooglePlaces.NearBySearch.QueryAsync(request);
-
-            foreach (var result in response.Results)
+            if (response.IsSuccessStatusCode)
             {
-                storeList.Stores.Add(new StoreDTO
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var data = JObject.Parse(responseContent);
+                var results = data["results"].ToObject<List<JToken>>();
+
+                foreach (var result in results)
                 {
-                    Name = result.Name,
-                    Address = result.Vicinity,
-                    Latitude = result.Geometry.Location.Latitude,
-                    Longitude = result.Geometry.Location.Longitude
-                });
+                    storeList.Stores.Add(new StoreDTO
+                    {
+                        Name = result["name"].ToString(),
+                        Address = result["vicinity"].ToString(),
+                        Latitude = (double)result["geometry"]["location"]["lat"],
+                        Longitude = (double)result["geometry"]["location"]["lng"]
+                    });
+                }
+            }
+            else
+            {
+                throw new HttpRequestException($"Google Places API request failed with status code: {response.StatusCode}");
             }
         }
 
