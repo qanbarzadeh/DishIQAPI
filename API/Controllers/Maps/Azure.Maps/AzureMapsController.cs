@@ -1,31 +1,30 @@
-﻿using Application.DTO.GoogleMaps;
-using Application.Interfaces.GoogleMaps;
+﻿using Application.DTO.Azure.maps;
+using Application.DTO.GoogleMaps;
+using Application.Interfaces.Azure.Maps;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 
-namespace API.Controllers.GoolgeMaps
+namespace API.Controllers.Maps.Azure.Maps
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PlacesController : ControllerBase
+    public class AzureMapsController : ControllerBase
     {
-        private readonly INearbySearchService _nearbySearchService;
+        private readonly INearbySearchServiceAzureMaps _nearbySearchServiceAzureMaps;
 
-        public PlacesController(INearbySearchService nearbySearchService)
+        public AzureMapsController(INearbySearchServiceAzureMaps nearbySearchServiceAzureMaps)
         {
-            _nearbySearchService = nearbySearchService ?? throw new ArgumentNullException(nameof(nearbySearchService));
+            _nearbySearchServiceAzureMaps = nearbySearchServiceAzureMaps ?? throw new ArgumentNullException(nameof(nearbySearchServiceAzureMaps));
         }
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(StoreListDTO), 200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StoreListDTO>> SearchNearbyPlaces(string location, int radius, string[] types)
+        public async Task<ActionResult<StoreListDTO>> SearchNearbyPlaces(SearchRequestDTO searchRequestDTO)
         {
             try
             {
-                var storeList = await _nearbySearchService.Search(location, radius, types);
+                var storeList = await _nearbySearchServiceAzureMaps.Search(searchRequestDTO);
                 return Ok(storeList);
             }
             catch (HttpRequestException ex)
