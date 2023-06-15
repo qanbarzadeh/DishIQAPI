@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Application.Services.GoogleMaps
 {
-    public class NearbySearchService : INearbySearchService
+    public class NearbySearchServiceGoogleMaps : INearbySearchService
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IKeyVaultService _keyVaultService;
         private string _googleApiKey;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        public NearbySearchService(IHttpClientFactory httpClientFactory, IKeyVaultService keyVaultService)
+        public NearbySearchServiceGoogleMaps(IHttpClientFactory httpClientFactory, IKeyVaultService keyVaultService)
         {
             _httpClientFactory = httpClientFactory;
             _keyVaultService = keyVaultService;

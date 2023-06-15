@@ -11,7 +11,7 @@ using Application.DTO.GoogleMaps;
 using Application.Services.GoogleMaps;
 using Domain.AzureVault;
 
-namespace Application.Test.GoogleMapsTest
+namespace Application.Test.Maps.Test.GoogleMapsTest
 {
     public class NearbySearchServiceTests
     {
@@ -63,7 +63,7 @@ namespace Application.Test.GoogleMapsTest
             var httpClient = new HttpClient(mockHttpMessageHandler.Object);
             httpClientFactoryMock.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(httpClient);
 
-            var service = new NearbySearchService(httpClientFactoryMock.Object, keyVaultServiceMock.Object);
+            var service = new NearbySearchServiceGoogleMaps(httpClientFactoryMock.Object, keyVaultServiceMock.Object);
 
             // Act
             var result = await service.Search("40.748817,-73.985428", 1000, new[] { "grocery_or_supermarket" });
@@ -71,12 +71,10 @@ namespace Application.Test.GoogleMapsTest
             // Assert
             Assert.NotNull(result);
             Assert.True(result.Stores.Count > 0);
-
             Assert.Equal("Store 1", result.Stores[0].Name);
             Assert.Equal("Address 1", result.Stores[0].Address);
             Assert.Equal(1.234567, result.Stores[0].Latitude, 6);
             Assert.Equal(2.345678, result.Stores[0].Longitude, 6);
-
             Assert.Equal("Store 2", result.Stores[1].Name);
             Assert.Equal("Address 2", result.Stores[1].Address);
             Assert.Equal(3.456789, result.Stores[1].Latitude, 6);
