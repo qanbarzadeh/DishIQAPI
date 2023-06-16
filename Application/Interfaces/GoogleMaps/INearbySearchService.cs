@@ -1,4 +1,4 @@
-﻿using Application.DTO.GoogleMaps;
+﻿using Application.DTO.Azure.maps;
 using System;
 using System.Collections.Generic;
 using System.Linq;

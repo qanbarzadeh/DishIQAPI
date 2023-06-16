@@ -1,5 +1,4 @@
 ﻿using Application.DTO.Azure.maps;
-using Application.DTO.GoogleMaps;
 using Application.Interfaces.Azure.Maps;
 using Domain.AzureVault;
 using Microsoft.Extensions.Configuration;
