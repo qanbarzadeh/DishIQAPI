@@ -5,7 +5,6 @@ using Application.Mapping;
 using Application.Services.Recipe;
 using Application.Interfaces;
 using OpenAIAPI;
-using Application.Services.SelectionAndOrder;
 using Domain.AzureVault;
 using Infrastructure.AzureVaultService;
 using Azure.Identity;
@@ -31,7 +30,6 @@ builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
 builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>();
-builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionService>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 
 // Register RecipeService 
