@@ -12,8 +12,9 @@ using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
-using Application.Interfaces.GoogleMaps;
-using Application.Services.GoogleMaps;
+using Application.Interfaces.Azure.Maps;
+using Application.Services.AzureMaps;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
-builder.Services.AddHttpClient<INearbySearchService, NearbySearchServiceGoogleMaps>();
+builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>();
 builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionService>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 
