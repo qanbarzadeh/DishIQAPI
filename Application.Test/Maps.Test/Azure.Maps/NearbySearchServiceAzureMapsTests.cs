@@ -71,8 +71,8 @@ namespace Application.Test.Maps.Test.Azure.Maps
             // Act
             var result = await service.Search(new SearchRequestDTO
             {
-                Latitude = "40.748817",
-                Longitude = "-73.985428",
+                Latitude = 40.748817,
+                Longitude = -73.985428,
                 Radius = 1000
             });
 

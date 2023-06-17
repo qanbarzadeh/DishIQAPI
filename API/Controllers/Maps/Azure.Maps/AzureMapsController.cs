@@ -19,10 +19,18 @@ namespace API.Controllers.Maps.Azure.Maps
         [ProducesResponseType(typeof(StoreListDTO), 200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StoreListDTO>> SearchNearbyPlaces(SearchRequestDTO searchRequestDTO)
+        public async Task<ActionResult<StoreListDTO>> SearchNearbyPlaces(double latitude, double longitude, double radius)
         {
             try
             {
+                // Create a new SearchRequestDTO with the provided parameters
+                var searchRequestDTO = new SearchRequestDTO
+                {
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    Radius = radius
+                };
+
                 var storeList = await _nearbySearchServiceAzureMaps.Search(searchRequestDTO);
                 return Ok(storeList);
             }
@@ -39,3 +47,4 @@ namespace API.Controllers.Maps.Azure.Maps
         }
     }
 }
+
