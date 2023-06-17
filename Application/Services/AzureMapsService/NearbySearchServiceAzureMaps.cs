@@ -3,20 +3,21 @@ using Application.Interfaces.Azure.Maps;
 using Domain.AzureVault;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
 
 namespace Application.Services.AzureMaps
 {
     public class NearbySearchServiceAzureMaps : INearbySearchServiceAzureMaps
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
         private readonly IKeyVaultService _keyVaultService;
         private string _azureMapsApiKey;
         private readonly string _azureMapsBaseUrl;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        public NearbySearchServiceAzureMaps(IHttpClientFactory httpClientFactory, IKeyVaultService keyVaultService, IConfiguration configuration)
+        public NearbySearchServiceAzureMaps(HttpClient httpClient, IKeyVaultService keyVaultService, IConfiguration configuration)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClient;
             _keyVaultService = keyVaultService;
             _azureMapsBaseUrl = configuration["AzureMaps:BaseUrl"];
         }
@@ -46,9 +47,12 @@ namespace Application.Services.AzureMaps
         {
             var storeList = new StoreListDTO { Stores = new List<StoreDTO>() };
 
-            var httpClient = _httpClientFactory.CreateClient();
+            // No longer necessary to create a new HttpClient here. You already have _httpClient.
+            //var httpClient = _httpClientFactory.CreateClient();
+
             var requestUrl = $"{_azureMapsBaseUrl}?subscription-key={await AzureMapsApiKey()}&api-version=1.0&query=grocery%20store&lat={searchRequestDTO.Latitude}&lon={searchRequestDTO.Longitude}&radius={searchRequestDTO.Radius}";
-            var response = await httpClient.GetAsync(requestUrl);
+
+            var response = await _httpClient.GetAsync(requestUrl); // Use _httpClient here
 
             if (response.IsSuccessStatusCode)
             {

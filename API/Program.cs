@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Application.Interfaces.Azure.Maps;
 using Application.Services.AzureMaps;
-
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +30,11 @@ builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
-
-builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>();
-
+builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>((services, client) =>
+{
+    var configuration = services.GetRequiredService<IConfiguration>();
+    client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
+});
 
 // Register RecipeService 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
@@ -55,8 +57,8 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 {
     options.Connect(new Uri(appConfigUri), new ManagedIdentityCredential())
           .Select(KeyFilter.Any, LabelFilter.Null)
-          .UseFeatureFlags(); 
-         
+          .UseFeatureFlags();
+
 });
 
 // Connect to Azure Key Vault

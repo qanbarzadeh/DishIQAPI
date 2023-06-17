@@ -63,9 +63,10 @@ namespace Application.Test.Maps.Test.Azure.Maps
                 });
 
             var httpClient = new HttpClient(mockHttpMessageHandler.Object);
-            httpClientFactoryMock.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(httpClient);
+            //httpClientFactoryMock.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(httpClient);
 
-            var service = new NearbySearchServiceAzureMaps(httpClientFactoryMock.Object, keyVaultServiceMock.Object, configurationMock.Object);
+            //var service = new NearbySearchServiceAzureMaps(httpClientFactoryMock.Object, keyVaultServiceMock.Object, configurationMock.Object);
+            var service = new NearbySearchServiceAzureMaps(httpClient, keyVaultServiceMock.Object, configurationMock.Object);  // Changed this line
 
             // Act
             var result = await service.Search(new SearchRequestDTO
