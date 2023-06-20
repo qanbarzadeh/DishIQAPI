@@ -49,7 +49,9 @@ namespace Application.Services.OpenAI.ChatGptAPI
                 {
                     if (_openAiApiKey == null)
                     {
-                        _openAiApiKey = await _keyVaultService.GetSecretAsync("OpenAI-Key");
+                        //_openAiApiKey = await _keyVaultService.GetSecretAsync("OpenAI-Key");
+                        _openAiApiKey = await _keyVaultService.GetSecretAsync("openai-apikey-b");
+
                     }
                 }
                 finally
@@ -137,8 +139,8 @@ namespace Application.Services.OpenAI.ChatGptAPI
             promptBuilder.AppendLine("- Allergy Restrictions");
             promptBuilder.AppendLine("- Cuisine");
             promptBuilder.AppendLine("- Dish Type");
-            promptBuilder.AppendLine("- Cooking Method");
-            promptBuilder.AppendLine("- List of Ingredients");
+            promptBuilder.AppendLine("- Cooking Method");            
+            promptBuilder.AppendLine("- List of Ingredients (please format each ingredient as 'Ingredient Name: Quantity')"); //updat format
             promptBuilder.AppendLine("- Cooking Steps");
             promptBuilder.AppendLine("###");
 
