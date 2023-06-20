@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.GoogleMaps
+namespace Application.Interfaces.Azure.Maps
 {
-    public interface INearbySearchService
+    public interface INearbySearchServiceAzureMaps
     {
-        Task<StoreListDTO> Search(string location, int radius, string[] types);
+            Task<StoreListDTO> Search(SearchRequestDTO searchRequestDTO);
     }
-
 }

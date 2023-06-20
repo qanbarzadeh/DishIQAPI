@@ -5,17 +5,15 @@ using Application.Mapping;
 using Application.Services.Recipe;
 using Application.Interfaces;
 using OpenAIAPI;
-using Application.Services.SelectionAndOrder;
 using Domain.AzureVault;
 using Infrastructure.AzureVaultService;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Azure.Security.KeyVault.Secrets;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
-using Application.Interfaces.GoogleMaps;
-using Application.Services.GoogleMaps;
+using Application.Interfaces.Azure.Maps;
+using Application.Services.AzureMaps;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +26,15 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
-builder.Services.AddHttpClient<INearbySearchService, NearbySearchService>();
-builder.Services.AddScoped<IIngredientsSelectionService, IngredientsSelectionService>();
-builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
+builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>((services, client) =>
+{
+    var configuration = services.GetRequiredService<IConfiguration>();
+    client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
+});
 
 // Register RecipeService 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
@@ -56,8 +57,8 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 {
     options.Connect(new Uri(appConfigUri), new ManagedIdentityCredential())
           .Select(KeyFilter.Any, LabelFilter.Null)
-          .UseFeatureFlags(); 
-         
+          .UseFeatureFlags();
+
 });
 
 // Connect to Azure Key Vault
