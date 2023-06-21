@@ -9,7 +9,7 @@ namespace Domain.Entities.Factories.UserRegistration
 {
     public static class ExternalLoginFactory
     {
-        public static ExternalLogin CreateExternalLogin(string loginProvider, string providerKey, User user)
+        public static ExternalLogin CreateExternalLogin(string loginProvider, string providerKey, AuthUser user)
         {
             return new ExternalLogin
             {

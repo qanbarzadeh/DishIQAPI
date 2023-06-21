@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities.UserRegistration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace Domain.Entities.Factories.UserRegistration
 {
     public static class UserFactory
     {
-        public static User CreateUser(string emailAddress, string username)
+        public static AuthUser CreateUser(string emailAddress, string username)
         {
-            return new User
+            return new AuthUser
             {
                 EmailAddress = emailAddress,
                 Username = username,
