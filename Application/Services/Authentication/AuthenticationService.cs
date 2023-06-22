@@ -10,6 +10,7 @@ using System.Web;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Identity;
 using Domain.Entities.Factories.UserRegistration;
+using Application.Repository.Authentication;
 
 namespace Application.Services.Authentication
 {
@@ -18,12 +19,23 @@ namespace Application.Services.Authentication
         private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly HttpClient _httpClient;
+        private readonly IAuthUserRepository _authUserRepository;
+        private readonly IExternalLoginRepository _externalLoginRepository;
+        private readonly IUserEventRepository _userEventRepository;
 
-        public AuthenticationService(IConfiguration configuration, UserManager<IdentityUser> userManager, HttpClient httpClient)
+        public AuthenticationService(IConfiguration configuration,
+                                      UserManager<IdentityUser> userManager,
+                                      HttpClient httpClient,
+                                      IAuthUserRepository authUserRepository,
+                                      IExternalLoginRepository externalLoginRepository,
+                                      IUserEventRepository userEventRepository)
         {
             _configuration = configuration;
             _userManager = userManager;
             _httpClient = httpClient;
+            _authUserRepository = authUserRepository;
+            _externalLoginRepository = externalLoginRepository;
+            _userEventRepository = userEventRepository;
         }
 
         public async Task<string> InitiateExternalAuthenticationAsync(string provider, string redirectUri)
