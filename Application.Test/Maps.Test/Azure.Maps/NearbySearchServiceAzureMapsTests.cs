@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Application.Services.AzureMaps;
-using Domain.AzureVault;
+using Application.Interfaces; 
 using Microsoft.Extensions.Configuration;
 using Application.DTO.Azure.maps;
 

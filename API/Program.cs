@@ -5,7 +5,6 @@ using Application.Mapping;
 using Application.Services.Recipe;
 using Application.Interfaces;
 using OpenAIAPI;
-using Domain.AzureVault;
 using Infrastructure.AzureVaultService;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Application.Interfaces.Azure.Maps;
 using Application.Services.AzureMaps;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +33,7 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
     var configuration = services.GetRequiredService<IConfiguration>();
     client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
 });
+builder.Services.AddMemoryCache();
 
 // Register RecipeService 
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
