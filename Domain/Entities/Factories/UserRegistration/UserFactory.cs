@@ -1,9 +1,4 @@
 ﻿using Domain.Entities.UserRegistration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities.Factories.UserRegistration
 {
@@ -13,9 +8,14 @@ namespace Domain.Entities.Factories.UserRegistration
         {
             return new AuthUser
             {
+                Id = Guid.NewGuid(), // assuming a new Guid for each new user
                 EmailAddress = emailAddress,
                 Username = username,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+                UpdatedAt = DateTime.UtcNow,
+                Version = 1,
+                ExternalLogins = new List<ExternalLogin>()
             };
         }
     }

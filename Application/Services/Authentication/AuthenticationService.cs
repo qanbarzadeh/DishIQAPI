@@ -7,6 +7,9 @@ using System.Net.Http.Headers;
 using Domain.Entities.UserRegistration;
 using Domain.Enums.UserRegistration;
 using System.Web;
+using Azure.Security.KeyVault.Secrets;
+using Azure.Identity;
+using Domain.Entities.Factories.UserRegistration;
 
 namespace Application.Services.Authentication
 {
@@ -34,11 +37,11 @@ namespace Application.Services.Authentication
             // Define the query parameters for the authorization request
             var queryParams = new Dictionary<string, string>()
             {
-            { "client_id", _configuration["AzureAd:ClientId"] },
+            { "client_id", _configuration["AzureAd-ClientId"] },
             { "response_type", "code" },
             { "redirect_uri", redirectUri },
             { "response_mode", "query" },
-            { "scope", _configuration["AzureAd:Scope"] },
+            { "scope", _configuration["DishIQ_Scope"] },
             { "state", Guid.NewGuid().ToString() } // Use a random value for the state parameter to mitigate CSRF attacks
             };
 
@@ -65,16 +68,21 @@ namespace Application.Services.Authentication
                 throw new ArgumentException("Unsupported provider");
             }
 
+            // Load the Azure AD client secret from Azure Key Vault
+            var keyVaultUri = _configuration["AzureAd-ClientSecret"];
+            var client = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
+            KeyVaultSecret secret = await client.GetSecretAsync("AzureAd-ClientSecret");
+
             // Exchange the authorization code for an access token
             var tokenResponse = await _httpClient.PostAsync("https://login.microsoftonline.com/common/oauth2/v2.0/token", new FormUrlEncodedContent(new[]
             {
-            new KeyValuePair<string, string>("client_id", _configuration["AzureAd:ClientId"]),
-        new KeyValuePair<string, string>("scope", _configuration["AzureAd:Scope"]),
-        new KeyValuePair<string, string>("code", authorizationCode),
-        new KeyValuePair<string, string>("redirect_uri", _configuration["AzureAd:RedirectUri"]),
-        new KeyValuePair<string, string>("grant_type", "authorization_code"),
-        new KeyValuePair<string, string>("client_secret", _configuration["AzureAd:ClientSecret"]),
-          }));
+            new KeyValuePair<string, string>("client_id", _configuration["AzureAd-ClientId"]),
+            new KeyValuePair<string, string>("scope", _configuration["DishIQ_Scope"]),
+            new KeyValuePair<string, string>("code", authorizationCode),
+            new KeyValuePair<string, string>("redirect_uri", _configuration["AzureAd-RedirectUri"]),
+            new KeyValuePair<string, string>("grant_type", "authorization_code"),
+            new KeyValuePair<string, string>("client_secret", secret.Value),
+              }));
 
             tokenResponse.EnsureSuccessStatusCode();
 
@@ -102,32 +110,15 @@ namespace Application.Services.Authentication
                 }
             }
 
-            // Creating an AuthUser object from the IdentityUser object
-            var authUser = new AuthUser
-            {
-                Id = Guid.Parse(identityUser.Id),
-                EmailAddress = identityUser.Email,
-                Username = identityUser.UserName,
-                // ... fill other fields as needed ...
-            };
-
+            // Creating an AuthUser object
+            var authUser = UserFactory.CreateUser(identityUser.Email, identityUser.UserName);
             // Creating the ExternalLogin object
-            var externalLogin = new ExternalLogin
-            {
-                LoginProvider = provider,
-                ProviderKey = userInfoData.Id, // Assuming userInfoData.Id gives us a unique id from the provider
-                UserId = authUser.Id,
-                User = authUser,
-            };
 
+            var externalLogin = ExternalLoginFactory.CreateExternalLogin(provider, userInfoData.Id, authUser);
+            
             // Create UserEvent object
-            var userEvent = new UserEvent
-            {
-                UserId = authUser.Id,
-                User = authUser,
-                EventType = EventType.Login,
-                EventDate = DateTime.UtcNow
-            };
+            var userEvent = UserEventFactory.CreateUserEvent(authUser, EventType.Login);
+
 
             // TODO: Save the AuthUser, ExternalLogin, and UserEvent objects to the database. 
             // This will depend on how you've setup your DbContext or repositories.
