@@ -1,16 +1,10 @@
 ﻿using Application.DTO.Authentication;
 using Application.Interfaces.Authentication;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
-using System.Net.Http.Headers;
-using Domain.Entities.UserRegistration;
-using Domain.Enums.UserRegistration;
 using System.Web;
-using Azure.Security.KeyVault.Secrets;
-using Azure.Identity;
-using Domain.Entities.Factories.UserRegistration;
 using Application.Repository.Authentication;
+using Application.Interfaces.Authentication.Helpers;
 
 namespace Application.Services.Authentication
 {
@@ -18,24 +12,34 @@ namespace Application.Services.Authentication
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly HttpClient _httpClient;
+        //private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IAuthUserRepository _authUserRepository;
         private readonly IExternalLoginRepository _externalLoginRepository;
         private readonly IUserEventRepository _userEventRepository;
+        private readonly ITokenService _tokenService;
+        private readonly IUserService _userService;
+        private readonly IEntityCreationService _entityCreationService;
 
         public AuthenticationService(IConfiguration configuration,
                                       UserManager<IdentityUser> userManager,
-                                      HttpClient httpClient,
+                                      IHttpClientFactory httpClientFactory,
                                       IAuthUserRepository authUserRepository,
                                       IExternalLoginRepository externalLoginRepository,
-                                      IUserEventRepository userEventRepository)
+                                      IUserEventRepository userEventRepository,
+                                      ITokenService tokenService,
+                                      IUserService userService,
+                                      IEntityCreationService entityCreationService)
         {
             _configuration = configuration;
             _userManager = userManager;
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
             _authUserRepository = authUserRepository;
             _externalLoginRepository = externalLoginRepository;
             _userEventRepository = userEventRepository;
+            _tokenService = tokenService;
+            _userService = userService;
+            _entityCreationService = entityCreationService;
         }
 
         public async Task<string> InitiateExternalAuthenticationAsync(string provider, string redirectUri)
@@ -80,60 +84,13 @@ namespace Application.Services.Authentication
                 throw new ArgumentException("Unsupported provider");
             }
 
-            // Load the Azure AD client secret from Azure Key Vault
-            var keyVaultUri = _configuration["AzureAd-ClientSecret"];
-            var client = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
-            KeyVaultSecret secret = await client.GetSecretAsync("AzureAd-ClientSecret");
+            var tokenResponseData = await _tokenService.GetTokenResponseData(authorizationCode);
 
-            // Exchange the authorization code for an access token
-            var tokenResponse = await _httpClient.PostAsync("https://login.microsoftonline.com/common/oauth2/v2.0/token", new FormUrlEncodedContent(new[]
-            {
-            new KeyValuePair<string, string>("client_id", _configuration["AzureAd-ClientId"]),
-            new KeyValuePair<string, string>("scope", _configuration["DishIQ_Scope"]),
-            new KeyValuePair<string, string>("code", authorizationCode),
-            new KeyValuePair<string, string>("redirect_uri", _configuration["AzureAd-RedirectUri"]),
-            new KeyValuePair<string, string>("grant_type", "authorization_code"),
-            new KeyValuePair<string, string>("client_secret", secret.Value),
-              }));
+            var userInfoData = await _userService.GetUserInfoData(tokenResponseData.AccessToken);
 
-            tokenResponse.EnsureSuccessStatusCode();
+            var identityUser = await _userService.GetIdentityUser(userInfoData);
 
-            var tokenResponseContent = await tokenResponse.Content.ReadAsStringAsync();
-            var tokenResponseData = JsonConvert.DeserializeObject<TokenResponse>(tokenResponseContent);
-
-            // Call the Microsoft Graph API to get the user's email address and other information
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponseData.AccessToken);
-            var userInfoResponse = await _httpClient.GetAsync("https://graph.microsoft.com/v1.0/me");
-            userInfoResponse.EnsureSuccessStatusCode();
-
-            var userInfoContent = await userInfoResponse.Content.ReadAsStringAsync();
-            var userInfoData = JsonConvert.DeserializeObject<UserInfoResponse>(userInfoContent);
-
-            // Finding the IdentityUser object from the email obtained
-            var identityUser = await _userManager.FindByEmailAsync(userInfoData.Email);
-
-            if (identityUser == null)
-            {
-                identityUser = new IdentityUser { UserName = userInfoData.Email, Email = userInfoData.Email };
-                var result = await _userManager.CreateAsync(identityUser);
-                if (!result.Succeeded)
-                {
-                    throw new Exception("Failed to create user"); // Replace with your own error handling
-                }
-            }
-
-            // Creating an AuthUser object
-            var authUser = UserFactory.CreateUser(identityUser.Email, identityUser.UserName);
-            // Creating the ExternalLogin object
-
-            var externalLogin = ExternalLoginFactory.CreateExternalLogin(provider, userInfoData.Id, authUser);
-            
-            // Create UserEvent object
-            var userEvent = UserEventFactory.CreateUserEvent(authUser, EventType.Login);
-
-
-            // TODO: Save the AuthUser, ExternalLogin, and UserEvent objects to the database. 
-            // This will depend on how you've setup your DbContext or repositories.
+            await _entityCreationService.HandleUserEntitiesCreation(provider, userInfoData, identityUser);
 
             return new AuthenticationResult
             {
@@ -145,6 +102,5 @@ namespace Application.Services.Authentication
                 Errors = null // No errors
             };
         }
-
     }
 }

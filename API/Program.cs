@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Application.Interfaces.Azure.Maps;
 using Application.Services.AzureMaps;
+using Application.Interfaces.Authentication.Helpers;
+using Application.Services.Authentication.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,9 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
     var configuration = services.GetRequiredService<IConfiguration>();
     client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
 });
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddHttpClient<IUserService, UserService>();
+builder.Services.AddScoped<IEntityCreationService, EntityCreationService>();
 builder.Services.AddMemoryCache();
 
 // Register RecipeService 
@@ -59,7 +64,7 @@ builder.Configuration.AddAzureAppConfiguration(options =>
           .UseFeatureFlags();
 
 });
-
+builder.Services.AddHttpClient();   
 // Connect to Azure Key Vault
 var keyVaultUri = builder.Configuration.GetSection("Azure")["KeyVaultUri"];
 builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new ManagedIdentityCredential());
