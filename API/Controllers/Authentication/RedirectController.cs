@@ -4,6 +4,7 @@ namespace API.Controllers.Authentication
 {
     public class RedirectController : Controller
     {
+        [HttpGet] 
         [Route("auth-redirect")]
         public IActionResult AuthRedirect()
         {
