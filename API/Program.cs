@@ -14,6 +14,8 @@ using Application.Interfaces.Azure.Maps;
 using Application.Services.AzureMaps;
 using Application.Interfaces.Authentication.Helpers;
 using Application.Services.Authentication.Helpers;
+using Application.Repository.Authentication;
+using Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,7 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
     var configuration = services.GetRequiredService<IConfiguration>();
     client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
 });
+builder.Services.AddScoped<IAuthUserRepository, AuthUserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpClient<IUserService, UserService>();
 builder.Services.AddScoped<IEntityCreationService, EntityCreationService>();
