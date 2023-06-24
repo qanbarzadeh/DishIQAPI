@@ -41,6 +41,8 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpClient<IUserService, UserService>();
 builder.Services.AddScoped<IAuthUserRepository, AuthUserRepository>();
+builder.Services.AddScoped<IExternalLoginRepository, ExternalLoginRepository>();
+
 builder.Services.AddScoped<IEntityCreationService, EntityCreationService>();
 builder.Services.AddMemoryCache();
 
