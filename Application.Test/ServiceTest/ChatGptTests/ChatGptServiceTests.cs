@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Xunit;
 
 
-namespace Application.Test.ChatGptTests
+namespace Application.Test.ServiceTest.ChatGptTests
 {
     //public class ChatGptServiceTests
     //{
@@ -23,7 +23,7 @@ namespace Application.Test.ChatGptTests
     //        // Arrange
     //        var configurationMock = new Mock<IConfiguration>();
     //        configurationMock.Setup(x => x["OpenAI:ApiKey"]).Returns("test_api_key");
-            
+
     //        var httpClientHandlerMock = new Mock<HttpMessageHandler>();
 
     //        httpClientHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync",

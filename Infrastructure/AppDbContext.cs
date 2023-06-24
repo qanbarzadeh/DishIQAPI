@@ -1,7 +1,9 @@
 ﻿using Domain.Entities.RecipeEntities;
 using Domain.Entities.UserEntities;
+using Domain.Entities.UserRegistration;
 using Infrastructure.Context.Configuration;
 using Infrastructure.Context.Configuration.RecipeConfiguration;
+using Infrastructure.Context.UserRegsitrationConf;
 using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,12 @@ namespace Infrastructure
 {
     public class AppDbContext : DbContext
     {
+
+        //User Registration DBSets
+        public DbSet<AuthUser> AuthUsers { get; set; }
+        public DbSet<ExternalLogin> ExternalLogins { get; set; }
+        public DbSet<UserEvent> UserEvents { get; set; } 
+
         // DbSets for User entities
         public DbSet<User> Users { get; set; }
         public DbSet<UserProfileInfo> UserProfileInfos { get; set; }
@@ -19,6 +27,7 @@ namespace Infrastructure
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<UserActivityLog> UserActivityLogs { get; set; }
         public DbSet<SocialMediaHandle> SocialMediaHandles { get; set; }
+
 
 
         // DbSets for Recipe entities
@@ -46,6 +55,13 @@ namespace Infrastructure
         {
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);           
             modelBuilder.HasDefaultSchema(DatabaseSetting.UserSchema);
+
+            //User registration configuration
+            new AuthUserConfiguration().Configure(modelBuilder.Entity<AuthUser>());
+            new ExternalLoginConfiguration().Configure(modelBuilder.Entity<ExternalLogin>());
+            new UserEventConfiguration().Configure(modelBuilder.Entity<UserEvent>()); // 
+
+
             // Apply configurations
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new UserProfileInfoConfiguration().Configure(modelBuilder.Entity<UserProfileInfo>());

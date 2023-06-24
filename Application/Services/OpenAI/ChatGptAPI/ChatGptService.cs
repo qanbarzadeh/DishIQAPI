@@ -9,7 +9,7 @@ using Application.Interfaces;
 using Application.DTO.OpenAiResponse;
 using Domain.Entities.RecipeEntities;
 using System.Net.Http.Headers;
-using Domain.AzureVault;
+
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
@@ -139,8 +139,8 @@ namespace Application.Services.OpenAI.ChatGptAPI
             promptBuilder.AppendLine("- Allergy Restrictions");
             promptBuilder.AppendLine("- Cuisine");
             promptBuilder.AppendLine("- Dish Type");
-            promptBuilder.AppendLine("- Cooking Method");
-            promptBuilder.AppendLine("- List of Ingredients");
+            promptBuilder.AppendLine("- Cooking Method");            
+            promptBuilder.AppendLine("- List of Ingredients (please format each ingredient as 'Ingredient Name: Quantity')"); //updat format
             promptBuilder.AppendLine("- Cooking Steps");
             promptBuilder.AppendLine("###");
 
