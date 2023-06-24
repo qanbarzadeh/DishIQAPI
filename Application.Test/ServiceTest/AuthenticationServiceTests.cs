@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Authentication.Helpers;
+﻿using Application.DTO.Authentication;
+using Application.Interfaces.Authentication.Helpers;
 using Application.Repository.Authentication;
 using Application.Services.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -73,5 +74,29 @@ namespace Application.Test.ServiceTest
             Assert.Contains("test_client_id", result);
             Assert.Contains("test_scope", result);
         }
+        [Fact]
+        public async Task HandleExternalAuthenticationCallbackAsync_ShouldReturnExpectedResult()
+        {
+            // Arrange
+            var tokenResponseData = new TokenResponse { AccessToken = "test_access_token", RefreshToken = "test_refresh_token", ExpiresIn = 3600 };
+            var userInfoData = new UserInfoResponse { Email = "test@test.com", Id = "test_user_id" };
+            var identityUser = new IdentityUser { Id = "test_id", Email = "test@test.com" };
+
+            _tokenServiceMock.Setup(x => x.GetTokenResponseData(It.IsAny<string>())).ReturnsAsync(tokenResponseData);
+            _userServiceMock.Setup(x => x.GetUserInfoData(It.IsAny<string>())).ReturnsAsync(userInfoData);
+            _userServiceMock.Setup(x => x.GetIdentityUser(It.IsAny<UserInfoResponse>())).ReturnsAsync(identityUser);
+            _entityCreationServiceMock.Setup(x => x.HandleUserEntitiesCreation(It.IsAny<string>(), It.IsAny<UserInfoResponse>(), It.IsAny<IdentityUser>())).Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _authenticationService.HandleExternalAuthenticationCallbackAsync("Microsoft", "test_authorization_code");
+
+            // Assert
+            Assert.True(result.IsAuthenticated);
+            Assert.Equal(tokenResponseData.AccessToken, result.Token);
+            Assert.Equal(tokenResponseData.RefreshToken, result.RefreshToken);
+            Assert.Equal(identityUser.Id, result.UserId);
+        }
+
+
     }
 }
