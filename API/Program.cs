@@ -37,9 +37,10 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
     var configuration = services.GetRequiredService<IConfiguration>();
     client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
 });
-builder.Services.AddScoped<IAuthUserRepository, AuthUserRepository>();
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpClient<IUserService, UserService>();
+builder.Services.AddScoped<IAuthUserRepository, AuthUserRepository>();
 builder.Services.AddScoped<IEntityCreationService, EntityCreationService>();
 builder.Services.AddMemoryCache();
 
