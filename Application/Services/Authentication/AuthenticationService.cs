@@ -62,7 +62,7 @@ namespace Application.Services.Authentication
             };
 
             // Construct the authorization request URL
-            var url = new UriBuilder("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
+            var url = new UriBuilder("https://login.microsoftonline.com/common/oauth2/v2.0/authorize") //todo: store link in configuration
             {
                 Query = ToQueryString(queryParams)
             };
