@@ -18,13 +18,10 @@ using Application.Repository.Authentication;
 using Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
 // Add services to the container.
 builder.Services.AddControllers();
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -37,13 +34,12 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
     var configuration = services.GetRequiredService<IConfiguration>();
     client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
 });
-
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpClient<IUserService, UserService>();
 builder.Services.AddScoped<IAuthUserRepository, AuthUserRepository>();
 builder.Services.AddScoped<IExternalLoginRepository, ExternalLoginRepository>();
-
 builder.Services.AddScoped<IEntityCreationService, EntityCreationService>();
+builder.Services.AddScoped<IUserEventRepository, UserEventRepository>();
 builder.Services.AddMemoryCache();
 
 // Register RecipeService 
