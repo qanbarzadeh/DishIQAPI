@@ -34,6 +34,16 @@ namespace Infrastructure.Context.UserRegsitrationConf
 
             builder.Property(u => u.IsDeleted)
                 .HasDefaultValue(false);
+
+            //builder.HasMany(u => u.ExternalLogins)
+            //    .WithOne(el => el.AuthUser)
+            //    .HasForeignKey(el => el.AuthUserId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            //builder.HasMany(u => u.UserEvents)
+            //    .WithOne(ue => ue.AuthUser)
+            //    .HasForeignKey(ue => ue.AuthUserId)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

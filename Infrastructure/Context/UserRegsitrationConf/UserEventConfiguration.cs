@@ -13,7 +13,7 @@ namespace Infrastructure.Context.UserRegsitrationConf
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(ue => ue.UserId)
+            builder.Property(ue => ue.AuthUserId)
                 .IsRequired();
 
             builder.Property(ue => ue.EventType)
@@ -22,10 +22,10 @@ namespace Infrastructure.Context.UserRegsitrationConf
             builder.Property(ue => ue.EventDate)
                 .IsRequired();
 
-            builder.HasOne<AuthUser>()
-                .WithMany()
-                .HasForeignKey(ue => ue.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne<AuthUser>()
+            //    .WithMany(u => u.UserEvents)
+            //    .HasForeignKey(ue => ue.AuthUserId)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

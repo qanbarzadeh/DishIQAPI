@@ -15,8 +15,8 @@ namespace Domain.Entities.Factories.UserRegistration
             {
                 LoginProvider = loginProvider,
                 ProviderKey = providerKey,
-                User = user,
-                UserId = user.Id,
+                AuthUser = user,
+                AuthUserId = user.Id,
                 LinkedAt = DateTime.UtcNow
             };
         }

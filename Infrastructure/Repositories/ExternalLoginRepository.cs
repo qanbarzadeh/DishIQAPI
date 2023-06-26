@@ -23,7 +23,7 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<ExternalLogin>> GetExternalLoginsByAuthUserIdAsync(Guid authUserId)
         {
             return await _context.ExternalLogins
-                                 .Where(el => el.UserId == authUserId)
+                                 .Where(el => el.AuthUserId == authUserId)
                                  .ToListAsync();
         }       
     }

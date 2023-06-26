@@ -9,8 +9,8 @@ namespace Domain.Entities.Factories.UserRegistration
         {
             return new UserEvent
             {
-                UserId = user.Id,
-                User = user,
+                AuthUserId = user.Id,
+                AuthUser = user,
                 EventType = eventType,
                 EventDate = DateTime.UtcNow
             };

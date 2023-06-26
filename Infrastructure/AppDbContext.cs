@@ -55,11 +55,22 @@ namespace Infrastructure
         {
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);           
             modelBuilder.HasDefaultSchema(DatabaseSetting.UserSchema);
-
             //User registration configuration
             new AuthUserConfiguration().Configure(modelBuilder.Entity<AuthUser>());
             new ExternalLoginConfiguration().Configure(modelBuilder.Entity<ExternalLogin>());
-            new UserEventConfiguration().Configure(modelBuilder.Entity<UserEvent>()); // 
+            new UserEventConfiguration().Configure(modelBuilder.Entity<UserEvent>());
+
+            modelBuilder.Entity<AuthUser>()
+    .           HasMany(u => u.ExternalLogins)
+    .           WithOne(el => el.AuthUser)
+    .           HasForeignKey(el => el.AuthUserId)
+    .           OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AuthUser>()
+                .HasMany(u => u.UserEvents)
+                .WithOne(ue => ue.AuthUser)
+                .HasForeignKey(ue => ue.AuthUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             // Apply configurations

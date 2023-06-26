@@ -11,8 +11,8 @@ namespace Domain.Entities.UserRegistration
         public int Id { get; set; }
         public string LoginProvider { get; set; }
         public string ProviderKey { get; set; }
-        public Guid UserId { get; set; }
-        public AuthUser User { get; set; }
+        public Guid AuthUserId { get; set; }
+        public AuthUser AuthUser { get; set; }
         public DateTime LinkedAt { get; set; } = DateTime.UtcNow;
         public bool IsDeleted { get; set; } = false;
     }

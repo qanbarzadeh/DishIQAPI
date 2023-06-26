@@ -1,28 +1,19 @@
 ﻿using Application.DTO.Authentication;
 using Application.Interfaces.Authentication.Helpers;
-using Application.Repository.Authentication;
+using Application.Interfaces.UnitOfWork;
 using Domain.Entities.Factories.UserRegistration;
 using Domain.Enums.UserRegistration;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Authentication.Helpers
 {
     public class EntityCreationService : IEntityCreationService
     {
-        private readonly IAuthUserRepository _authUserRepository;
-        private readonly IExternalLoginRepository _externalLoginRepository;
-        private readonly IUserEventRepository _userEventRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EntityCreationService(IAuthUserRepository authUserRepository, IExternalLoginRepository externalLoginRepository, IUserEventRepository userEventRepository)
+        public EntityCreationService(IUnitOfWork unitOfWork)
         {
-            _authUserRepository = authUserRepository;
-            _externalLoginRepository = externalLoginRepository;
-            _userEventRepository = userEventRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task HandleUserEntitiesCreation(string provider, UserInfoResponse userInfoData, IdentityUser identityUser)
@@ -31,16 +22,21 @@ namespace Application.Services.Authentication.Helpers
             var externalLogin = ExternalLoginFactory.CreateExternalLogin(provider, userInfoData.Id, authUser);
             var userEvent = UserEventFactory.CreateUserEvent(authUser, EventType.Login);
 
+            // Add the entities to the repositories.
+            await _unitOfWork.AuthUsers.AddAuthUserAsync(authUser);
+            await _unitOfWork.ExternalLogins.AddExternalLoginAsync(externalLogin);
+            await _unitOfWork.UserEvents.AddUserEventAsync(userEvent);
+
+            // Save all entities in a single transaction.
             try
             {
-                await _authUserRepository.AddAuthUserAsync(authUser);
-                await _externalLoginRepository.AddExternalLoginAsync(externalLogin);
-                await _userEventRepository.AddUserEventAsync(userEvent);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception e)
             {
-                throw new Exception("Failed to create and store user-related entities", e); 
+                throw new Exception("Failed to create and store user-related entities", e);
             }
         }
     }
+
 }

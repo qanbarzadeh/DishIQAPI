@@ -26,10 +26,10 @@ namespace Infrastructure.Context.UserRegsitrationConf
                 .HasMaxLength(255)
                 .IsRequired();
 
-            builder.HasOne<AuthUser>()
-                .WithMany(u => u.ExternalLogins)
-                .HasForeignKey(el => el.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne<AuthUser>()
+            //    .WithMany(u => u.ExternalLogins)
+            //    .HasForeignKey(el => el.AuthUserId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(el => el.LinkedAt)
                 .IsRequired();
