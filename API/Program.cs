@@ -70,6 +70,16 @@ builder.Services.AddHttpClient();
 // Connect to Azure Key Vault
 var keyVaultUri = builder.Configuration.GetSection("Azure")["KeyVaultUri"];
 builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new ManagedIdentityCredential());
+//Ef Core migration
+if (Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") != null)
+{
+    using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.Migrate();
+    }
+}
+
 
 var app = builder.Build();
 
