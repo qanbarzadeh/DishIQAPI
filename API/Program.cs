@@ -16,6 +16,7 @@ using Application.Interfaces.Authentication.Helpers;
 using Application.Services.Authentication.Helpers;
 using Application.Repository.Authentication;
 using Infrastructure.Repositories;
+using Application.Interfaces.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -24,6 +25,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Register the UnitOfWork with DI
+
 
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
