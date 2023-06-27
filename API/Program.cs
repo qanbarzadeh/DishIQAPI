@@ -120,7 +120,8 @@ app.UseSwaggerUI(c =>
 });
 app.UseCors(builder =>
 {
-    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
+    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 });
+
 app.MapControllers();
 app.Run();
