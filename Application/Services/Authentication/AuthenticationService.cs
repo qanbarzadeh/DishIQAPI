@@ -60,7 +60,7 @@ namespace Application.Services.Authentication
             { "response_type", "code" },
             { "redirect_uri", redirectUri },
             { "response_mode", "query" },
-            { "scope", _configuration["DishIQ_Scope"] },
+             { "scope", $"openid profile email {_configuration["DishIQ_Scope"]}" },
             { "state", Guid.NewGuid().ToString() } // Use a random value for the state parameter to mitigate CSRF attacks
             };
 
