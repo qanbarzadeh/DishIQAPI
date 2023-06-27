@@ -42,13 +42,16 @@ namespace Application.Services.Authentication
             _entityCreationService = entityCreationService;
         }
 
-        public async Task<string> InitiateExternalAuthenticationAsync(string provider, string redirectUri)
+        public async Task<string> InitiateExternalAuthenticationAsync(string provider)
         {
             // Validate the provider
             if (provider != "Microsoft")
             {
                 throw new ArgumentException("Unsupported provider");
             }
+
+
+            string redirectUri = _configuration["AzureAd-RedirectUri"];
 
             // Define the query parameters for the authorization request
             var queryParams = new Dictionary<string, string>()

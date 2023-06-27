@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Http;
+using System.Threading.Tasks; // Include this if not already included
 
 namespace API.Controllers.Authentication
 {
@@ -17,11 +18,11 @@ namespace API.Controllers.Authentication
         }
 
         [HttpGet("initiate")]
-        public async Task<IActionResult> Initiate([FromQuery] string provider, [FromQuery] string redirectUri)
+        public async Task<IActionResult> Initiate([FromQuery] string provider)
         {
             try
             {
-                var url = await _authenticationService.InitiateExternalAuthenticationAsync(provider, redirectUri);
+                var url = await _authenticationService.InitiateExternalAuthenticationAsync(provider);
                 return Redirect(url);
             }
             catch (ArgumentException ex)

@@ -67,7 +67,7 @@ namespace Application.Test.ServiceTest
 
 
             // Act
-            var result = await _authenticationService.InitiateExternalAuthenticationAsync("Microsoft", "http://test_redirect_uri");
+            var result = await _authenticationService.InitiateExternalAuthenticationAsync("Microsoft");
 
             // Assert
             Assert.NotNull(result);

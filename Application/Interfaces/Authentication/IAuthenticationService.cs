@@ -9,7 +9,7 @@ namespace Application.Interfaces.Authentication
 {
     public interface IAuthenticationService
     {
-        Task<string> InitiateExternalAuthenticationAsync(string provider, string redirectUri);
+        Task<string> InitiateExternalAuthenticationAsync(string provider);
         Task<AuthenticationResult> HandleExternalAuthenticationCallbackAsync(string provider, string authorizationCode);
     }
 }
