@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Web;
 using Application.Repository.Authentication;
 using Application.Interfaces.Authentication.Helpers;
+using Domain.Exceptions.Authentication;
 
 namespace Application.Services.Authentication
 {
@@ -12,7 +13,6 @@ namespace Application.Services.Authentication
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
-        //private readonly HttpClient _httpClient;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IAuthUserRepository _authUserRepository;
         private readonly IExternalLoginRepository _externalLoginRepository;
@@ -47,7 +47,7 @@ namespace Application.Services.Authentication
             // Validate the provider
             if (provider != "Microsoft")
             {
-                throw new ArgumentException("Unsupported provider");
+                throw new AuthenticationException("Unsupported provider");
             }
 
 
@@ -84,26 +84,33 @@ namespace Application.Services.Authentication
         {
             if (provider != "Microsoft")
             {
-                throw new ArgumentException("Unsupported provider");
+                throw new AuthenticationException($"{provider} is not supported.");
             }
 
-            var tokenResponseData = await _tokenService.GetTokenResponseData(authorizationCode);
-
-            var userInfoData = await _userService.GetUserInfoData(tokenResponseData.AccessToken);
-
-            var identityUser = await _userService.GetIdentityUser(userInfoData);
-
-            await _entityCreationService.HandleUserEntitiesCreation(provider, userInfoData, identityUser);
-
-            return new AuthenticationResult
+            try
             {
-                IsAuthenticated = true,
-                Token = tokenResponseData.AccessToken,
-                RefreshToken = tokenResponseData.RefreshToken,
-                ExpiryDate = DateTime.UtcNow.AddSeconds(tokenResponseData.ExpiresIn),
-                UserId = identityUser.Id,
-                Errors = null // No errors
-            };
+                var tokenResponseData = await _tokenService.GetTokenResponseData(authorizationCode);
+
+                var userInfoData = await _userService.GetUserInfoData(tokenResponseData.AccessToken);
+
+                var identityUser = await _userService.GetIdentityUser(userInfoData);
+
+                await _entityCreationService.HandleUserEntitiesCreation(provider, userInfoData, identityUser);
+
+                return new AuthenticationResult
+                {
+                    IsAuthenticated = true,
+                    Token = tokenResponseData.AccessToken,
+                    RefreshToken = tokenResponseData.RefreshToken,
+                    ExpiryDate = DateTime.UtcNow.AddSeconds(tokenResponseData.ExpiresIn),
+                    UserId = identityUser.Id,
+                    Errors = null // No errors
+                };
+            }
+            catch (Exception e)
+            {
+                throw new TokenExchangeException("Error exchanging token", e);
+            }
         }
     }
 }
