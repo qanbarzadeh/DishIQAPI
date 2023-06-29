@@ -17,9 +17,9 @@ using Application.Services.Authentication.Helpers;
 using Application.Repository.Authentication;
 using Infrastructure.Repositories;
 using Application.Interfaces.UnitOfWork;
-using Application.Interfaces.Authentication;
-using Application.Services.Authentication;
 using Microsoft.AspNetCore.Identity;
+using AuthenticationService = Application.Services.Authentication.AuthenticationService;
+using IAuthenticationService = Application.Interfaces.Authentication.IAuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,6 +96,7 @@ if (Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") != null)
         dbContext.Database.Migrate();
     }
 }
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 var app = builder.Build();
 
