@@ -5,10 +5,6 @@
       "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING",
       "dynamicId": null
     },
-    "compute.appService1": {
-      "group": "connections",
-      "type": "compute.appService"
-    },
     "identityapp1": {
       "type": "identityapp",
       "dynamicId": null
@@ -17,6 +13,11 @@
       "type": "secrets",
       "connectionId": "VaultUri",
       "dynamicId": null
+    },
+    "compute.appService1": {
+      "group": "connections",
+      "type": "compute.appService",
+      "connectionId": null
     }
   }
 }
