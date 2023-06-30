@@ -19,11 +19,9 @@
       "dynamicId": null
     },
     "compute.appService1": {
-      "secretStore": null,
       "group": "connections",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/DishIQ",
-      "type": "compute.appService.windows",
-      "connectionId": null
+      "type": "compute.appService.windows"
     }
   }
 }
