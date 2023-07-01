@@ -11,5 +11,6 @@ namespace Application.Interfaces.Authentication
     {
         Task<string> InitiateExternalAuthenticationAsync(string provider);
         Task<AuthenticationResult> HandleExternalAuthenticationCallbackAsync(string provider, string authorizationCode);
+        
     }
 }

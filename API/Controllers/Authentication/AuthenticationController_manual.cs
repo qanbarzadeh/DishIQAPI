@@ -8,11 +8,11 @@ namespace API.Controllers.Authentication
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController_manual : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController_manual(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
@@ -64,6 +64,6 @@ namespace API.Controllers.Authentication
                 // Handle any other general exceptions
                 return StatusCode(500, $"An internal error occurred: {ex.Message}");
             }
-        }
+        }       
     }
 }

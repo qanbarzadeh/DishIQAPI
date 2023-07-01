@@ -43,8 +43,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+// Configure Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAd");
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -72,7 +73,6 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
     client.BaseAddress = new Uri(configuration["AzureMaps:BaseUrl"]);
 });
 builder.Services.AddScoped<IUserService, UserService>();
-
 
 // Connect to Azure App Configuration
 var appConfigUri = builder.Configuration.GetSection("Azure")["AppConfigurationUri"];
@@ -121,8 +121,8 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseRouting();
-app.UseAuthentication();   
-app.UseAuthorization();    
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
