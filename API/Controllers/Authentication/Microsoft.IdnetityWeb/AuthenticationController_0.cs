@@ -30,28 +30,26 @@ namespace API.Controllers.Authentication.Microsoft.IdnetityWeb
                           $"response_mode=query&" +
                           $"scope=offline_access%20{_configuration["AzureAd:Scopes"]}";
 
-            //return Ok(new { authUrl });
-            return Redirect(authUrl);
-
+            return Ok(new { authUrl });
         }
 
         [HttpGet("signin-oidc")]
-        public async Task<IActionResult> Redirect([FromQuery] string code)
-        {
-            try
-            {
-                var scopes = _configuration["AzureAd:Scopes"].Split(' ');
+public async Task<IActionResult> Redirect([FromQuery] string code)
+{
+    try
+    {
+        var scopes = _configuration["AzureAd:Scopes"].Split(' ');
 
-                var result = await _tokenAcquisition.GetAuthenticationResultForUserAsync(scopes);
+        var result = await _tokenAcquisition.GetAuthenticationResultForUserAsync(scopes);
 
-                return Ok(new { accessToken = result.AccessToken });
-            }
-            catch (Exception ex)
-            {
-                // Log the exception with a logger (e.g., ILogger) here if needed.
-                return BadRequest(new { error = ex.Message });
-            }
-        }
+        return Ok(new { accessToken = result.AccessToken });
+    }
+    catch (Exception ex)
+    {
+        // Log the exception with a logger (e.g., ILogger) here if needed.
+        return BadRequest(new { error = ex.Message });
+    }
+}
 
         //[HttpGet("signin-oidc")]
         //public async Task<IActionResult> Redirect([FromQuery] string code)

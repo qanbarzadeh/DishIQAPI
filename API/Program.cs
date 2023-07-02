@@ -8,7 +8,6 @@ using OpenAIAPI;
 using Infrastructure.AzureVaultService;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Application.Interfaces.Azure.Maps;
 using Application.Services.AzureMaps;
@@ -20,7 +19,6 @@ using Application.Interfaces.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using AuthenticationService = Application.Services.Authentication.AuthenticationService;
 using IAuthenticationService = Application.Interfaces.Authentication.IAuthenticationService;
-using System;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
