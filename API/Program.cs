@@ -91,6 +91,9 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 var keyVaultUri = builder.Configuration.GetSection("Azure")["KeyVaultUri"];
 builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new ManagedIdentityCredential());
 
+
+
+var app = builder.Build();
 //Ef Core migration
 if (Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") != null)
 {
@@ -101,9 +104,6 @@ if (Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") != null)
     }
 }
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-
-var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

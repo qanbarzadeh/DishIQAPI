@@ -17,7 +17,7 @@ namespace API.Controllers.Authentication.Microsoft.IdnetityWeb
         public AuthenticationController_0(ITokenAcquisition tokenAcquisition, IConfiguration configuration)
         {
             _tokenAcquisition = tokenAcquisition;
-            _configuration = configuration;
+            _configuration = configuration; 
         }
 
         [HttpGet("login")]
