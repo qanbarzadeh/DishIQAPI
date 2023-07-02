@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Identity;
 using AuthenticationService = Application.Services.Authentication.AuthenticationService;
 using IAuthenticationService = Application.Interfaces.Authentication.IAuthenticationService;
 using System;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,8 +43,10 @@ builder.Logging.AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Configure Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAd");
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
+    .EnableTokenAcquisitionToCallDownstreamApi()
+    .AddInMemoryTokenCaches();
 
 // DbContext Configuration
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -100,6 +103,7 @@ if (Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") != null)
         dbContext.Database.Migrate();
     }
 }
+
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 var app = builder.Build();
@@ -110,7 +114,6 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
-
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "DishIQ MVP Dev");
         c.OAuthClientId(builder.Configuration["AzureAd:ClientId"]);

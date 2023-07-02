@@ -30,7 +30,9 @@ namespace API.Controllers.Authentication.Microsoft.IdnetityWeb
                           $"response_mode=query&" +
                           $"scope=offline_access%20{_configuration["AzureAd:Scopes"]}";
 
-            return Ok(new { authUrl });
+            //return Ok(new { authUrl });
+            return Redirect(authUrl);
+
         }
 
         [HttpGet("signin-oidc")]
