@@ -38,12 +38,9 @@ namespace API.Controllers.Authentication.Microsoft.IdnetityWeb
         {
             try
             {
-                IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(_configuration["AzureAd:ClientId"])
-                    .WithClientSecret(_configuration["AzureAd:ClientSecret"])
-                    .WithAuthority(new Uri($"{_configuration["AzureAd:Instance"]}{_configuration["AzureAd:TenantId"]}"))
-                    .Build();
+                var scopes = _configuration["AzureAd:Scopes"].Split(' ');
 
-                var result = await app.AcquireTokenByAuthorizationCode(new[] { _configuration["AzureAd:Scopes"] }, code).ExecuteAsync();
+                var result = await _tokenAcquisition.GetAuthenticationResultForUserAsync(scopes);
 
                 return Ok(new { accessToken = result.AccessToken });
             }
@@ -53,5 +50,26 @@ namespace API.Controllers.Authentication.Microsoft.IdnetityWeb
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        //[HttpGet("signin-oidc")]
+        //public async Task<IActionResult> Redirect([FromQuery] string code)
+        //{
+        //    try
+        //    {
+        //        IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(_configuration["AzureAd:ClientId"])
+        //            .WithClientSecret(_configuration["AzureAd:ClientSecret"])
+        //            .WithAuthority(new Uri($"{_configuration["AzureAd:Instance"]}{_configuration["AzureAd:TenantId"]}"))
+        //            .Build();
+
+        //        var result = await app.AcquireTokenByAuthorizationCode(new[] { _configuration["AzureAd:Scopes"] }, code).ExecuteAsync();
+
+        //        return Ok(new { accessToken = result.AccessToken });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception with a logger (e.g., ILogger) here if needed.
+        //        return BadRequest(new { error = ex.Message });
+        //    }
+        //}
     }
 }
