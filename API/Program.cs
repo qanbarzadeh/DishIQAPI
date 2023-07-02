@@ -20,6 +20,7 @@ using Application.Interfaces.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using AuthenticationService = Application.Services.Authentication.AuthenticationService;
 using IAuthenticationService = Application.Interfaces.Authentication.IAuthenticationService;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,8 +110,14 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
+
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "DishIQ MVP Dev");
+        c.OAuthClientId(builder.Configuration["AzureAd:ClientId"]);
+        c.OAuthClientSecret(builder.Configuration["AzureAd:ClientSecret"]);
+        c.OAuthRealm(builder.Configuration["AzureAd:TenantId"]);
+        c.OAuthAppName("DishIQ MVP Dev");
+        c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
 }
 else

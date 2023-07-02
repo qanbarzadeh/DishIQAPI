@@ -14,13 +14,13 @@ namespace Application.Test.Controller
     {
         private readonly Mock<ITokenAcquisition> _mockTokenAcquisition;
         private readonly Mock<IConfiguration> _mockConfiguration;
-        private readonly AuthenticationController _controller;
+        private readonly AuthenticationController_0 _controller;
 
         public AuthenticationControllerTests()
         {
             _mockTokenAcquisition = new Mock<ITokenAcquisition>();
             _mockConfiguration = new Mock<IConfiguration>();
-            _controller = new AuthenticationController(_mockTokenAcquisition.Object, _mockConfiguration.Object);
+            _controller = new AuthenticationController_0(_mockTokenAcquisition.Object, _mockConfiguration.Object);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Application.Test.Controller
             var mockUrlHelper = new Mock<IUrlHelper>();
             mockUrlHelper.Setup(x => x.Action(It.IsAny<UrlActionContext>())).Returns("callbackUrl");
 
-            var controller = new AuthenticationController(null, mockConfiguration.Object)
+            var controller = new AuthenticationController_0(null, mockConfiguration.Object)
             {
                 Url = mockUrlHelper.Object,
                 ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
