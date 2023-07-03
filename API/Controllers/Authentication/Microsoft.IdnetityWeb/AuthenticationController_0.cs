@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
@@ -17,59 +19,39 @@ namespace API.Controllers.Authentication.Microsoft.IdnetityWeb
         public AuthenticationController_0(ITokenAcquisition tokenAcquisition, IConfiguration configuration)
         {
             _tokenAcquisition = tokenAcquisition;
-            _configuration = configuration; 
+            _configuration = configuration;
         }
 
         [HttpGet("login")]
         public IActionResult Login()
         {
-            var authUrl = $"{_configuration["AzureAd:Instance"]}{_configuration["AzureAd:TenantId"]}/oauth2/v2.0/authorize?" +
-                          $"client_id={_configuration["AzureAd:ClientId"]}&" +
-                          $"response_type=code&" +
-                          $"redirect_uri={Url.Action("signin-oidc", "Authentication", null, Request.Scheme)}&" +
-                          $"response_mode=query&" +
-                          $"scope=offline_access%20{_configuration["AzureAd:Scopes"]}";
+            var properties = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("signin-oidc", "Authentication", null, Request.Scheme),
+                AllowRefresh = true,
+                IsPersistent = true
+            };
 
-            return Ok(new { authUrl });
+            return Challenge(properties, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         [HttpGet("signin-oidc")]
-public async Task<IActionResult> Redirect([FromQuery] string code)
-{
-    try
-    {
-        var scopes = _configuration["AzureAd:Scopes"].Split(' ');
+        public async Task<IActionResult> Redirect([FromQuery] string code)
+        {
+            try
+            {
+                var scopes = _configuration["AzureAd:Scopes"].Split(' ');
 
-        var result = await _tokenAcquisition.GetAuthenticationResultForUserAsync(scopes);
+                // Specify the scheme as OpenIdConnect
+                var result = await _tokenAcquisition.GetAuthenticationResultForUserAsync(scopes, tenantId: null, userFlow: null, user: User, authenticationScheme: OpenIdConnectDefaults.AuthenticationScheme);
 
-        return Ok(new { accessToken = result.AccessToken });
-    }
-    catch (Exception ex)
-    {
-        // Log the exception with a logger (e.g., ILogger) here if needed.
-        return BadRequest(new { error = ex.Message });
-    }
-}
-
-        //[HttpGet("signin-oidc")]
-        //public async Task<IActionResult> Redirect([FromQuery] string code)
-        //{
-        //    try
-        //    {
-        //        IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(_configuration["AzureAd:ClientId"])
-        //            .WithClientSecret(_configuration["AzureAd:ClientSecret"])
-        //            .WithAuthority(new Uri($"{_configuration["AzureAd:Instance"]}{_configuration["AzureAd:TenantId"]}"))
-        //            .Build();
-
-        //        var result = await app.AcquireTokenByAuthorizationCode(new[] { _configuration["AzureAd:Scopes"] }, code).ExecuteAsync();
-
-        //        return Ok(new { accessToken = result.AccessToken });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the exception with a logger (e.g., ILogger) here if needed.
-        //        return BadRequest(new { error = ex.Message });
-        //    }
-        //}
+                return Ok(new { accessToken = result.AccessToken });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception with a logger (e.g., ILogger) here if needed.
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }
