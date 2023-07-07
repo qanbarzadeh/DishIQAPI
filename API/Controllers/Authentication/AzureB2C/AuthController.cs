@@ -12,7 +12,7 @@ namespace API.Controllers.Authentication.AzureB2C
         public AuthController()
         {
             _app = ConfidentialClientApplicationBuilder.Create("0d51501c-f157-4ae5-8d35-08ea624ab473")
-                .WithClientSecret("KCY8Q~qGWQ.dOYtshDRj2CYYVubHMFo~4nppfb6-")
+                .WithClientSecret("CNP8Q~gbDJTvz.2Ft-t8uMuZ1NWV-CVV8SXjhcM5")
                 .WithB2CAuthority("https://dishiqapp.b2clogin.com/dishiqapp.onmicrosoft.com/B2C_1_SignUpSignInUserFlow")
                 .Build();
         }
