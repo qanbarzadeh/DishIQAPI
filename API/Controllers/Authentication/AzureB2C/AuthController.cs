@@ -29,7 +29,7 @@ namespace API.Controllers.Authentication.AzureB2C
             try
             {
                 // Now we will try to exchange the code for an access token
-                var result = await _app.AcquireTokenByAuthorizationCode(new[] { "https://dishiqapp.onmicrosoft.com/0d51501c-f157-4ae5-8d35-08ea624ab473/read" }, code).ExecuteAsync();
+                var result = await _app.AcquireTokenByAuthorizationCode(new[] { "https://graph.microsoft.com/openid" }, code).ExecuteAsync();
 
                 // Here we just return the tokens for simplicity, but you might want to do something else with them,
                 // like create a session, store them for later use, etc.
