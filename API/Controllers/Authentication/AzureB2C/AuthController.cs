@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 namespace API.Controllers.Authentication.AzureB2C
 {
     [ApiController]
-    [Route("[controller]")]
-    public class AuthController : ControllerBase
+    [Route("dishiqapp.onmicrosoft.com/oauth2/[controller]")]
+    public class AuthrespController : ControllerBase
     {
         private readonly IConfidentialClientApplication _app;
 
-        public AuthController()
+        public AuthrespController()
         {
             _app = ConfidentialClientApplicationBuilder.Create("4d76d959-03f3-4b47-88d1-4792e469339b")
                 .WithClientSecret("NZJ8Q~uyDiZf_x49~ITMqL3-AMZb1WIjP8Cq2c1k")
@@ -19,8 +19,8 @@ namespace API.Controllers.Authentication.AzureB2C
                 .Build();
         }
 
-        [HttpGet("response")]
-        public async Task<IActionResult> AuthResponse(string code, string error, string error_description)
+        [HttpGet]
+        public async Task<IActionResult> Index(string code, string error, string error_description)
         {
             if (!string.IsNullOrEmpty(error))
             {
