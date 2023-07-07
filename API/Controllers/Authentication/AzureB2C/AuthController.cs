@@ -1,17 +1,15 @@
-﻿using global::Microsoft.AspNetCore.Mvc;
-using global::Microsoft.Identity.Client;
-using System;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace API.Controllers.Authentication.AzureB2C
 {
     [ApiController]
-    [Route("dishiqapp.onmicrosoft.com/oauth2/[controller]")]
-    public class AuthrespController : ControllerBase
+    [Route("[controller]")]
+    public class AuthController : ControllerBase
     {
         private readonly IConfidentialClientApplication _app;
 
-        public AuthrespController()
+        public AuthController()
         {
             _app = ConfidentialClientApplicationBuilder.Create("4d76d959-03f3-4b47-88d1-4792e469339b")
                 .WithClientSecret("NZJ8Q~uyDiZf_x49~ITMqL3-AMZb1WIjP8Cq2c1k")
@@ -19,8 +17,8 @@ namespace API.Controllers.Authentication.AzureB2C
                 .Build();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(string code, string error, string error_description)
+        [HttpGet("response")]
+        public async Task<IActionResult> Response(string code, string error, string error_description)
         {
             if (!string.IsNullOrEmpty(error))
             {
