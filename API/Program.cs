@@ -41,15 +41,8 @@ builder.Logging.AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Configure Authentication
-// Comment or remove the following line
-// builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-//     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
-//     .EnableTokenAcquisitionToCallDownstreamApi()
-//     .AddInMemoryTokenCaches();
-
-// Add the B2C Authentication
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"), "OpenIdConnect", "Cookies")
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
     .EnableTokenAcquisitionToCallDownstreamApi()
     .AddInMemoryTokenCaches();
 
@@ -121,11 +114,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "DishIQ MVP Dev");
-        c.OAuthClientId(builder.Configuration["AzureAdB2C:ClientId"]);
-        c.OAuthClientSecret(builder.Configuration["AzureAdB2C:ClientSecret"]);
-        c.OAuthRealm(builder.Configuration["AzureAdB2C:TenantId"]);
-        c.OAuthAppName("DishIQ MVP Dev");
-        c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
 }
 else
