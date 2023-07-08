@@ -11,14 +11,14 @@ namespace Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
-        public IAuthUserRepository AuthUsers { get; }
+        
         public IExternalLoginRepository ExternalLogins { get; }
         public IUserEventRepository UserEvents { get; }
 
-        public UnitOfWork(AppDbContext context, IAuthUserRepository authUsers, IExternalLoginRepository externalLogins, IUserEventRepository userEvents)
+        public UnitOfWork(AppDbContext context, IExternalLoginRepository externalLogins, IUserEventRepository userEvents)
         {
             _context = context;
-            AuthUsers = authUsers;
+            
             ExternalLogins = externalLogins;
             UserEvents = userEvents;
         }

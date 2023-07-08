@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Application.Interfaces.Authentication.Manual;
 using Application.Services.Authentication.Manual;
+using Application.Repository.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,7 +68,6 @@ builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
-
 // HttpClient Services
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>((services, client) =>

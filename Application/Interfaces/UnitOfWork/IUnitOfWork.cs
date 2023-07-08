@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 namespace Application.Interfaces.UnitOfWork
 {
     public interface IUnitOfWork
-    {
-        IAuthUserRepository AuthUsers { get; }
-        
-        
+    {                       
         Task SaveChangesAsync();
     }
 }
