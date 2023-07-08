@@ -56,12 +56,16 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 // Repository and Services Registration
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var jwtSecret = config["JwtSecret"];
+    return new TokenService(jwtSecret);
+});
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
 
 // HttpClient Services
