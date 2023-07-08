@@ -10,8 +10,8 @@ namespace Application.Interfaces.UnitOfWork
     public interface IUnitOfWork
     {
         IAuthUserRepository AuthUsers { get; }
-        IExternalLoginRepository ExternalLogins { get; }
-        IUserEventRepository UserEvents { get; }
+        
+        
         Task SaveChangesAsync();
     }
 }

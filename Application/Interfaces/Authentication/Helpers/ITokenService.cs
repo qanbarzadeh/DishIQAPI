@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Authentication;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace Application.Interfaces.Authentication.Helpers
 {
     public interface ITokenService
     {
-        Task<TokenResponse> GetTokenResponseData(string authorizationCode);
+        Task<string> GenerateToken(IdentityUser user);
     }
-
 }

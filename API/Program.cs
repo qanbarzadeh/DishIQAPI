@@ -13,13 +13,11 @@ using Application.Interfaces.Azure.Maps;
 using Application.Services.AzureMaps;
 using Application.Interfaces.Authentication.Helpers;
 using Application.Services.Authentication.Helpers;
-using Application.Repository.Authentication;
-using Infrastructure.Repositories;
 using Application.Interfaces.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
-using AuthenticationService = Application.Services.Authentication.AuthenticationService;
-using IAuthenticationService = Application.Interfaces.Authentication.IAuthenticationService;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Application.Interfaces.Authentication.Manual;
+using Application.Services.Authentication.Manual;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +38,12 @@ builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
+// AddIdentity services
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+
 // Configure Authentication
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
@@ -51,16 +55,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Repository and Services Registration
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAuthUserRepository, AuthUserRepository>();
-builder.Services.AddScoped<IExternalLoginRepository, ExternalLoginRepository>();
-builder.Services.AddScoped<IEntityCreationService, EntityCreationService>();
-builder.Services.AddScoped<IUserEventRepository, UserEventRepository>();
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
 
 // HttpClient Services

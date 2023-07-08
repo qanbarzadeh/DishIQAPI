@@ -2,50 +2,40 @@
 using Application.Interfaces.Authentication.Helpers;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Application.Services.Authentication.Helpers
 {
     public class TokenService : ITokenService
     {
-        private readonly IConfiguration _configuration;
-        private readonly HttpClient _httpClient;
+        private readonly string _jwtSecret;
 
-        public TokenService(IConfiguration configuration, HttpClient httpClient)
+        public TokenService(string jwtSecret)
         {
-            _configuration = configuration;
-            _httpClient = httpClient;
+            _jwtSecret = jwtSecret;
         }
 
-        public async Task<TokenResponse> GetTokenResponseData(string authorizationCode)
+        public Task<string> GenerateToken(IdentityUser user)
         {
-            var keyVaultUri = _configuration["AzureAd-ClientSecret"];
-            var client = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
-            KeyVaultSecret secret = await client.GetSecretAsync("AzureAd-ClientSecret");
-
-            var tokenResponse = await _httpClient.PostAsync("https://login.microsoftonline.com/common/oauth2/v2.0/token", new FormUrlEncodedContent(new[]
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSecret);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-            new KeyValuePair<string, string>("client_id", _configuration["AzureAd-ClientId"]),
-            new KeyValuePair<string, string>("scope", _configuration["DishIQ_Scope"]),
-            new KeyValuePair<string, string>("code", authorizationCode),
-            new KeyValuePair<string, string>("redirect_uri", _configuration["AzureAd-RedirectUri"]),
-            new KeyValuePair<string, string>("grant_type", "authorization_code"),
-            new KeyValuePair<string, string>("client_secret", secret.Value),
-        }));
-
-            if (!tokenResponse.IsSuccessStatusCode)
-            {
-                throw new Exception("Failed to exchange authorization code for access token"); 
-            }
-            
-            var tokenResponseContent = await tokenResponse.Content.ReadAsStringAsync();
-            var tokenResponseData = JsonConvert.DeserializeObject<TokenResponse>(tokenResponseContent);
-            if (tokenResponseData == null)
-            {
-                throw new Exception("Failed to deserialize token response"); 
-            }
-            return tokenResponseData;
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                new Claim(ClaimTypes.Name, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return Task.FromResult(tokenHandler.WriteToken(token));
         }
     }
 }
