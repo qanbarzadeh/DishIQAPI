@@ -19,7 +19,7 @@ namespace Domain.Entities.UserEntities
 
         // Navigation properties to related entities
         public virtual UserProfileInfo UserProfileInfo { get; set; } = new UserProfileInfo();
-        public virtual UserCredentials UserCredentials { get; set; } = new UserCredentials();
+        
         public virtual ICollection<UserAllergy> UserAllergies { get; set; } = new List<UserAllergy>();
         public virtual UserCookingSkillLevel UserCookingSkillLevel { get; set; } = new UserCookingSkillLevel();
         public virtual ICollection<DietaryPreferences> DietaryPreferences { get; set; } = new List<DietaryPreferences>();

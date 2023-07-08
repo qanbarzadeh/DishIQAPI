@@ -3,23 +3,23 @@ using Domain.Entities.UserEntities;
 using Infrastructure.Context.Configuration;
 using Infrastructure.Context.Configuration.RecipeConfiguration;
 using Infrastructure.Setting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         // DbSets for User entities
-        public DbSet<User> Users { get; set; }
+        // Remove User and UserCredentials if you use IdentityUser
         public DbSet<UserProfileInfo> UserProfileInfos { get; set; }
-        public DbSet<UserCredentials> UserCredentials { get; set; }
         public DbSet<UserAllergy> UserAllergies { get; set; }
         public DbSet<UserCookingSkillLevel> UserCookingSkillLevels { get; set; }
         public DbSet<DietaryPreferences> DietaryPreferences { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<UserActivityLog> UserActivityLogs { get; set; }
         public DbSet<SocialMediaHandle> SocialMediaHandles { get; set; }
-
 
         // DbSets for Recipe entities
         public DbSet<RecipeDietPreference> RecipeDietPrefernce { get; set; }
@@ -36,20 +36,20 @@ namespace Infrastructure
         public DbSet<FoodInformation> FoodInformation { get; set; }
         public DbSet<GeneratedRecipe> GetGeneratedRecipes { get; set; }
 
-
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // Very important!
+
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);           
             modelBuilder.HasDefaultSchema(DatabaseSetting.UserSchema);
+
             // Apply configurations
-            new UserConfiguration().Configure(modelBuilder.Entity<User>());
+            // Skip UserConfiguration and UserCredentialsConfiguration if you use IdentityUser
             new UserProfileInfoConfiguration().Configure(modelBuilder.Entity<UserProfileInfo>());
-            new UserCredentialsConfiguration().Configure(modelBuilder.Entity<UserCredentials>());
             new UserAllergyConfiguration().Configure(modelBuilder.Entity<UserAllergy>());
             new UserCookingSkillLevelConfiguration().Configure(modelBuilder.Entity<UserCookingSkillLevel>());
             new DietaryPreferencesConfiguration().Configure(modelBuilder.Entity<DietaryPreferences>());
@@ -58,7 +58,7 @@ namespace Infrastructure
             new SocialHandleConfiguration().Configure(modelBuilder.Entity<SocialMediaHandle>());
 
             // Apply configurations for Recipe related entities
-            new MealTypeConfiguration().Configure(modelBuilder.Entity<MealType>());            
+            new MealTypeConfiguration().Configure(modelBuilder.Entity<MealType>());
             new RegionConfiguration().Configure(modelBuilder.Entity<Region>());
             new CookingTechniqueConfiguration().Configure(modelBuilder.Entity<CookingTechnique>());
             new FlavorConfiguration().Configure(modelBuilder.Entity<Flavor>());
@@ -73,4 +73,3 @@ namespace Infrastructure
         }
     }
 }
-

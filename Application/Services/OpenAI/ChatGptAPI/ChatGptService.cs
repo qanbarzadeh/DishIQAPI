@@ -9,7 +9,7 @@ using Application.Interfaces;
 using Application.DTO.OpenAiResponse;
 using Domain.Entities.RecipeEntities;
 using System.Net.Http.Headers;
-using Domain.AzureVault;
+
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
