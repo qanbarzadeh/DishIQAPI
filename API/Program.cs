@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Application.Interfaces.Authentication.Manual;
 using Application.Services.Authentication.Manual;
 using Application.Repository.Authentication;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,7 +74,38 @@ builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServic
 builder.Services.AddScoped<IUserService, UserService>();
 
 // Add SwaggerGen and configure endpoints
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DishIQ MVP Dev", Version = "v1" });
+
+    // Define the OAuth2 scheme that's in use (i.e. Implicit Flow)
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+            },
+            new List<string>()
+        }
+    });
+});
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient();
@@ -113,6 +146,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "DishIQ MVP Dev");
+        c.DefaultModelExpandDepth(2);
+        //c.DefaultModelRendering(ModelRendering.Model);  // Commented out due to a missing namespace
+        c.DefaultModelsExpandDepth(-1);
+        c.DisplayRequestDuration();
+        c.EnableDeepLinking();
+        c.EnableFilter();
     });
 }
 else
