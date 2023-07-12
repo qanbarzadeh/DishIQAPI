@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.UserRegistration;
 using Infrastructure.Setting;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Context.UserRegsitrationConf
 {

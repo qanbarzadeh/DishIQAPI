@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Domain.Enums;
+﻿using Domain.Enums;
 
 namespace Domain.Entities.UserEntities
 {

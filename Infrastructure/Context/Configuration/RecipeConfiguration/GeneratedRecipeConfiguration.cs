@@ -1,14 +1,7 @@
 ﻿using Domain.Entities.RecipeEntities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Infrastructure.Setting;
-using Domain.ValueObjects.Recipe;
-using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Context.Configuration.RecipeConfiguration
 {
@@ -32,7 +25,7 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
             builder.HasMany(x => x.Ingredients)
                 .WithOne()
                 .HasForeignKey(x => x.Id)
-                .IsRequired(); 
+                .IsRequired();
 
             builder.HasMany(x => x.CookingSteps)
                 .WithOne()

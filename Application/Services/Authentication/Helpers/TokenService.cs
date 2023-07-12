@@ -1,11 +1,6 @@
-﻿using Application.DTO.Authentication;
-using Application.Interfaces.Authentication.Helpers;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
+﻿using Application.Interfaces.Authentication.Helpers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

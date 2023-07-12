@@ -18,5 +18,5 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
         }
     }
 }
- 
+
 

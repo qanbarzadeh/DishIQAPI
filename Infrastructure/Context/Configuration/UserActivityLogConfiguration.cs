@@ -2,11 +2,6 @@
 using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Context.Configuration
 {
@@ -14,7 +9,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserActivityLog> builder)
         {
-            
+
             builder.ToTable(nameof(UserActivityLog), DatabaseSetting.UserSchema);
 
             builder.HasKey(x => x.Id);
@@ -32,8 +27,8 @@ namespace Infrastructure.Context.Configuration
            .IsRequired()
            .HasMaxLength(15)
            .IsUnicode(false)
-           .HasColumnType("varchar(15)"); 
-        
+           .HasColumnType("varchar(15)");
+
             builder.Property(x => x.DeviceType)
                 .HasMaxLength(50);
 

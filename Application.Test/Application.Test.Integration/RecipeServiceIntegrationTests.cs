@@ -1,18 +1,4 @@
-﻿using Application.Configuration;
-using Application.DTO;
-using Application.DTO.RecipeDTOs;
-using Application.Interfaces;
-using Application.Services.OpenAI.ChatGptAPI;
-using Application.Services.Recipe;
-using Domain.Entities.RecipeEntities;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Xunit; 
-
-namespace Application.Test.Application.Test.Integration
+﻿namespace Application.Test.Application.Test.Integration
 {
     //public class RecipeServiceIntegrationTests
     //{
@@ -49,9 +35,9 @@ namespace Application.Test.Application.Test.Integration
 
     //        // Create services
     //        var chatGptService = new ChatGptService(httpClient, configuration, _rapidAiOptions, (ILogger<ChatGptService>)_logger, _recipeParser); 
-            
 
-            
+
+
     //        // Perform the integration test
     //        var recipeRequestDTO = new RecipeRequestDTO
     //        {

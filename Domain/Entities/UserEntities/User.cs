@@ -1,11 +1,4 @@
-﻿using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.UserEntities
 {
@@ -19,7 +12,7 @@ namespace Domain.Entities.UserEntities
 
         // Navigation properties to related entities
         public virtual UserProfileInfo UserProfileInfo { get; set; } = new UserProfileInfo();
-        
+
         public virtual ICollection<UserAllergy> UserAllergies { get; set; } = new List<UserAllergy>();
         public virtual UserCookingSkillLevel UserCookingSkillLevel { get; set; } = new UserCookingSkillLevel();
         public virtual ICollection<DietaryPreferences> DietaryPreferences { get; set; } = new List<DietaryPreferences>();

@@ -10,8 +10,8 @@ namespace Infrastructure.Context.Configuration
         public void Configure(EntityTypeBuilder<UserNotification> builder)
         {
             builder.ToTable(nameof(UserNotification), DatabaseSetting.UserSchema);
-           
-            
+
+
             // Primary key
             builder.HasKey(un => un.Id);
 

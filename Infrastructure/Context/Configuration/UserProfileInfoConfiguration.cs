@@ -2,11 +2,6 @@
 using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Context.Configuration
 {
@@ -16,13 +11,13 @@ namespace Infrastructure.Context.Configuration
         {
             builder.ToTable(nameof(UserProfileInfo), DatabaseSetting.UserSchema); // todo : implement DependencyInjection  and service creation approach 
 
-            builder.HasKey(x => x.UserId); 
+            builder.HasKey(x => x.UserId);
 
             builder.HasOne<User>()
                 .WithOne(x => x.UserProfileInfo)
                 .HasForeignKey<UserProfileInfo>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-           
+
             builder.Property(upi => upi.FullName)
                 .HasMaxLength(100)
                 .IsRequired();

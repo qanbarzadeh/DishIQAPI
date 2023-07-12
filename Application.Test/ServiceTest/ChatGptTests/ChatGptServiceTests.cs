@@ -1,19 +1,4 @@
-﻿using System.Net;
-using Application.Configuration;
-using Application.DTO;
-using Application.DTO.RecipeDTOs;
-using Application.Services.OpenAI.ChatGptAPI;
-using Domain.Entities.RecipeEntities;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Moq;
-using Moq.Protected;
-using Newtonsoft.Json;
-using Xunit;
-
-
-namespace Application.Test.ServiceTest.ChatGptTests
+﻿namespace Application.Test.ServiceTest.ChatGptTests
 {
     //public class ChatGptServiceTests
     //{

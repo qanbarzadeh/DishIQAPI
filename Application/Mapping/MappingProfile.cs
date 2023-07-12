@@ -6,7 +6,7 @@ namespace Application.Mapping
 {
     public class MappingProfile : Profile
     {
-        public MappingProfile() 
+        public MappingProfile()
         {
             CreateMap<RecipeRequest, RecipeRequestDTO>();
             CreateMap<RecipeRequestDTO, RecipeRequest>();
