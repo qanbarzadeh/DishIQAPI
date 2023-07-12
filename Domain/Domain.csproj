@@ -21,4 +21,8 @@
     <PackageReference Include="Microsoft.Identity.Web" Version="2.12.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ValueObjects\Recipe\" />
+  </ItemGroup>
+
 </Project>

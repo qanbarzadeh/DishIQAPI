@@ -1,6 +1,6 @@
 ﻿using Application.DTO.RecipeDTOs;
 using AutoMapper;
-using Domain.Entities.RecipeEntities;
+
 
 namespace Application.Mapping
 {
@@ -8,8 +8,7 @@ namespace Application.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<RecipeRequest, RecipeRequestDTO>();
-            CreateMap<RecipeRequestDTO, RecipeRequest>();
+           
         }
     }
 }

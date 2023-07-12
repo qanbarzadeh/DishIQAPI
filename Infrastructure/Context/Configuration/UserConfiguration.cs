@@ -18,23 +18,7 @@ namespace Infrastructure.Context.Configuration
                 .HasMaxLength(50)
                 .IsRequired();
 
-            // Email address
-            builder.Property(u => u.EmailAddress)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .IsRequired();
-
-            // Relationship to UserProfileInfo
-            //builder.HasOne(u => u.UserProfileInfo)
-            //    .WithOne()
-            //    .HasForeignKey<UserProfileInfo>(upi => upi.UserId)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //// Relationship to UserCredentials
-            //builder.HasOne(u => u.UserCredentials)
-            //    .WithOne()
-            //    .HasForeignKey<UserCredentials>(uc => uc.Id)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            
 
             // Relationship to UserAllergies
             builder.HasMany(u => u.UserAllergies)
