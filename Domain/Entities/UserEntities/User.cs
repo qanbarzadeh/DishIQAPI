@@ -11,6 +11,7 @@ namespace Domain.Entities.UserEntities
 
         // Navigation properties to related entities
         public ICollection<Recipe> Recipes { get; set; } = new List<Recipe>(); // New property
+        public ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
         public virtual UserProfileInfo UserProfileInfo { get; set; } = new UserProfileInfo();
         public virtual ICollection<UserAllergy> UserAllergies { get; set; } = new List<UserAllergy>();
         public virtual UserCookingSkillLevel UserCookingSkillLevel { get; set; } = new UserCookingSkillLevel();

@@ -1,5 +1,4 @@
-﻿using Application.DTO.RecipeDTOs;
-using AutoMapper;
+﻿using AutoMapper;
 
 
 namespace Application.Mapping
@@ -8,7 +7,7 @@ namespace Application.Mapping
     {
         public MappingProfile()
         {
-           
+
         }
     }
 }

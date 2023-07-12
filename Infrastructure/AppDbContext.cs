@@ -1,5 +1,7 @@
-﻿using Domain.Entities.UserEntities;
+﻿using Domain.Entities.RecipeEntities;
+using Domain.Entities.UserEntities;
 using Infrastructure.Context.Configuration;
+using Infrastructure.Context.Configuration.RecipeConfiguration;
 using Infrastructure.Setting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -10,7 +12,7 @@ namespace Infrastructure
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         // DbSets for User entities
-        // Remove User and UserCredentials if you use IdentityUser
+        public DbSet<User> Users { get; set; }
         public DbSet<UserProfileInfo> UserProfileInfos { get; set; }
         public DbSet<UserAllergy> UserAllergies { get; set; }
         public DbSet<UserCookingSkillLevel> UserCookingSkillLevels { get; set; }
@@ -20,7 +22,10 @@ namespace Infrastructure
         public DbSet<SocialMediaHandle> SocialMediaHandles { get; set; }
 
         // DbSets for Recipe entities
-        
+        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+        public DbSet<NutritionInformation> NutritionInformations { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -30,11 +35,10 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder); // Very important!
 
-            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);           
             modelBuilder.HasDefaultSchema(DatabaseSetting.UserSchema);
 
-            // Apply configurations
-            // Skip UserConfiguration and UserCredentialsConfiguration if you use IdentityUser
+            // Apply configurations for User related entities
+            new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new UserProfileInfoConfiguration().Configure(modelBuilder.Entity<UserProfileInfo>());
             new UserAllergyConfiguration().Configure(modelBuilder.Entity<UserAllergy>());
             new UserCookingSkillLevelConfiguration().Configure(modelBuilder.Entity<UserCookingSkillLevel>());
@@ -43,8 +47,14 @@ namespace Infrastructure
             new UserActivityLogConfiguration().Configure(modelBuilder.Entity<UserActivityLog>());
             new SocialHandleConfiguration().Configure(modelBuilder.Entity<SocialMediaHandle>());
 
+            // Change default schema for Recipe related entities
+            modelBuilder.HasDefaultSchema(DatabaseSetting.RecipeSchema);
+
             // Apply configurations for Recipe related entities
-            
+            new RecipeConfiguration().Configure(modelBuilder.Entity<Recipe>());
+            new IngredientConfiguration().Configure(modelBuilder.Entity<Ingredient>());
+            new RecipeIngredientConfiguration().Configure(modelBuilder.Entity<RecipeIngredient>());
+            new NutritionInformationConfiguration().Configure(modelBuilder.Entity<NutritionInformation>());
         }
     }
 }

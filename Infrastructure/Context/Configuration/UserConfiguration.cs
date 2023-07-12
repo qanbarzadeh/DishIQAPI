@@ -10,6 +10,7 @@ namespace Infrastructure.Context.Configuration
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable(nameof(User), DatabaseSetting.UserSchema);
+
             // Primary key
             builder.HasKey(u => u.UserId);
 
@@ -18,7 +19,11 @@ namespace Infrastructure.Context.Configuration
                 .HasMaxLength(50)
                 .IsRequired();
 
-            
+            // Relationship to Recipes
+            builder.HasMany(u => u.Recipes)
+                .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Relationship to UserAllergies
             builder.HasMany(u => u.UserAllergies)
@@ -32,12 +37,11 @@ namespace Infrastructure.Context.Configuration
                 .HasForeignKey<UserCookingSkillLevel>(us => us.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //// Relationship to UserDietaryPreferences                
+            // Relationship to UserDietaryPreferences                
             builder.HasMany(u => u.DietaryPreferences)
                 .WithOne()
                 .HasForeignKey(dp => dp.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
 
             // Relationship to UserNotifications
             builder.HasMany(u => u.UserNotifications)
@@ -50,7 +54,6 @@ namespace Infrastructure.Context.Configuration
                 .WithOne()
                 .HasForeignKey<UserActivityLog>(ual => ual.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
         }
     }
 }
