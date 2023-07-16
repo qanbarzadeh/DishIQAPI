@@ -53,6 +53,13 @@ namespace Infrastructure.Repositories
             }
         }
 
+        public async Task UpdateUserAsync(ApplicationUser applicationUser)
+        {
+            
+            _context.Users.Update(applicationUser);
+             await _context.SaveChangesAsync();
+        }
+
         // Implement additional methods as needed
     }
 }

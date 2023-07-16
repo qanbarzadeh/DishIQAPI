@@ -10,12 +10,11 @@ namespace Infrastructure.Context.Configuration
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.ToTable(nameof(ApplicationUser), DatabaseSetting.UserSchema);
-
             // Primary key
-            builder.HasKey(u => u.UserId);
+            builder.HasKey(u => u.Id); // Changed from UserId to Id
 
             // Username
-            builder.Property(u => u.Username)
+            builder.Property(u => u.UserName) // Changed from Username to UserName
                 .HasMaxLength(50)
                 .IsRequired();
 

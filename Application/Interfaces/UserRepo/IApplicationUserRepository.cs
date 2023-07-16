@@ -6,7 +6,7 @@ namespace Application.Interfaces.UserRepo
     {
         Task<ApplicationUser> GetUserByIdAsync(int id);
         Task<IEnumerable<ApplicationUser>> GetAllUsersAsync();
-        Task AddUserAsync(ApplicationUser applicationUser); 
-        // Add other necessary methods here
+        Task AddUserAsync(ApplicationUser applicationUser);
+        Task UpdateUserAsync(ApplicationUser applicationUser); // Added UpdateUserAsync method
     }
 }
