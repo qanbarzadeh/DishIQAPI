@@ -11,6 +11,7 @@ using Application.Services.Authentication.Manual;
 using Application.Services.AzureMaps;
 using Application.Services.OpenAI.ChatGptAPI;
 using Application.Services.RecipenameSpace;
+using Application.Services.UsersLinkRecipes;
 using Azure.Identity;
 using Infrastructure;
 using Infrastructure.AzureVaultService;
@@ -73,7 +74,7 @@ builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
-builder.Services.AddScoped<IUserSpecificRecipeStorageService, IUserSpecificRecipeStorageService>(); 
+builder.Services.AddScoped<IUserSpecificRecipeStorageService, UserSpecificRecipeStorageService>(); 
 // HttpClient Services
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>((services, client) =>
