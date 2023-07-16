@@ -12,6 +12,14 @@ namespace Infrastructure.Context.Configuration
             builder.ToTable(nameof(UserCookingSkillLevel), DatabaseSetting.UserSchema);
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("SkillLevelId");
+
+
+            builder.HasOne<ApplicationUser>()
+            .WithOne(x => x.UserCookingSkillLevel)
+            .HasForeignKey<UserCookingSkillLevel>(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(); 
+            //If every UserCookingSkillLevel should always have a User
         }
     }
 }

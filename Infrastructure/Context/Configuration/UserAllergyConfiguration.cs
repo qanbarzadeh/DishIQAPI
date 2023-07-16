@@ -32,10 +32,13 @@ namespace Infrastructure.Context.Configuration
                 .HasColumnType("datetime2")
                 .HasDefaultValueSql("getutcdate()");
 
+           
+
             builder.HasOne<ApplicationUser>()
-                .WithMany(x => x.UserAllergies)
-                .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            .WithMany(x => x.UserAllergies)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(); // If every UserAllergy should always have a User
         }
     }
 }
