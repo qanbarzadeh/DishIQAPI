@@ -32,7 +32,7 @@ namespace Infrastructure.Context.Configuration
                 .HasColumnType("datetime2")
                 .HasDefaultValueSql("getutcdate()");
 
-            builder.HasOne<User>()
+            builder.HasOne<ApplicationUser>()
                 .WithMany(x => x.UserAllergies)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

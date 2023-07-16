@@ -1,21 +1,26 @@
-﻿using Domain.Entities.UserRegistration;
+﻿using Domain.Entities.RecipeEntities;
+using Domain.Entities.UserEntities;
+using Domain.Entities.UserRegistration;
 
 namespace Domain.Entities.Factories.UserRegistration
 {
     public static class UserFactory
     {
-        public static AuthUser CreateUser(string emailAddress, string username)
+        public static ApplicationUser CreateUser(string username, string email, string userId)
         {
-            return new AuthUser
+            return new ApplicationUser
             {
-                Id = Guid.NewGuid(), // assuming a new Guid for each new user
-                EmailAddress = emailAddress,
-                Username = username,
-                CreatedAt = DateTime.UtcNow,
-                IsDeleted = false,
-                UpdatedAt = DateTime.UtcNow,
-                Version = 1,
-                ExternalLogins = new List<ExternalLogin>()
+                UserId = userId,
+                Username = username,                
+                // Navigation properties to related entities
+                Recipes = new List<Recipe>(),
+                RecipeIngredients = new List<RecipeIngredient>(),
+                UserProfileInfo = new UserProfileInfo(),
+                UserAllergies = new List<UserAllergy>(),
+                UserCookingSkillLevel = new UserCookingSkillLevel(),
+                DietaryPreferences = new List<DietaryPreferences>(),
+                UserNotifications = new List<UserNotification>(),
+                UserActivityLog = new UserActivityLog()
             };
         }
     }

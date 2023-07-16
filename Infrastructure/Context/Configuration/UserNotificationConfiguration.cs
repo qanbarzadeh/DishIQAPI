@@ -20,7 +20,7 @@ namespace Infrastructure.Context.Configuration
 
             // User foreign key
             builder.Property(un => un.UserId).IsRequired();
-            builder.HasOne<User>()
+            builder.HasOne<ApplicationUser>()
                 .WithMany(u => u.UserNotifications)
                 .HasForeignKey(un => un.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

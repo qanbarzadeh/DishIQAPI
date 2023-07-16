@@ -47,7 +47,7 @@ namespace Infrastructure.Context.Configuration
             builder.Property(x => x.Duration)
                 .IsRequired(false);
 
-            builder.HasOne<User>()
+            builder.HasOne<ApplicationUser>()
                 .WithOne(u => u.UserActivityLog)
                 .HasForeignKey<UserActivityLog>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

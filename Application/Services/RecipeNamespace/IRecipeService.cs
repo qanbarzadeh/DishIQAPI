@@ -1,6 +1,6 @@
 ﻿using Application.DTO.RecipeDTOs;
 
-namespace Application.Services.Recipe
+namespace Application.Services.RecipenameSpace
 {
     public interface IRecipeService
     {

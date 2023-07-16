@@ -1,11 +1,6 @@
 ﻿using Domain.Entities.RecipeEntities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Context.Configuration.RecipeConfiguration
 {
@@ -45,6 +40,9 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
                 .HasMaxLength(50);
 
             builder.Property(r => r.CaloriesPerServing)
+                .IsRequired();
+
+            builder.Property(r => r.UserId) // Ensure UserId is treated as a string
                 .IsRequired();
 
             // User relationship

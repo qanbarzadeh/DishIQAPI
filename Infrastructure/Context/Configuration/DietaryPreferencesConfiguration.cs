@@ -20,7 +20,7 @@ namespace Infrastructure.Context.Configuration
                 .HasMaxLength(50)
                 .IsRequired();
             //Relationship to User
-            builder.HasOne<User>()
+            builder.HasOne<ApplicationUser>()
                 .WithMany(u => u.DietaryPreferences)
                 .HasForeignKey(uf => uf.Id)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -13,7 +13,7 @@ namespace Infrastructure.Context.Configuration
 
             builder.HasKey(x => x.UserId);
 
-            builder.HasOne<User>()
+            builder.HasOne<ApplicationUser>()
                 .WithOne(x => x.UserProfileInfo)
                 .HasForeignKey<UserProfileInfo>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

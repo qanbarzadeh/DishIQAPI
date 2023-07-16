@@ -12,7 +12,7 @@ namespace Infrastructure
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         // DbSets for User entities
-        public DbSet<User> Users { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<UserProfileInfo> UserProfileInfos { get; set; }
         public DbSet<UserAllergy> UserAllergies { get; set; }
         public DbSet<UserCookingSkillLevel> UserCookingSkillLevels { get; set; }
@@ -38,7 +38,7 @@ namespace Infrastructure
             modelBuilder.HasDefaultSchema(DatabaseSetting.UserSchema);
 
             // Apply configurations for User related entities
-            new UserConfiguration().Configure(modelBuilder.Entity<User>());
+            new ApplicationUserConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());
             new UserProfileInfoConfiguration().Configure(modelBuilder.Entity<UserProfileInfo>());
             new UserAllergyConfiguration().Configure(modelBuilder.Entity<UserAllergy>());
             new UserCookingSkillLevelConfiguration().Configure(modelBuilder.Entity<UserCookingSkillLevel>());

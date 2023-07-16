@@ -1,13 +1,14 @@
 ﻿using Domain.Entities.RecipeEntities;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities.UserEntities
 {
-    public class User
+    public class ApplicationUser : IdentityUser
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; } // Updated to string
+
+        //public int UserId { get; set; }
         public string Username { get; set; }
-        [EmailAddress]
 
         // Navigation properties to related entities
         public ICollection<Recipe> Recipes { get; set; } = new List<Recipe>(); // New property
@@ -18,5 +19,6 @@ namespace Domain.Entities.UserEntities
         public virtual ICollection<DietaryPreferences> DietaryPreferences { get; set; } = new List<DietaryPreferences>();
         public virtual ICollection<UserNotification> UserNotifications { get; set; } = new List<UserNotification>();
         public virtual UserActivityLog UserActivityLog { get; set; } = new UserActivityLog();
+     
     }
 }

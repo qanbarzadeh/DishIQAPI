@@ -6,7 +6,7 @@ namespace Domain.Entities.RecipeEntities
     public class RecipeIngredient
     {
         public int RecipeId { get; set; }
-        public Recipe Recipe { get; set; }
+        public Domain.Entities.RecipeEntities.Recipe Recipe { get; set; }
         public int IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
         public decimal Quantity { get; set; }
@@ -16,6 +16,6 @@ namespace Domain.Entities.RecipeEntities
         public int UserId { get; set; }
 
         // Navigation property to User
-        public User User { get; set; }
+        public ApplicationUser  ApplicationUser { get; set; }
     }
 }

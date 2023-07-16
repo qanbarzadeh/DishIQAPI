@@ -1,15 +1,16 @@
 ﻿using Application.Interfaces.Authentication.Helpers;
 using Application.Interfaces.Authentication.Manual;
 using Microsoft.AspNetCore.Identity;
+using Domain.Entities.UserEntities; // <-- You might need to adjust this according to your actual namespace
 
 namespace Application.Services.Authentication.Manual
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
 
-        public AuthService(UserManager<IdentityUser> userManager, ITokenService tokenService)
+        public AuthService(UserManager<ApplicationUser> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -17,7 +18,7 @@ namespace Application.Services.Authentication.Manual
 
         public async Task<IdentityResult> RegisterAsync(string email, string password)
         {
-            var user = new IdentityUser { UserName = email, Email = email };
+            var user = new ApplicationUser { UserName = email, Email = email };
             return await _userManager.CreateAsync(user, password);
         }
 
@@ -33,7 +34,7 @@ namespace Application.Services.Authentication.Manual
 
             throw new Exception("Invalid login attempt.");
         }
+
+        
     }
-
-
 }

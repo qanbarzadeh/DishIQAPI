@@ -1,5 +1,5 @@
 ﻿using Application.DTO.RecipeDTOs;
-using Application.Services.Recipe;
+using Application.Services.RecipenameSpace;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheBlockAPI.Controllers

@@ -2,16 +2,19 @@ using Application.Interfaces;
 using Application.Interfaces.Authentication.Helpers;
 using Application.Interfaces.Authentication.Manual;
 using Application.Interfaces.Azure.Maps;
+using Application.Interfaces.NutritionsAnalysis;
 using Application.Interfaces.UnitOfWork;
+using Application.Interfaces.UserRepo;
 using Application.Mapping;
 using Application.Services.Authentication.Helpers;
 using Application.Services.Authentication.Manual;
 using Application.Services.AzureMaps;
 using Application.Services.OpenAI.ChatGptAPI;
-using Application.Services.Recipe;
+using Application.Services.RecipenameSpace;
 using Azure.Identity;
 using Infrastructure;
 using Infrastructure.AzureVaultService;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +59,13 @@ builder.Services.AddScoped<ITokenService>(provider =>
     var jwtSecret = config["JwtSecret"];
     return new TokenService(jwtSecret);
 });
+
+// Register repositories
+builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+builder.Services.AddScoped<IRecipeIngredientRepository, RecipeIngredientRepository>();
+builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+//builder.Services.AddScoped<INutritionInformationRepository, NutritionInformationRepository>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();

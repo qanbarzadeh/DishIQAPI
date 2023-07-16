@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Context.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
-            builder.ToTable(nameof(User), DatabaseSetting.UserSchema);
+            builder.ToTable(nameof(ApplicationUser), DatabaseSetting.UserSchema);
 
             // Primary key
             builder.HasKey(u => u.UserId);

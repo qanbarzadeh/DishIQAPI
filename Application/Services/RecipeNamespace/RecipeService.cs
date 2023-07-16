@@ -2,7 +2,7 @@
 using Application.Interfaces;
 using Application.Services.OpenAI.ChatGptAPI;
 
-namespace Application.Services.Recipe
+namespace Application.Services.RecipenameSpace
 {
     public class RecipeService : IRecipeService
     {

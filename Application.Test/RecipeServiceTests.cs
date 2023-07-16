@@ -2,7 +2,7 @@
 using Application.DTO.RecipeDTOs;
 using Application.Interfaces;
 using Application.Services.OpenAI.ChatGptAPI;
-using Application.Services.Recipe;
+using Application.Services.RecipenameSpace;
 using Moq;
 using Xunit;
 
