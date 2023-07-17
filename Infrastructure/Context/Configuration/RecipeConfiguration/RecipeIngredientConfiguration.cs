@@ -28,13 +28,13 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
             builder.HasOne(ri => ri.Recipe)
                 .WithMany(r => r.RecipeIngredients)
                 .HasForeignKey(ri => ri.RecipeId)
-                .OnDelete(DeleteBehavior.Restrict); // Changed from Cascade to Restrict
+                .OnDelete(DeleteBehavior.Restrict);  // Change this line
 
             // Relationship to Ingredient
             builder.HasOne(ri => ri.Ingredient)
                 .WithMany(i => i.RecipeIngredients)
                 .HasForeignKey(ri => ri.IngredientId)
-                .OnDelete(DeleteBehavior.Restrict); // Changed from Cascade to Restrict
+                .OnDelete(DeleteBehavior.Restrict);  // Change this line
         }
     }
 }
