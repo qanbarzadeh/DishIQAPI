@@ -1,4 +1,5 @@
-﻿using Domain.Entities.UserRegistration;
+﻿using Domain.Entities.UserEntities;
+using Domain.Entities.UserRegistration;
 using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,7 +14,7 @@ namespace Infrastructure.Context.UserRegsitrationConf
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(ue => ue.AuthUserId)
+            builder.Property(ue => ue.ApplicationUserId)
                 .IsRequired();
 
             builder.Property(ue => ue.EventType)
@@ -22,10 +23,10 @@ namespace Infrastructure.Context.UserRegsitrationConf
             builder.Property(ue => ue.EventDate)
                 .IsRequired();
 
-            //builder.HasOne<AuthUser>()
-            //    .WithMany(u => u.UserEvents)
-            //    .HasForeignKey(ue => ue.AuthUserId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne<ApplicationUser>()
+                .WithMany(u => u.UserEvents)
+                .HasForeignKey(ue => ue.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

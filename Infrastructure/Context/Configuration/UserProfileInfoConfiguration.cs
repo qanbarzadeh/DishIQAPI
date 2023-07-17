@@ -9,19 +9,13 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserProfileInfo> builder)
         {
-            builder.ToTable(nameof(UserProfileInfo), DatabaseSetting.UserSchema); // todo : implement DependencyInjection  and service creation approach 
+            builder.ToTable(nameof(UserProfileInfo), DatabaseSetting.UserSchema);
 
-            builder.HasKey(x => x.UserId);
-
-            builder.HasOne<ApplicationUser>()
-                .WithOne(x => x.UserProfileInfo)
-                .HasForeignKey<UserProfileInfo>(x => x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasKey(x => x.Id); // Changed from UserId to Id
 
             builder.Property(upi => upi.FullName)
                 .HasMaxLength(100)
                 .IsRequired();
-
 
             // Gender
             builder.Property(upi => upi.Gender)

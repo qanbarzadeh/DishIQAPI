@@ -6,8 +6,9 @@ namespace Domain.Entities.UserEntities
     {
         //[Key]
         //[ForeignKey("User")] move to FluentAPI 
-        public int UserId { get; set; }
-
+        //public int UserId { get; set; }
+            
+        public int Id { get; set;  }
 
         public string Username { get; set; }
 

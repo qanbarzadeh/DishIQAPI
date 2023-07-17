@@ -35,11 +35,7 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
                 .HasForeignKey(ri => ri.IngredientId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Relationship to Applicationuser
-            builder.HasOne(ri => ri.ApplicationUser)
-                .WithMany(u => u.RecipeIngredients)
-                .HasForeignKey(ri => ri.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+          
         }
     }
 
