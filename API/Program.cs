@@ -25,7 +25,7 @@ using Microsoft.OpenApi.Models;
 using OpenAIAPI;
 
 var builder = WebApplication.CreateBuilder(args);
-//test deploy
+//test deploy delete migratin histroy in azure
 // Add services to the container.
 builder.Services.AddControllers();
 
