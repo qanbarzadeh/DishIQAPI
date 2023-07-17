@@ -171,9 +171,6 @@ namespace Infrastructure.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -187,7 +184,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("RecipeId", "IngredientId", "UserId");
+                    b.HasKey("RecipeId", "IngredientId");
 
                     b.HasIndex("ApplicationUserId");
 

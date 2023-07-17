@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230717130028_InitialCreate")]
+    [Migration("20230717131529_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -174,9 +174,6 @@ namespace Infrastructure.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -190,7 +187,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("RecipeId", "IngredientId", "UserId");
+                    b.HasKey("RecipeId", "IngredientId");
 
                     b.HasIndex("ApplicationUserId");
 
