@@ -22,6 +22,7 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using OpenAIAPI;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,9 @@ builder.Services.AddScoped<ITokenService>(provider =>
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IRecipeIngredientRepository, RecipeIngredientRepository>();
 builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+
+builder.Services.AddScoped<Lazy<IRecipeRepository>>(x => new Lazy<IRecipeRepository>(() => x.GetRequiredService<IRecipeRepository>()));
+builder.Services.AddScoped<Lazy<IApplicationUserRepository>>(x => new Lazy<IApplicationUserRepository>(() => x.GetRequiredService<IApplicationUserRepository>()));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
