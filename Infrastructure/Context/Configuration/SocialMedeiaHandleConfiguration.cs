@@ -24,12 +24,7 @@ namespace Infrastructure.Context.Configuration
                 .IsRequired();
             // Social media handle
             builder.Property(sm => sm.Handle)
-                .IsRequired();
-            // Foreign key relationship with UserProfileInfo
-            builder.HasOne<UserProfileInfo>()
-                .WithMany(upi => upi.SocialMediaHandles)
-                .HasForeignKey(sm => sm.UserProfileInfoId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .IsRequired();                        
         }
     }
 }

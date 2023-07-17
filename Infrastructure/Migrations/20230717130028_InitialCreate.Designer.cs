@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230717122916_UpdateRecipeIngredientConfiguration")]
-    partial class UpdateRecipeIngredientConfiguration
+    [Migration("20230717130028_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,8 +317,6 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserProfileInfoId");
-
                     b.ToTable("SocialMediaHandles", "Recipe");
                 });
 
@@ -380,67 +378,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("UserActivityLog", "User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserAllergy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("SeverityLevel")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserAllergy", "User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserCookingSkillLevel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("SkillLevelId");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CookingSkillLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserCookingSkillLevel", "User");
-                });
-
             modelBuilder.Entity("Domain.Entities.UserEntities.UserNotification", b =>
                 {
                     b.Property<int>("Id")
@@ -471,105 +408,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserNotification", "User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserProfileInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("AccountCreationDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Bio")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsBlacklisted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSuspicious")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LanguagePreference")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTimeOffset>("LastLoginDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("NotificationSettings")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentInformation")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ProfilePicture")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("SocialMediaHandle")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("SubscriptionStatus")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("UserActivityLog")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserProfileInfo", "User");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRegistration.UserEvent", b =>
@@ -779,15 +617,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.SocialMediaHandle", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntities.UserProfileInfo", null)
-                        .WithMany("SocialMediaHandles")
-                        .HasForeignKey("UserProfileInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.UserRegistration.UserEvent", b =>
                 {
                     b.HasOne("Domain.Entities.UserEntities.ApplicationUser", "ApplicationUser")
@@ -868,11 +697,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Recipes");
 
                     b.Navigation("UserEvents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserProfileInfo", b =>
-                {
-                    b.Navigation("SocialMediaHandles");
                 });
 #pragma warning restore 612, 618
         }
