@@ -6,7 +6,6 @@ namespace Domain.Entities.UserEntities
 {
     public class ApplicationUser : IdentityUser
     {
-
         public bool IsDeleted { get; set; } = false;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public int Version { get; set; } = 1;

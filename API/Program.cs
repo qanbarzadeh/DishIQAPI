@@ -18,14 +18,13 @@ using Infrastructure.AzureVaultService;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using OpenAIAPI;
 
 var builder = WebApplication.CreateBuilder(args);
-//test deploy delete migratin histroy in azure
+
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -49,9 +48,8 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .EnableTokenAcquisitionToCallDownstreamApi()
     .AddInMemoryTokenCaches();
 
-// DbContext Configuration
-builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Database Configuration
+builder.Services.ConfigureDatabase(builder.Configuration);
 
 // Repository and Services Registration
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -66,14 +64,14 @@ builder.Services.AddScoped<ITokenService>(provider =>
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IRecipeIngredientRepository, RecipeIngredientRepository>();
 builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
-//builder.Services.AddScoped<INutritionInformationRepository, NutritionInformationRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IKeyVaultService, AzureKeyVaultService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IRecipeInformationService, RecipeInformationService>();
 builder.Services.AddSingleton<IRecipeParser, RecipeParser>();
-builder.Services.AddScoped<IUserSpecificRecipeStorageService, UserSpecificRecipeStorageService>(); 
+builder.Services.AddScoped<IUserSpecificRecipeStorageService, UserSpecificRecipeStorageService>();
+
 // HttpClient Services
 builder.Services.AddHttpClient<IChatGptService, ChatGptService>();
 builder.Services.AddHttpClient<INearbySearchServiceAzureMaps, NearbySearchServiceAzureMaps>((services, client) =>
@@ -103,7 +101,7 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"   
+                    Id = "Bearer"
                 },
                 Scheme = "oauth2",
                 Name = "Bearer",
@@ -130,16 +128,6 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 // Connect to Azure Key Vault
 var keyVaultUri = builder.Configuration.GetSection("Azure")["KeyVaultUri"];
 builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new ManagedIdentityCredential());
-
-//Ef Core migration
-if (Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") != null)
-{
-    using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        dbContext.Database.Migrate();
-    }
-}
 
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 

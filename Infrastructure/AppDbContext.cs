@@ -12,10 +12,7 @@ namespace Infrastructure
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         // DbSets for User entities
-        public DbSet<ApplicationUser> ApplicationUser { get; set; }
-        
-        
-        
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }                        
         public DbSet<DietaryPreferences> DietaryPreferences { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<UserActivityLog> UserActivityLogs { get; set; }
@@ -38,10 +35,7 @@ namespace Infrastructure
             modelBuilder.HasDefaultSchema(DatabaseSetting.UserSchema);
 
             // Apply configurations for User related entities
-            new ApplicationUserConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());
-            
-            
-            
+            new ApplicationUserConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());                                    
             new DietaryPreferencesConfiguration().Configure(modelBuilder.Entity<DietaryPreferences>());
             new UserNotificationConfiguration().Configure(modelBuilder.Entity<UserNotification>());
             new UserActivityLogConfiguration().Configure(modelBuilder.Entity<UserActivityLog>());
