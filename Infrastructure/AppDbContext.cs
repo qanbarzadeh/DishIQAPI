@@ -13,9 +13,9 @@ namespace Infrastructure
     {
         // DbSets for User entities
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
-        public DbSet<UserProfileInfo> UserProfileInfos { get; set; }
-        public DbSet<UserAllergy> UserAllergies { get; set; }
-        public DbSet<UserCookingSkillLevel> UserCookingSkillLevels { get; set; }
+        
+        
+        
         public DbSet<DietaryPreferences> DietaryPreferences { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<UserActivityLog> UserActivityLogs { get; set; }
@@ -39,9 +39,9 @@ namespace Infrastructure
 
             // Apply configurations for User related entities
             new ApplicationUserConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());
-            new UserProfileInfoConfiguration().Configure(modelBuilder.Entity<UserProfileInfo>());
-            new UserAllergyConfiguration().Configure(modelBuilder.Entity<UserAllergy>());
-            new UserCookingSkillLevelConfiguration().Configure(modelBuilder.Entity<UserCookingSkillLevel>());
+            
+            
+            
             new DietaryPreferencesConfiguration().Configure(modelBuilder.Entity<DietaryPreferences>());
             new UserNotificationConfiguration().Configure(modelBuilder.Entity<UserNotification>());
             new UserActivityLogConfiguration().Configure(modelBuilder.Entity<UserActivityLog>());

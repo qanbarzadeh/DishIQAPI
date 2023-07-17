@@ -16,7 +16,8 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
 
             // Quantity
             builder.Property(ri => ri.Quantity)
-                .IsRequired();
+                .IsRequired()
+                .HasPrecision(5, 2);  // Add this line to set the precision and scale for the Quantity field
 
             // Unit
             builder.Property(ri => ri.Unit)
@@ -35,8 +36,6 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
                 .HasForeignKey(ri => ri.IngredientId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-          
         }
     }
-
 }

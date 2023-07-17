@@ -2,11 +2,6 @@
 using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Context.Configuration.RecipeConfiguration
 {
@@ -20,15 +15,15 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
             builder.HasKey(ni => ni.Id);
 
             // Nutrient properties
-            builder.Property(ni => ni.Carbohydrate).IsRequired();
-            builder.Property(ni => ni.Protein).IsRequired();
-            builder.Property(ni => ni.Fat).IsRequired();
-            builder.Property(ni => ni.VitaminA).IsRequired();
-            builder.Property(ni => ni.VitaminC).IsRequired();
-            builder.Property(ni => ni.VitaminD).IsRequired();
-            builder.Property(ni => ni.Calcium).IsRequired();
-            builder.Property(ni => ni.Iron).IsRequired();
-            builder.Property(ni => ni.Sodium).IsRequired();
+            builder.Property(n => n.Calcium).HasPrecision(5, 2);
+            builder.Property(n => n.Carbohydrate).HasPrecision(5, 2);
+            builder.Property(n => n.Fat).HasPrecision(5, 2);
+            builder.Property(n => n.Iron).HasPrecision(5, 2);
+            builder.Property(n => n.Protein).HasPrecision(5, 2);
+            builder.Property(n => n.Sodium).HasPrecision(5, 2);
+            builder.Property(n => n.VitaminA).HasPrecision(5, 2);
+            builder.Property(n => n.VitaminC).HasPrecision(5, 2);
+            builder.Property(n => n.VitaminD).HasPrecision(5, 2);
 
             // Relationship to Ingredient
             builder.HasOne(ni => ni.Ingredient)
