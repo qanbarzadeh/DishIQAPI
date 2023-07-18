@@ -4,9 +4,8 @@ using Domain.Entities.UserEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
-namespace API.Controllers.UserSpecificRecipe
+namespace API.Controllers
 {
     [ApiController]
     [Authorize]
