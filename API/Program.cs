@@ -13,6 +13,7 @@ using Application.Services.OpenAI.ChatGptAPI;
 using Application.Services.RecipenameSpace;
 using Application.Services.UsersLinkRecipes;
 using Azure.Identity;
+using Domain.Entities.UserEntities;
 using Infrastructure;
 using Infrastructure.AzureVaultService;
 using Infrastructure.Repositories;
@@ -33,9 +34,9 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // AddIdentity services
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddUserManager<UserManager<IdentityUser>>() // Added UserManager
+    .AddUserManager<UserManager<ApplicationUser>>()
     .AddDefaultTokenProviders();
 
 // Configure logging
@@ -65,6 +66,7 @@ builder.Services.AddScoped<ITokenService>(provider =>
 // Register repositories
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IRecipeIngredientRepository, RecipeIngredientRepository>();
+builder.Services.AddScoped<Lazy<IRecipeIngredientRepository>>(x => new Lazy<IRecipeIngredientRepository>(() => x.GetRequiredService<IRecipeIngredientRepository>()));
 builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 
 builder.Services.AddScoped<Lazy<IRecipeRepository>>(x => new Lazy<IRecipeRepository>(() => x.GetRequiredService<IRecipeRepository>()));
