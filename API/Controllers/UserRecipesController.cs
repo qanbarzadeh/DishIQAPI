@@ -24,13 +24,42 @@ namespace API.Controllers
         [HttpPost("SaveGeneratedRecipeForUser")]
         public async Task<IActionResult> SaveGeneratedRecipeForUser([FromBody] GeneratedRecipeDTO generatedRecipeDto)
         {
-            // Get the user from the UserManager using the username in the User ClaimsPrincipal
-            var username = User.Identity.Name; // This is the "unique_name" claim in your JWT
-            var applicationUser = await _userManager.FindByNameAsync(username);
+            try
+            {
+                if (generatedRecipeDto == null)
+                {
+                    return BadRequest("Generated recipe data is null.");
+                }
 
-            await _userSpecificRecipeStorageService.AddUserWithRecipe(applicationUser, generatedRecipeDto);
+                // Get the user from the UserManager using the username in the User ClaimsPrincipal
+                var username = User.Identity.Name; // This is the "unique_name" claim in your JWT
 
-            return Ok();
+                if (string.IsNullOrEmpty(username))
+                {
+                    return Unauthorized("User is not authorized or token is invalid.");
+                }
+
+                var applicationUser = await _userManager.FindByNameAsync(username);
+
+                if (applicationUser == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                await _userSpecificRecipeStorageService.AddUserWithRecipe(applicationUser, generatedRecipeDto);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                // Use your logging mechanism here e.g., NLog, Serilog, or basic Console.WriteLine
+                Console.WriteLine(ex.Message);
+
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
     }
 }
+    
