@@ -1,5 +1,6 @@
 ﻿using Application.DTO.Authentication;
 using Application.Interfaces.Authentication.Helpers;
+using Domain.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -8,10 +9,10 @@ namespace Application.Services.Authentication.Helpers
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public UserService(UserManager<IdentityUser> userManager, IHttpClientFactory httpClientFactory)
+        public UserService(UserManager<ApplicationUser> userManager, IHttpClientFactory httpClientFactory)
         {
             _userManager = userManager;
             _httpClientFactory = httpClientFactory;
@@ -40,12 +41,12 @@ namespace Application.Services.Authentication.Helpers
             return userInfoData;
         }
 
-        public async Task<IdentityUser> GetIdentityUser(UserInfoResponse userInfoData)
+        public async Task<ApplicationUser> GetIdentityUser(UserInfoResponse userInfoData)
         {
             var identityUser = await _userManager.FindByEmailAsync(userInfoData.Email);
             if (identityUser == null)
             {
-                identityUser = new IdentityUser { UserName = userInfoData.Email, Email = userInfoData.Email };
+                identityUser = new ApplicationUser { UserName = userInfoData.Email, Email = userInfoData.Email };
                 var result = await _userManager.CreateAsync(identityUser);
 
                 if (!result.Succeeded)
@@ -53,7 +54,9 @@ namespace Application.Services.Authentication.Helpers
                     throw new Exception("Failed to create IdentityUser");
                 }
             }
-            return identityUser;
+            return  identityUser;
         }
+
+        
     }
 }
