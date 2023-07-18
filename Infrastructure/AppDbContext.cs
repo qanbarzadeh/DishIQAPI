@@ -41,6 +41,7 @@ namespace Infrastructure
             new UserNotificationConfiguration().Configure(modelBuilder.Entity<UserNotification>());
             new UserActivityLogConfiguration().Configure(modelBuilder.Entity<UserActivityLog>());
             new SocialHandleConfiguration().Configure(modelBuilder.Entity<SocialMediaHandle>());
+            new NutritionInformationConfiguration().Configure(modelBuilder.Entity<NutritionInformation>()); 
 
             // Change default schema for Recipe related entities
             modelBuilder.HasDefaultSchema(DatabaseSetting.RecipeSchema);
