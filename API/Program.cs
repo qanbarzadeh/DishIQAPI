@@ -56,6 +56,7 @@ builder.Services.ConfigureDatabase(builder.Configuration);
 
 // Repository and Services Registration
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserResolverService, UserResolverService>();
 builder.Services.AddScoped<ITokenService>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
