@@ -17,6 +17,7 @@ namespace Infrastructure
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<UserActivityLog> UserActivityLogs { get; set; }
         public DbSet<SocialMediaHandle> SocialMediaHandles { get; set; }
+        public DbSet<NutritionInformation> NutritionInformation { get; set; }
 
         // DbSets for Recipe entities
         public DbSet<Recipe> Recipes { get; set; }
