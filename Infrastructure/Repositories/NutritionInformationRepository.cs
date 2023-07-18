@@ -21,7 +21,7 @@ namespace Infrastructure.Repositories
                 throw new KeyNotFoundException($"Nutrition Information with id {id} not found");
             }
 
-            return await nutritionInformation;
+            return nutritionInformation;
         }
 
         public async Task<IEnumerable<NutritionInformation>> GetAllNutritionInformationAsync()
