@@ -1,12 +1,10 @@
-﻿using System.Threading.Tasks;
-using Application.DTO.RecipeDTOs;
+﻿using Application.DTO.RecipeDTOs;
 using Application.Interfaces.UserRepo;
 using Application.Interfaces.Authentication.Manual;
-using Domain.Entities.UserEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+namespace CheBlockAPI.Controllers
 {
     [Authorize]
     [ApiController]
