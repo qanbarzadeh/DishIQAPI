@@ -10,6 +10,8 @@ namespace Application.Services.Authentication.Helpers
     public class TokenService : ITokenService
     {
         private readonly string _jwtSecret;
+        private readonly string _jwtIssuer = "https://dishiq.azurewebsites.net";
+        private readonly string _jwtAudience = "https://dishiq.azurewebsites.net/api";
 
         public TokenService(string jwtSecret)
         {
@@ -24,7 +26,9 @@ namespace Application.Services.Authentication.Helpers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Iss, _jwtIssuer),
+                new Claim(JwtRegisteredClaimNames.Aud, _jwtAudience)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
