@@ -9,7 +9,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<SocialMediaHandle> builder)
         {
-            builder.ToTable(nameof(SocialHandleConfiguration), DatabaseSetting.UserSchema);
+            builder.ToTable(nameof(SocialHandleConfiguration), DatabaseSetting.Schema);
             builder.HasKey(k => k.Id);
             builder.Property(s => s.Id)
                 .HasColumnName("SocialMediaId");

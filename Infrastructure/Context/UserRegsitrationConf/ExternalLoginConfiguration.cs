@@ -9,7 +9,7 @@ namespace Infrastructure.Context.UserRegsitrationConf
     {
         public void Configure(EntityTypeBuilder<ExternalLogin> builder)
         {
-            builder.ToTable(nameof(ExternalLogin), DatabaseSetting.AuthenticationSchema);
+            builder.ToTable(nameof(ExternalLogin), DatabaseSetting.Schema);
 
             builder.HasKey(x => x.Id);
 

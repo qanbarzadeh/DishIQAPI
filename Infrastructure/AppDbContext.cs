@@ -1,9 +1,8 @@
 ﻿using Domain.Entities.RecipeEntities;
 using Domain.Entities.UserEntities;
-using Infrastructure.Context.Configuration;
 using Infrastructure.Context.Configuration.RecipeConfiguration;
+using Infrastructure.Context.Configuration;
 using Infrastructure.Setting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +11,7 @@ namespace Infrastructure
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         // DbSets for User entities
-        public DbSet<ApplicationUser> ApplicationUser { get; set; }                        
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<DietaryPreferences> DietaryPreferences { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<UserActivityLog> UserActivityLogs { get; set; }
@@ -31,22 +30,19 @@ namespace Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // Very important!
+            // Change default schema for all entities
+            modelBuilder.HasDefaultSchema(DatabaseSetting.Schema);
 
-            modelBuilder.HasDefaultSchema(DatabaseSetting.UserSchema);
+            base.OnModelCreating(modelBuilder); // Now this is after setting the default schema
 
-            // Apply configurations for User related entities
-            new ApplicationUserConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());                                    
+            // Apply configurations for all entities
+            new ApplicationUserConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());
             new DietaryPreferencesConfiguration().Configure(modelBuilder.Entity<DietaryPreferences>());
             new UserNotificationConfiguration().Configure(modelBuilder.Entity<UserNotification>());
             new UserActivityLogConfiguration().Configure(modelBuilder.Entity<UserActivityLog>());
             new SocialHandleConfiguration().Configure(modelBuilder.Entity<SocialMediaHandle>());
-            new NutritionInformationConfiguration().Configure(modelBuilder.Entity<NutritionInformation>()); 
+            new NutritionInformationConfiguration().Configure(modelBuilder.Entity<NutritionInformation>());
 
-            // Change default schema for Recipe related entities
-            modelBuilder.HasDefaultSchema(DatabaseSetting.RecipeSchema);
-
-            // Apply configurations for Recipe related entities
             new RecipeConfiguration().Configure(modelBuilder.Entity<Recipe>());
             new IngredientConfiguration().Configure(modelBuilder.Entity<Ingredient>());
             new RecipeIngredientConfiguration().Configure(modelBuilder.Entity<RecipeIngredient>());

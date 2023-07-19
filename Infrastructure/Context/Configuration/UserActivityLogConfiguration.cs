@@ -9,7 +9,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserActivityLog> builder)
         {
-            builder.ToTable(nameof(UserActivityLog), DatabaseSetting.UserSchema);
+            builder.ToTable(nameof(UserActivityLog), DatabaseSetting.Schema);
 
             builder.HasKey(x => x.Id);
 

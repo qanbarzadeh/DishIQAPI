@@ -9,7 +9,7 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
     {
         public void Configure(EntityTypeBuilder<RecipeIngredient> builder)
         {
-            builder.ToTable(nameof(RecipeIngredient), DatabaseSetting.RecipeSchema);
+            builder.ToTable(nameof(RecipeIngredient), DatabaseSetting.Schema);
 
             // RecipeId and IngredientId composite key
             builder.HasKey(ri => new { ri.RecipeId, ri.IngredientId });

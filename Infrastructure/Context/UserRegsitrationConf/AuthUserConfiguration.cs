@@ -9,7 +9,7 @@ namespace Infrastructure.Context.UserRegsitrationConf
     {
         public void Configure(EntityTypeBuilder<AuthUser> builder)
         {
-            builder.ToTable(nameof(AuthUser), DatabaseSetting.AuthenticationSchema);
+            builder.ToTable(nameof(AuthUser), DatabaseSetting.Schema);
 
             builder.HasKey(x => x.Id);
 

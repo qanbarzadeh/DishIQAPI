@@ -11,7 +11,7 @@
         {
             public void Configure(EntityTypeBuilder<NutritionInformation> builder)
             {
-                builder.ToTable(nameof(NutritionInformation), DatabaseSetting.RecipeSchema);
+                builder.ToTable(nameof(NutritionInformation), DatabaseSetting.Schema);
 
                 builder.HasKey(n => n.Id);
 

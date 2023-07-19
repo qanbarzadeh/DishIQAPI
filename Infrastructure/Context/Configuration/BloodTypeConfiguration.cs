@@ -9,7 +9,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<BloodType> builder)
         {
-            builder.ToTable("BloodType", DatabaseSetting.RecipeSchema);
+            builder.ToTable("BloodType", DatabaseSetting.Schema);
 
             builder.HasKey(e => e.Id);
 

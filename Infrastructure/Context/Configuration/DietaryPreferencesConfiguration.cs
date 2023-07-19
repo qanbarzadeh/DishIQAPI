@@ -7,7 +7,7 @@ public class DietaryPreferencesConfiguration : IEntityTypeConfiguration<DietaryP
 {
     public void Configure(EntityTypeBuilder<DietaryPreferences> builder)
     {
-        builder.ToTable(nameof(DietaryPreferences), DatabaseSetting.UserSchema);
+        builder.ToTable(nameof(DietaryPreferences), DatabaseSetting.Schema);
 
         builder.HasKey(dp => dp.Id);
 

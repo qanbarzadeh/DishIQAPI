@@ -18,8 +18,9 @@ namespace Application.Services.Authentication.Manual
 
         public async Task<ApplicationUser> GetUserFromToken()
         {
-            //var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var username = "ali@dishiq.com"; // Hardcode your username here
+            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+
+            //var username = "ali@dishiq.com"; // Hardcode your username here
             var applicationUser = await _userManager.FindByNameAsync(username);
             return applicationUser;
         }

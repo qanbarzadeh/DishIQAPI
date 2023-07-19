@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230717170348_InitialCreate")]
+    [Migration("20230719183911_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("Recipe")
+                .HasDefaultSchema("Dishiq")
                 .HasAnnotation("ProductVersion", "7.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -49,7 +49,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredient", "Recipe");
+                    b.ToTable("Ingredient", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.NutritionInformation", b =>
@@ -104,7 +104,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("IngredientId")
                         .IsUnique();
 
-                    b.ToTable("NutritionInformation", "Recipe");
+                    b.ToTable("NutritionInformation", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Recipe", b =>
@@ -163,7 +163,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Recipes", "Recipe");
+                    b.ToTable("Recipes", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.RecipeIngredient", b =>
@@ -193,7 +193,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("RecipeIngredient", "Recipe");
+                    b.ToTable("RecipeIngredient", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.ApplicationUser", b =>
@@ -268,7 +268,7 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("ApplicationUser", "User");
+                    b.ToTable("ApplicationUser", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.DietaryPreferences", b =>
@@ -290,7 +290,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DietaryPreferences", "User");
+                    b.ToTable("DietaryPreferences", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.SocialMediaHandle", b =>
@@ -314,7 +314,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SocialMediaHandles", "Recipe");
+                    b.ToTable("SocialMediaHandles", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.UserActivityLog", b =>
@@ -372,7 +372,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserActivityLog", "User");
+                    b.ToTable("UserActivityLog", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.UserNotification", b =>
@@ -404,7 +404,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserNotification", "User");
+                    b.ToTable("UserNotification", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRegistration.UserEvent", b =>
@@ -429,7 +429,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("UserEvent", "Recipe");
+                    b.ToTable("UserEvent", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -456,7 +456,7 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", "Recipe");
+                    b.ToTable("AspNetRoles", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -481,7 +481,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", "Recipe");
+                    b.ToTable("AspNetRoleClaims", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -506,7 +506,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", "Recipe");
+                    b.ToTable("AspNetUserClaims", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -528,7 +528,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", "Recipe");
+                    b.ToTable("AspNetUserLogins", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -543,7 +543,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", "Recipe");
+                    b.ToTable("AspNetUserRoles", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -562,7 +562,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", "Recipe");
+                    b.ToTable("AspNetUserTokens", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.RecipeEntities.NutritionInformation", b =>

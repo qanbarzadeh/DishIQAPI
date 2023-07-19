@@ -10,7 +10,7 @@ namespace Infrastructure.Context.UserRegsitrationConf
     {
         public void Configure(EntityTypeBuilder<UserEvent> builder)
         {
-            builder.ToTable(nameof(UserEvent), DatabaseSetting.AuthenticationSchema);
+            builder.ToTable(nameof(UserEvent), DatabaseSetting.Schema);
 
             builder.HasKey(x => x.Id);
 

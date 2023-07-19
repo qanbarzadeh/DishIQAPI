@@ -12,14 +12,11 @@ namespace Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "User");
-
-            migrationBuilder.EnsureSchema(
-                name: "Recipe");
+                name: "Dishiq");
 
             migrationBuilder.CreateTable(
                 name: "ApplicationUser",
-                schema: "User",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -48,7 +45,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -63,7 +60,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "DietaryPreferences",
-                schema: "User",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     DietaryPreferenceID = table.Column<int>(type: "int", nullable: false)
@@ -78,7 +75,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Ingredient",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -94,7 +91,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "SocialMediaHandles",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     SocialMediaId = table.Column<int>(type: "int", nullable: false)
@@ -110,7 +107,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserActivityLog",
-                schema: "User",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -133,7 +130,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserNotification",
-                schema: "User",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -151,7 +148,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -166,7 +163,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_ApplicationUser_UserId",
                         column: x => x.UserId,
-                        principalSchema: "User",
+                        principalSchema: "Dishiq",
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -174,7 +171,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -188,7 +185,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_ApplicationUser_UserId",
                         column: x => x.UserId,
-                        principalSchema: "User",
+                        principalSchema: "Dishiq",
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -196,7 +193,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -210,7 +207,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_ApplicationUser_UserId",
                         column: x => x.UserId,
-                        principalSchema: "User",
+                        principalSchema: "Dishiq",
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -218,7 +215,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Recipes",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -241,7 +238,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Recipes_ApplicationUser_UserId",
                         column: x => x.UserId,
-                        principalSchema: "User",
+                        principalSchema: "Dishiq",
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -249,7 +246,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserEvent",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -264,7 +261,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_UserEvent_ApplicationUser_ApplicationUserId",
                         column: x => x.ApplicationUserId,
-                        principalSchema: "User",
+                        principalSchema: "Dishiq",
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -272,7 +269,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -287,7 +284,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Recipe",
+                        principalSchema: "Dishiq",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -295,7 +292,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -307,14 +304,14 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_ApplicationUser_UserId",
                         column: x => x.UserId,
-                        principalSchema: "User",
+                        principalSchema: "Dishiq",
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Recipe",
+                        principalSchema: "Dishiq",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -322,7 +319,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "NutritionInformation",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -344,7 +341,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_NutritionInformation_Ingredient_IngredientId",
                         column: x => x.IngredientId,
-                        principalSchema: "Recipe",
+                        principalSchema: "Dishiq",
                         principalTable: "Ingredient",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -352,7 +349,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RecipeIngredient",
-                schema: "Recipe",
+                schema: "Dishiq",
                 columns: table => new
                 {
                     RecipeId = table.Column<int>(type: "int", nullable: false),
@@ -367,21 +364,21 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_RecipeIngredient_ApplicationUser_ApplicationUserId",
                         column: x => x.ApplicationUserId,
-                        principalSchema: "User",
+                        principalSchema: "Dishiq",
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RecipeIngredient_Ingredient_IngredientId",
                         column: x => x.IngredientId,
-                        principalSchema: "Recipe",
+                        principalSchema: "Dishiq",
                         principalTable: "Ingredient",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RecipeIngredient_Recipes_RecipeId",
                         column: x => x.RecipeId,
-                        principalSchema: "Recipe",
+                        principalSchema: "Dishiq",
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -389,13 +386,13 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                schema: "User",
+                schema: "Dishiq",
                 table: "ApplicationUser",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                schema: "User",
+                schema: "Dishiq",
                 table: "ApplicationUser",
                 column: "NormalizedUserName",
                 unique: true,
@@ -403,13 +400,13 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
@@ -417,50 +414,50 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NutritionInformation_IngredientId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "NutritionInformation",
                 column: "IngredientId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeIngredient_ApplicationUserId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "RecipeIngredient",
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeIngredient_IngredientId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "RecipeIngredient",
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recipes_UserId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "Recipes",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserEvent_ApplicationUserId",
-                schema: "Recipe",
+                schema: "Dishiq",
                 table: "UserEvent",
                 column: "ApplicationUserId");
         }
@@ -470,67 +467,67 @@ namespace Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserClaims",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserLogins",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserRoles",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "DietaryPreferences",
-                schema: "User");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "NutritionInformation",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "RecipeIngredient",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "SocialMediaHandles",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "UserActivityLog",
-                schema: "User");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "UserEvent",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "UserNotification",
-                schema: "User");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "Ingredient",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "Recipes",
-                schema: "Recipe");
+                schema: "Dishiq");
 
             migrationBuilder.DropTable(
                 name: "ApplicationUser",
-                schema: "User");
+                schema: "Dishiq");
         }
     }
 }

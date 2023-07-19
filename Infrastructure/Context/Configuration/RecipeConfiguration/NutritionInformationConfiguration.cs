@@ -9,7 +9,7 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
     {
         public void Configure(EntityTypeBuilder<NutritionInformation> builder)
         {
-            builder.ToTable(nameof(NutritionInformation), DatabaseSetting.RecipeSchema);
+            builder.ToTable(nameof(NutritionInformation), DatabaseSetting.Schema);
 
             // Primary key
             builder.HasKey(ni => ni.Id);

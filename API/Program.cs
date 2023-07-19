@@ -18,13 +18,10 @@ using Domain.Entities.UserEntities;
 using Infrastructure;
 using Infrastructure.AzureVaultService;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using OpenAIAPI;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

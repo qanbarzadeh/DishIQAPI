@@ -9,7 +9,7 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
-            builder.ToTable(nameof(ApplicationUser), DatabaseSetting.UserSchema);
+            builder.ToTable(nameof(ApplicationUser), DatabaseSetting.Schema);
 
             builder.HasKey(u => u.Id);
 
