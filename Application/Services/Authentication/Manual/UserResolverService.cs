@@ -20,7 +20,6 @@ namespace Application.Services.Authentication.Manual
         {
             var username = _httpContextAccessor.HttpContext.User.Identity.Name;
             var applicationUser = await _userManager.FindByNameAsync(username);
-
             return applicationUser;
         }
     }

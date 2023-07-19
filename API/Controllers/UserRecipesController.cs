@@ -4,7 +4,7 @@ using Application.Interfaces.Authentication.Manual;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CheBlockAPI.Controllers
+namespace API.Controllers
 {
     [Authorize]
     [ApiController]
@@ -22,7 +22,7 @@ namespace CheBlockAPI.Controllers
             _userResolverService = userResolverService;
         }
 
-        [HttpPost("SaveGeneratedRecipeForUser")]
+        [HttpPost]
         public async Task<IActionResult> SaveGeneratedRecipeForUser([FromBody] GeneratedRecipeDTO generatedRecipeDto)
         {
             var applicationUser = await _userResolverService.GetUserFromToken();
