@@ -1,4 +1,5 @@
-﻿using Application.DTO.RecipeDTOs;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Application.DTO.RecipeDTOs;
 using Application.Interfaces.Authentication.Manual;
 using Application.Interfaces.UserRepo;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TestController : ControllerBase
@@ -22,6 +22,7 @@ namespace API.Controllers
             _userResolverService = userResolverService;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<IActionResult> SaveGeneratedRecipeForUser([FromBody] GeneratedRecipeDTO generatedRecipeDto)
         {
