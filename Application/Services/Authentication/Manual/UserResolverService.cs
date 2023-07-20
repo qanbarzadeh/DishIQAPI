@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces.Authentication.Manual;
+using Application.Interfaces.UserRepo;
 using Domain.Entities.UserEntities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
 namespace Application.Services.Authentication.Manual
@@ -9,34 +9,25 @@ namespace Application.Services.Authentication.Manual
     public class UserResolverService : IUserResolverService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IApplicationUserRepository _applicationUserRepository;
 
-        public UserResolverService(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
+        public UserResolverService(IHttpContextAccessor httpContextAccessor, IApplicationUserRepository applicationUserRepository)
         {
             _httpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
+            _applicationUserRepository = applicationUserRepository;
         }
-
-        //public async Task<ApplicationUser> GetUserFromToken()
-        //{
-        //    var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-        //    //var username = "ali@dishiq.com"; // Hardcode your username here
-        //    var applicationUser = await _userManager.FindByNameAsync(username);
-        //    return applicationUser;
-        //}
 
         public async Task<ApplicationUser> GetUserFromToken()
         {
-            var username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
 
-            if (username == null)
+            if (userId == null)
             {
-                throw new Exception("Username claim not found in token");
+                return null;
             }
 
-            var applicationUser = await _userManager.FindByNameAsync(username);
-            return applicationUser;
+            return await _applicationUserRepository.GetUserByIdAsync(int.Parse(userId));
         }
+
     }
 }

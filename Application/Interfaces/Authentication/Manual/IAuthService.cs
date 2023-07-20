@@ -7,5 +7,4 @@ namespace Application.Interfaces.Authentication.Manual
         Task<IdentityResult> RegisterAsync(string email, string password);
         Task<string> LoginAsync(string email, string password);
     }
-
 }
