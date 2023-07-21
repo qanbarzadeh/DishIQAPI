@@ -10,7 +10,7 @@ namespace Domain.Entities.RecipeEntities
             public string Description { get; set; }
             public string PreparationTime { get; set; } //changed from TimeSpan to string (warning if claculation is required)
             public string  CookingTime { get; set; }
-            public int Servings { get; set; }
+            public string Servings { get; set; } //changedto string ftom int
             public string ServingSize { get; set; }
             public string Cuisine { get; set; }
             public string DishType { get; set; }
