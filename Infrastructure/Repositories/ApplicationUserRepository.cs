@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<ApplicationUser> GetUserByIdAsync(int id)
+        public async Task<ApplicationUser> GetUserByIdAsync(string id)
         {
             var user = await _context.ApplicationUser.FindAsync(id);
             if (user == null)
