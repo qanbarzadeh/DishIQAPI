@@ -1,16 +1,12 @@
-﻿using Moq;
-using Moq.Protected;
-using Newtonsoft.Json.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-using Application.Services.AzureMaps;
+﻿using Application.DTO.Azure.maps;
 using Application.Interfaces;
+using Application.Services.AzureMaps;
 using Microsoft.Extensions.Configuration;
-using Application.DTO.Azure.maps;
+using Moq;
+using Moq.Protected;
+using System.Net;
+using System.Text;
+using Xunit;
 
 namespace Application.Test.ServiceTest.Maps.Test.Azure.Maps
 {

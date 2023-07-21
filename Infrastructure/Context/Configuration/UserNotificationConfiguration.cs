@@ -9,9 +9,8 @@ namespace Infrastructure.Context.Configuration
     {
         public void Configure(EntityTypeBuilder<UserNotification> builder)
         {
-            builder.ToTable(nameof(UserNotification), DatabaseSetting.UserSchema);
-           
-            
+            builder.ToTable(nameof(UserNotification), DatabaseSetting.Schema);
+
             // Primary key
             builder.HasKey(un => un.Id);
 
@@ -20,10 +19,7 @@ namespace Infrastructure.Context.Configuration
 
             // User foreign key
             builder.Property(un => un.UserId).IsRequired();
-            builder.HasOne<User>()
-                .WithMany(u => u.UserNotifications)
-                .HasForeignKey(un => un.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            /* The relationship with ApplicationUser is removed here */
 
             // Notification type
             builder.Property(un => un.NotificationType)

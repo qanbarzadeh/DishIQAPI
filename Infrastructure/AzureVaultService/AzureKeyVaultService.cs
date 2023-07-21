@@ -1,10 +1,8 @@
-﻿using Azure.Identity;
+﻿using Application.Interfaces;
+using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Application.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.AzureVaultService
 {

@@ -1,11 +1,7 @@
-﻿using Application.DTO.Authentication;
-using Application.Interfaces.Authentication.Helpers;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
+﻿using Application.Interfaces.Authentication.Helpers;
+using Domain.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,13 +11,14 @@ namespace Application.Services.Authentication.Helpers
     public class TokenService : ITokenService
     {
         private readonly string _jwtSecret;
+        private readonly string _jwtIssuer = "https://dishiq.azurewebsites.net";
+        private readonly string _jwtAudience = "https://dishiq.azurewebsites.net/api";
 
         public TokenService(string jwtSecret)
         {
             _jwtSecret = jwtSecret;
-        }
-
-        public Task<string> GenerateToken(IdentityUser user)
+        }     
+        public Task<string> GenerateToken(ApplicationUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSecret);
@@ -29,7 +26,9 @@ namespace Application.Services.Authentication.Helpers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+            new Claim(ClaimTypes.Name, user.Id.ToString()),  // changed from user.UserName to user.Id
+            new Claim(JwtRegisteredClaimNames.Iss, _jwtIssuer),
+            new Claim(JwtRegisteredClaimNames.Aud, _jwtAudience)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -37,5 +36,6 @@ namespace Application.Services.Authentication.Helpers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return Task.FromResult(tokenHandler.WriteToken(token));
         }
+
     }
 }

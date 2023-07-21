@@ -17,436 +17,270 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("User")
+                .HasDefaultSchema("Dishiq")
                 .HasAnnotation("ProductVersion", "7.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.CookingStep", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("Order")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CookingStep", "Recipe");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.CookingTechnique", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CookingTechnique", "Recipe");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Country", "Recipe");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.Dislike", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dislike", "Recipe");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.Flavor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FlavorType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Flavor", "Recipe");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.FoodInformation", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AllergyRestrictions")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<int>("CaloriesPerServing")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CookingMethod")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<int>("CookingTime")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Cuisine")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("DietaryPreferences")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("DishType")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("KeyIngredients")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<TimeSpan>("PreparationTime")
-                        .HasColumnType("Time");
-
-                    b.Property<int>("ServingSize")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Servings")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FoodInformation", "Recipe");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
-                {
-                    b.Property<int>("GeneratedRecipeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("GeneratedRecipeID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GeneratedRecipeID"));
-
-                    b.Property<int>("FoodInformationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GeneratedRecipeID");
-
-                    b.ToTable("GeneratedRecipe", "Recipe");
-                });
-
             modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AllergyRestrictions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DietaryPreferences")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Ingredient", "Dishiq");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.NutritionInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Calcium")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Carbohydrate")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Fat")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Iron")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Protein")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Sodium")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("VitaminA")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("VitaminC")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("VitaminD")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId")
+                        .IsUnique();
+
+                    b.ToTable("NutritionInformation", "Dishiq");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Recipe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("CaloriesPerServing")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CookingMethod")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CookingTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cuisine")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DishType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PreparationTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServingSize")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Servings")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Recipes", "Dishiq");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.RecipeIngredient", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("RecipeId", "IngredientId");
 
-                    b.ToTable("Ingredient", "Recipe");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("RecipeIngredient", "Dishiq");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.MealTime", b =>
+            modelBuilder.Entity("Domain.Entities.UserEntities.ApplicationUser", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MealTimeEnum")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
-                    b.ToTable("MealTime", "Recipe");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            MealTimeEnum = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            MealTimeEnum = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            MealTimeEnum = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            MealTimeEnum = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            MealTimeEnum = 5
-                        });
-                });
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.MealType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("MealName")
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Version")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MealType", "Recipe");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            MealName = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            MealName = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            MealName = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            MealName = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            MealName = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            MealName = 6
-                        });
-                });
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.RecipeDietPreference", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DietaryPreferences")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RecipeDietPreference", "Recipe");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DietaryPreferences = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DietaryPreferences = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DietaryPreferences = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DietaryPreferences = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            DietaryPreferences = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            DietaryPreferences = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            DietaryPreferences = 7
-                        });
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.Region", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RegionName")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Region", "Recipe");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            RegionName = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            RegionName = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            RegionName = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            RegionName = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            RegionName = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            RegionName = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            RegionName = 7
-                        });
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.BloodType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BloodTypeName")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BloodTypes", "User");
+                    b.ToTable("ApplicationUser", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.DietaryPreferences", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("DietaryPreferenceID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AllowedDietaryPreferences")
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("DietaryPreferences", "User");
+                    b.ToTable("DietaryPreferences", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.SocialMediaHandle", b =>
@@ -470,30 +304,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserProfileInfoId");
-
-                    b.ToTable("SocialMediaHandles", "User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("User", "User");
+                    b.ToTable("SocialMediaHandles", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.UserActivityLog", b =>
@@ -551,74 +362,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserActivityLog", "User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserAllergy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("SeverityLevel")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserAllergy", "User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserCookingSkillLevel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("SkillLevelId");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CookingSkillLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserCookingSkillLevel", "User");
+                    b.ToTable("UserActivityLog", "Dishiq");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntities.UserNotification", b =>
@@ -650,105 +394,32 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserNotification", "User");
+                    b.ToTable("UserNotification", "Dishiq");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserProfileInfo", b =>
+            modelBuilder.Entity("Domain.Entities.UserRegistration.UserEvent", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("AccountCreationDate")
-                        .HasColumnType("datetimeoffset");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Bio")
+                    b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime>("EventDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Gender")
+                    b.Property<int>("EventType")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsBlacklisted")
-                        .HasColumnType("bit");
+                    b.HasKey("Id");
 
-                    b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("bit");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.Property<bool>("IsSuspicious")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LanguagePreference")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTimeOffset>("LastLoginDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("NotificationSettings")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentInformation")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ProfilePicture")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("SocialMediaHandle")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("SubscriptionStatus")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("UserActivityLog")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("UserProfileInfo", "User");
+                    b.ToTable("UserEvent", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -775,7 +446,7 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", "User");
+                    b.ToTable("AspNetRoles", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -800,72 +471,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", "User");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", "User");
+                    b.ToTable("AspNetRoleClaims", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -890,7 +496,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", "User");
+                    b.ToTable("AspNetUserClaims", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -912,7 +518,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", "User");
+                    b.ToTable("AspNetUserLogins", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -927,7 +533,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", "User");
+                    b.ToTable("AspNetUserRoles", "Dishiq");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -946,97 +552,66 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", "User");
+                    b.ToTable("AspNetUserTokens", "Dishiq");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.CookingStep", b =>
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.NutritionInformation", b =>
                 {
-                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
-                        .WithMany("CookingSteps")
-                        .HasForeignKey("Id")
+                    b.HasOne("Domain.Entities.RecipeEntities.Ingredient", "Ingredient")
+                        .WithOne("NutritionInformation")
+                        .HasForeignKey("Domain.Entities.RecipeEntities.NutritionInformation", "IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ingredient");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.FoodInformation", b =>
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Recipe", b =>
                 {
-                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
-                        .WithOne("FoodInformation")
-                        .HasForeignKey("Domain.Entities.RecipeEntities.FoodInformation", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
-                {
-                    b.HasOne("Domain.Entities.RecipeEntities.GeneratedRecipe", null)
-                        .WithMany("Ingredients")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.DietaryPreferences", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntities.User", null)
-                        .WithMany("DietaryPreferences")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.SocialMediaHandle", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntities.UserProfileInfo", null)
-                        .WithMany("SocialMediaHandles")
-                        .HasForeignKey("UserProfileInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserActivityLog", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntities.User", null)
-                        .WithOne("UserActivityLog")
-                        .HasForeignKey("Domain.Entities.UserEntities.UserActivityLog", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserAllergy", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntities.User", null)
-                        .WithMany("UserAllergies")
+                    b.HasOne("Domain.Entities.UserEntities.ApplicationUser", "User")
+                        .WithMany("Recipes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserCookingSkillLevel", b =>
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.RecipeIngredient", b =>
                 {
-                    b.HasOne("Domain.Entities.UserEntities.User", null)
-                        .WithOne("UserCookingSkillLevel")
-                        .HasForeignKey("Domain.Entities.UserEntities.UserCookingSkillLevel", "UserId")
+                    b.HasOne("Domain.Entities.UserEntities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.RecipeEntities.Ingredient", "Ingredient")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.RecipeEntities.Recipe", "Recipe")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserNotification", b =>
+            modelBuilder.Entity("Domain.Entities.UserRegistration.UserEvent", b =>
                 {
-                    b.HasOne("Domain.Entities.UserEntities.User", null)
-                        .WithMany("UserNotifications")
-                        .HasForeignKey("UserId")
+                    b.HasOne("Domain.Entities.UserEntities.ApplicationUser", "ApplicationUser")
+                        .WithMany("UserEvents")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserProfileInfo", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntities.User", null)
-                        .WithOne("UserProfileInfo")
-                        .HasForeignKey("Domain.Entities.UserEntities.UserProfileInfo", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1050,7 +625,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Entities.UserEntities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1059,7 +634,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Entities.UserEntities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1074,7 +649,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Entities.UserEntities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1083,44 +658,31 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Entities.UserEntities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.RecipeEntities.GeneratedRecipe", b =>
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Ingredient", b =>
                 {
-                    b.Navigation("CookingSteps");
-
-                    b.Navigation("FoodInformation")
+                    b.Navigation("NutritionInformation")
                         .IsRequired();
 
-                    b.Navigation("Ingredients");
+                    b.Navigation("RecipeIngredients");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.User", b =>
+            modelBuilder.Entity("Domain.Entities.RecipeEntities.Recipe", b =>
                 {
-                    b.Navigation("DietaryPreferences");
-
-                    b.Navigation("UserActivityLog")
-                        .IsRequired();
-
-                    b.Navigation("UserAllergies");
-
-                    b.Navigation("UserCookingSkillLevel")
-                        .IsRequired();
-
-                    b.Navigation("UserNotifications");
-
-                    b.Navigation("UserProfileInfo")
-                        .IsRequired();
+                    b.Navigation("RecipeIngredients");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserEntities.UserProfileInfo", b =>
+            modelBuilder.Entity("Domain.Entities.UserEntities.ApplicationUser", b =>
                 {
-                    b.Navigation("SocialMediaHandles");
+                    b.Navigation("Recipes");
+
+                    b.Navigation("UserEvents");
                 });
 #pragma warning restore 612, 618
         }

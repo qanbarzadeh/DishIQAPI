@@ -1,14 +1,17 @@
-﻿using Application.Repository.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Interfaces.NutritionsAnalysis;
+using Application.Interfaces.UserRepo;
 
 namespace Application.Interfaces.UnitOfWork
 {
     public interface IUnitOfWork
-    {                       
-        Task SaveChangesAsync();
+    {
+
+        IRecipeRepository RecipeRepository { get; }
+        IRecipeIngredientRepository RecipeIngredientRepository { get; }
+        IApplicationUserRepository UserRepository { get; }
+        INutritionInformationRepository NutritionInformationRepository { get; } // New addition
+                                                                                // Add additional repositories as needed
+        Task<int>  SaveChangesAsync();
+    
     }
-}
+}   

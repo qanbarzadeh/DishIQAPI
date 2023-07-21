@@ -4,7 +4,7 @@ namespace Application.DTO.RecipeDTOs
 {
     public class CookingStepDTO
     {
-     
+
 
         [JsonProperty("description")]
         public string Description { get; set; }

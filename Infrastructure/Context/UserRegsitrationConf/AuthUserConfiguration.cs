@@ -1,12 +1,7 @@
-﻿using Infrastructure.Setting;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Domain.Entities.UserRegistration;
+using Infrastructure.Setting;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Entities.UserRegistration;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Context.UserRegsitrationConf
 {
@@ -14,7 +9,7 @@ namespace Infrastructure.Context.UserRegsitrationConf
     {
         public void Configure(EntityTypeBuilder<AuthUser> builder)
         {
-            builder.ToTable(nameof(AuthUser), DatabaseSetting.AuthenticationSchema);
+            builder.ToTable(nameof(AuthUser), DatabaseSetting.Schema);
 
             builder.HasKey(x => x.Id);
 

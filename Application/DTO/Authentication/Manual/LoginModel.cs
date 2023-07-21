@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTO.Authentication.Manual
 {
@@ -11,7 +6,7 @@ namespace Application.DTO.Authentication.Manual
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }   
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
