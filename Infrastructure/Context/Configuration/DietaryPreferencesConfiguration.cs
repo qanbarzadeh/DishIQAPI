@@ -1,30 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
+﻿using Domain.Entities.UserEntities;
 using Infrastructure.Setting;
-using Domain.Entities.UserEntities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Context.Configuration
+public class DietaryPreferencesConfiguration : IEntityTypeConfiguration<DietaryPreferences>
 {
-    public class DietaryPreferencesConfiguration : Microsoft.EntityFrameworkCore.IEntityTypeConfiguration<DietaryPreferences>
+    public void Configure(EntityTypeBuilder<DietaryPreferences> builder)
     {
-        public void Configure(EntityTypeBuilder<DietaryPreferences> builder)
-        {
-            builder.ToTable(nameof(DietaryPreferences), DatabaseSetting.UserSchema);
-            
-            builder.HasKey(dp => dp.Id);
+        builder.ToTable(nameof(DietaryPreferences), DatabaseSetting.Schema);
 
-            builder.Property(dp => dp.Id)
-                .HasColumnName("DietaryPreferenceID");
+        builder.HasKey(dp => dp.Id);
 
-            builder.Property(dp => dp.AllowedDietaryPreferences)
-                .HasMaxLength(50)
-                .IsRequired();
-            //Relationship to User
-            builder.HasOne<User>()
-                .WithMany(u => u.DietaryPreferences)
-                .HasForeignKey(uf => uf.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
+        builder.Property(dp => dp.Id)
+            .HasColumnName("DietaryPreferenceID");
+
+        builder.Property(dp => dp.AllowedDietaryPreferences)
+            .HasMaxLength(50)
+            .IsRequired();
     }
 }

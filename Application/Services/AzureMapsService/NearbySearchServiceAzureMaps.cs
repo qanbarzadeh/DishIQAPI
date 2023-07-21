@@ -1,9 +1,8 @@
 ﻿using Application.DTO.Azure.maps;
+using Application.Interfaces;
 using Application.Interfaces.Azure.Maps;
-using Domain.AzureVault;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
-using System.Net.Http;
 
 namespace Application.Services.AzureMaps
 {

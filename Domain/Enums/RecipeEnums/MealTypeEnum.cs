@@ -1,31 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace Domain.Enums.RecipeEnums
 {
     public enum MealTypeEnum
     {
 
-    [Description("Main Course")]
-         MainCourse = 1,
+        [Description("Main Course")]
+        MainCourse = 1,
 
-    [Description("Appetizer")]
+        [Description("Appetizer")]
         Appetizer,
 
-    [Description("Dessert")]
+        [Description("Dessert")]
         Dessert,
 
-    [Description("Side Dish")]
+        [Description("Side Dish")]
         SideDish,
 
-    [Description("Soup")]
+        [Description("Soup")]
         Soup,
 
-    [Description("Salad")]
+        [Description("Salad")]
         Salad
-    }    
+    }
 }

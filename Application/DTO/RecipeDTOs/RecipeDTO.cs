@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.DTO.RecipeDTOs
+﻿namespace Application.DTO.RecipeDTOs
 {
     public class RecipeDTO
     {
@@ -13,7 +7,7 @@ namespace Application.DTO.RecipeDTOs
         public string Description { get; set; }
         public int PreparationTime { get; set; }
         public int CookingTime { get; set; }
-        public int Servings { get; set; }
+        public string Servings { get; set; }
         public int CaloriesPerServing { get; set; }
         public string ServingSize { get; set; }
         public List<string> DietaryPreferences { get; set; }

@@ -20,7 +20,7 @@ namespace Application.DTO.RecipeDTOs
         public string Servings { get; set; }
 
         [JsonProperty("caloriesPerServing")]
-        public string CaloriesPerServing { get; set; }
+        public string? CaloriesPerServing { get; set; }
 
         [JsonProperty("servingSize")]
         public string ServingSize { get; set; }

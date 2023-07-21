@@ -1,7 +1,6 @@
 ﻿using Application.DTO.OpenAiResponse;
 using Application.DTO.RecipeDTOs;
 using Application.Interfaces;
-using Newtonsoft.Json.Linq;
 
 namespace OpenAIAPI
 {
@@ -183,4 +182,3 @@ namespace OpenAIAPI
     }
 }
 
-     

@@ -1,15 +1,12 @@
-﻿using Application.Configuration;
+﻿using Application.DTO.OpenAiResponse;
 using Application.DTO.RecipeDTOs;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System.Text;
-using Microsoft.Extensions.Logging;
 using Application.Interfaces;
-using Application.DTO.OpenAiResponse;
-using Domain.Entities.RecipeEntities;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using Domain.AzureVault;
+using System.Text;
+
 
 namespace Application.Services.OpenAI.ChatGptAPI
 {
@@ -139,7 +136,7 @@ namespace Application.Services.OpenAI.ChatGptAPI
             promptBuilder.AppendLine("- Allergy Restrictions");
             promptBuilder.AppendLine("- Cuisine");
             promptBuilder.AppendLine("- Dish Type");
-            promptBuilder.AppendLine("- Cooking Method");            
+            promptBuilder.AppendLine("- Cooking Method");
             promptBuilder.AppendLine("- List of Ingredients (please format each ingredient as 'Ingredient Name: Quantity')"); //updat format
             promptBuilder.AppendLine("- Cooking Steps");
             promptBuilder.AppendLine("###");
