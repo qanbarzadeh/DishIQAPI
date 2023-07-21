@@ -18,29 +18,29 @@ namespace Infrastructure.Context.Configuration.RecipeConfiguration
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(r => r.Description)
-                .IsRequired();
+            //builder.Property(r => r.Description)
+            //    .IsRequired();
 
-            builder.Property(r => r.PreparationTime)
-                .IsRequired();
+            //builder.Property(r => r.PreparationTime)
+            //    .IsRequired();
 
-            builder.Property(r => r.CookingTime)
-                .IsRequired();
+            //builder.Property(r => r.CookingTime)
+            //    .IsRequired();
 
-            builder.Property(r => r.Servings)
-                .IsRequired();
+            //builder.Property(r => r.Servings)
+            //    .IsRequired();
 
-            builder.Property(r => r.Cuisine)
-                .HasMaxLength(50);
+            //builder.Property(r => r.Cuisine)
+            //    .HasMaxLength(50);
 
-            builder.Property(r => r.DishType)
-                .HasMaxLength(50);
+            //builder.Property(r => r.DishType)
+            //    .HasMaxLength(50);
 
-            builder.Property(r => r.CookingMethod)
-                .HasMaxLength(50);
+            //builder.Property(r => r.CookingMethod)
+            //    .HasMaxLength(50);
 
-            builder.Property(r => r.CaloriesPerServing)
-                .IsRequired();
+            //builder.Property(r => r.CaloriesPerServing)
+            //    .IsRequired();
 
             builder.Property(r => r.UserId) // Ensure UserId is treated as a string
                 .IsRequired();
