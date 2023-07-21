@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Application.DTO.RecipeDTOs;
 using Domain.Entities.RecipeEntities;
-using System;
 
 namespace Application.Mapping
 {
@@ -12,8 +11,8 @@ namespace Application.Mapping
             CreateMap<GeneratedRecipeDTO, Recipe>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FoodInformation.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.FoodInformation.Description))
-                .ForMember(dest => dest.PreparationTime, opt => opt.MapFrom(src => TimeSpan.FromMinutes(int.Parse(src.FoodInformation.PreparationTime))))
-                .ForMember(dest => dest.CookingTime, opt => opt.MapFrom(src => TimeSpan.FromMinutes(int.Parse(src.FoodInformation.CookingTime))))
+                .ForMember(dest => dest.PreparationTime, opt => opt.MapFrom(src => src.FoodInformation.PreparationTime))
+                .ForMember(dest => dest.CookingTime, opt => opt.MapFrom(src => src.FoodInformation.CookingTime))
                 .ForMember(dest => dest.Servings, opt => opt.MapFrom(src => int.Parse(src.FoodInformation.Servings)))
                 .ForMember(dest => dest.CaloriesPerServing, opt => opt.MapFrom(src => double.Parse(src.FoodInformation.CaloriesPerServing)))
                 .ForMember(dest => dest.Cuisine, opt => opt.MapFrom(src => src.FoodInformation.Cuisine))
